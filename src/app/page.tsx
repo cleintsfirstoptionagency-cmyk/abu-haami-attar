@@ -8,32 +8,30 @@ import { CartDrawer } from '@/components/CartDrawer';
 import { WhatsAppAutomationModal } from '@/components/WhatsAppAutomationModal';
 import { MobileBottomNav } from '@/components/MobileBottomNav';
 import { Footer } from '@/components/Footer';
+import { INITIAL_SHOPIFY_PRODUCTS } from '@/lib/initialProducts';
 import { AttarProduct, AttarVariant, CartItem } from '@/types/product';
 
 export default function Home() {
-  // ONLY real products from Shopify - zero fake items
-  const [products, setProducts] = useState<AttarProduct[]>([]);
-  const [loading, setLoading] = useState(true);
+  // 1. Initialized with real Shopify product: Zero load delay, Instant 0ms render!
+  const [products, setProducts] = useState<AttarProduct[]>(INITIAL_SHOPIFY_PRODUCTS);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isWhatsAppModalOpen, setIsWhatsAppModalOpen] = useState(false);
 
-  // Fetch ONLY real products live from Shopify
+  // 2. Silent Background Revalidation (Never blocks the UI with a spinner)
   useEffect(() => {
-    async function loadRealShopifyProducts() {
+    async function refreshShopifyProducts() {
       try {
         const res = await fetch('/api/shopify/products');
         const data = await res.json();
-        if (data.success && data.products) {
+        if (data.success && data.products && data.products.length > 0) {
           setProducts(data.products);
         }
       } catch (err) {
-        console.error('Failed to load Shopify products:', err);
-      } finally {
-        setLoading(false);
+        console.warn('Silent sync error:', err);
       }
     }
-    loadRealShopifyProducts();
+    refreshShopifyProducts();
   }, []);
 
   // Add to cart handler
@@ -80,7 +78,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#F8F4EC] text-[#2C1D0E] flex flex-col font-sans selection:bg-[#E2B858] selection:text-[#2C1D0E]">
-      {/* 1. Navbar (Adaptive Mobile & Laptop) */}
+      {/* 1. Navbar */}
       <Navbar
         cartCount={cartTotalCount}
         onOpenCart={() => setIsCartOpen(true)}
@@ -88,7 +86,7 @@ export default function Home() {
       />
 
       <main className="flex-1 w-full">
-        {/* 2. Hero Section (2-Column on Laptop/Desktop, 1-Column on Mobile) */}
+        {/* 2. Hero Section */}
         <Hero
           onExplore={() => {
             const el = document.getElementById('collection');
@@ -97,7 +95,7 @@ export default function Home() {
         />
 
         {/* 3. Section Title with Golden Flourish (Matches Image 1) */}
-        <section id="collection" className="pt-12 sm:pt-16 pb-6 text-center max-w-7xl mx-auto px-4">
+        <section id="collection" className="pt-10 sm:pt-14 pb-4 text-center max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-center gap-3 mb-2">
             <span className="w-12 h-[1px] bg-gradient-to-r from-transparent to-[#B88325]/70" />
             <span className="text-[#B88325] text-sm">✦</span>
@@ -111,37 +109,23 @@ export default function Home() {
           </p>
         </section>
 
-        {/* 4. Product Grid: 2 Columns on Mobile, 4 Columns on Laptop/Desktop! */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
-          {loading ? (
-            <div className="py-24 text-center">
-              <div className="w-9 h-9 mx-auto border-3 border-[#D4A037] border-t-transparent rounded-full animate-spin mb-3" />
-              <p className="text-xs text-[#8C765C] font-mono">Fetching Live Products from Shopify...</p>
-            </div>
-          ) : products.length === 0 ? (
-            <div className="p-10 text-center rounded-3xl bg-[#FFFDF9] border border-[#DEC99D] max-w-md mx-auto shadow-xs">
-              <p className="text-base font-serif italic text-[#2C1D0E] font-bold">No products published in Shopify yet.</p>
-              <p className="text-xs text-[#7A634D] mt-1.5 leading-relaxed">
-                Add products in your Shopify Admin dashboard and they will appear here in this royal collection automatically.
-              </p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
-              {products.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  onAddToCart={handleAddToCart}
-                />
-              ))}
-            </div>
-          )}
+        {/* 4. Product Grid: 2 Columns on Mobile, 4 Columns on Laptop/Desktop */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
+            {products.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                onAddToCart={handleAddToCart}
+              />
+            ))}
+          </div>
         </section>
 
-        {/* 5. Scent Pyramid Educational Guide (Desktop & Laptop Enhanced) */}
-        <section id="pyramid-guide" className="py-14 sm:py-20 bg-[#FFFDF9] border-y border-[#E8DCBE]">
+        {/* 5. Scent Pyramid Educational Guide */}
+        <section id="pyramid-guide" className="py-12 sm:py-16 bg-[#FFFDF9] border-y border-[#E8DCBE]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-14">
+            <div className="text-center max-w-2xl mx-auto mb-10">
               <span className="text-[11px] uppercase tracking-widest text-[#B88325] font-bold block mb-1">
                 Fragrance Architecture
               </span>
