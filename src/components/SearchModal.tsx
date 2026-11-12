@@ -49,7 +49,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
     : products;
 
   const handleProductClick = (handle: string) => {
-    window.location.href = `https://${STORE_DOMAIN}/products/${handle}`;
+    window.location.href = `/products/${handle}`;
   };
 
   return (

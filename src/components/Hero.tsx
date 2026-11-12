@@ -187,7 +187,7 @@ export const Hero: React.FC<{ onExplore: () => void }> = () => {
         {/* Mobile Sleek Compact BUY NOW Pill Button */}
         <div className="absolute bottom-3 inset-x-0 z-30 flex justify-center pointer-events-auto px-4">
           <a
-            href={`https://${STORE_DOMAIN}/products/${currentSlide.handle}`}
+            href={`/products/${currentSlide.handle}`}
             className="relative overflow-hidden px-6 py-1.5 rounded-full font-bold text-[11px] tracking-wider uppercase bg-gradient-to-r from-[#F5D88E] via-[#E2B858] to-[#C99632] animate-button-glow text-[#221307] shadow-[0_4px_18px_rgba(226,184,88,0.65)] active:scale-95 transition-all flex items-center gap-1.5 border border-[#FFF0B8]"
           >
             <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent animate-button-splash pointer-events-none" />
@@ -224,7 +224,7 @@ export const Hero: React.FC<{ onExplore: () => void }> = () => {
             {HERO_SLIDES.map((slide) => (
               <a
                 key={`loop-1-${slide.id}`}
-                href={`https://${STORE_DOMAIN}/products/${slide.handle}`}
+                href={`/products/${slide.handle}`}
                 className="w-[280px] xl:w-[310px] aspect-[4/5] shrink-0 rounded-3xl overflow-hidden relative border border-[#DFCBA0]/30 hover:border-[#E2B858] shadow-[0_10px_35px_rgba(0,0,0,0.8)] group transition-all duration-300 hover:scale-[1.03] block bg-[#140E0A]"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -261,7 +261,7 @@ export const Hero: React.FC<{ onExplore: () => void }> = () => {
             {HERO_SLIDES.map((slide) => (
               <a
                 key={`loop-2-${slide.id}`}
-                href={`https://${STORE_DOMAIN}/products/${slide.handle}`}
+                href={`/products/${slide.handle}`}
                 className="w-[280px] xl:w-[310px] aspect-[4/5] shrink-0 rounded-3xl overflow-hidden relative border border-[#DFCBA0]/30 hover:border-[#E2B858] shadow-[0_10px_35px_rgba(0,0,0,0.8)] group transition-all duration-300 hover:scale-[1.03] block bg-[#140E0A]"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}

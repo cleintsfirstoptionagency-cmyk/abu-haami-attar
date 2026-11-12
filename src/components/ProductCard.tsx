@@ -11,7 +11,7 @@ const STORE_DOMAIN = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN || 'ezf1x7-pn.
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const currentVariant = product.variants[0];
-  const productUrl = `https://${STORE_DOMAIN}/products/${product.handle}`;
+  const productUrl = `/products/${product.handle}`;
 
   return (
     <a
