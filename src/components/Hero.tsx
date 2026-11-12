@@ -130,12 +130,6 @@ export const Hero: React.FC<{ onExplore: () => void }> = () => {
     <section className="relative w-full bg-[#0A0704] overflow-hidden select-none border-b border-[#2B1D10]">
       
       {/* 
-        Continuous Dotted Animation:
-        - Floating glowing golden dots & sparkles running continuously over the hero photo
-      */}
-      <GoldenDotsOverlay />
-
-      {/* 
         Horizontal Touch / Hand Swipeable Carousel:
         - Full-fit images starting from top edge
         - Header sits directly on top of these photos
@@ -170,6 +164,12 @@ export const Hero: React.FC<{ onExplore: () => void }> = () => {
           </div>
         ))}
       </div>
+
+      {/* 
+        Continuous Dotted Animation:
+        - Rendered ON TOP OF the carousel with z-20 so it floats directly over the hero photos on mobile
+      */}
+      <GoldenDotsOverlay />
 
       {/* Subtle Desktop Side Navigation Arrows */}
       <button

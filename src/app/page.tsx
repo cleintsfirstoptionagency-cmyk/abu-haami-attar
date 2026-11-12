@@ -81,7 +81,7 @@ export default function Home() {
         <section id="collection" className="pt-4 sm:pt-6 pb-1 text-center max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-center gap-3 mb-1.5">
             <span className="w-10 sm:w-12 h-[1px] bg-gradient-to-r from-transparent to-[#B88325]/70" />
-            <span className="text-[#B88325] text-xs sm:text-sm">✦</span>
+            <span className="text-[#B88325] text-xs sm:text-sm animate-pulse">✦</span>
             <span className="w-10 sm:w-12 h-[1px] bg-gradient-to-l from-transparent to-[#B88325]/70" />
           </div>
           <h2 className="text-2xl sm:text-4xl lg:text-5xl font-serif italic text-[#2C1D0E] font-bold tracking-tight">
