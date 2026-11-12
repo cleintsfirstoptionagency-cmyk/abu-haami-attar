@@ -2,19 +2,19 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Al-Attar | Royal Haute Parfumerie & Pure Concentrated Oils",
-  description: "100% Alcohol-Free Pure Cambodian Agarwood, Kannauj Rose, and White Musk Attars. Hand-distilled using ancient royal heritage techniques.",
+  title: "Abu Haani | Luxury Artisanal Attars & Pure Fragrances",
+  description: "Hand-crafted pure non-alcoholic artisanal attars and pure perfumes. Discover timeless fragrances.",
   openGraph: {
-    title: "Al-Attar | Royal Haute Parfumerie",
-    description: "Hand-distilled 100% pure concentrated non-alcoholic attars. 16+ hours guaranteed longevity with free insured courier across India.",
-    url: "https://www.royalattar.com",
-    siteName: "Al-Attar Parfumerie",
+    title: "Abu Haani | Discover Timeless Fragrances",
+    description: "Pure artisanal non-alcoholic attars with 16+ hours longevity.",
+    url: "https://ezf1x7-pn.myshopify.com",
+    siteName: "Abu Haani Parfumerie",
     images: [
       {
-        url: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=1200&q=80",
+        url: "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/2nd_de1f8517-6064-458b-898e-55c7a3326a9f.jpg?v=1794477876",
         width: 1200,
         height: 630,
-        alt: "Royal Attar Luxury Bottle",
+        alt: "Abu Haani Luxury Perfume",
       },
     ],
     locale: "en_IN",
@@ -28,22 +28,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark scroll-smooth">
+    <html lang="en" className="scroll-smooth">
       <head>
         {/* Luxury Typography Fonts */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
           rel="stylesheet"
         />
-        {/* High-Performance Tailwind Styling Engine */}
+        {/* Tailwind Styling Engine */}
         <script src="https://cdn.tailwindcss.com"></script>
         <script
           dangerouslySetInnerHTML={{
             __html: `
               tailwind.config = {
-                darkMode: 'class',
                 theme: {
                   extend: {
                     fontFamily: {
@@ -52,13 +51,28 @@ export default function RootLayout({
                       sans: ['"Plus Jakarta Sans"', '-apple-system', 'sans-serif'],
                     },
                     colors: {
+                      cream: {
+                        50: '#FDFBF7',
+                        100: '#F8F4EC',
+                        200: '#F0E7D6',
+                        300: '#E6D7BD',
+                      },
+                      sepia: {
+                        900: '#231609',
+                        800: '#2C1D0E',
+                        700: '#422E1B',
+                        600: '#5C442D',
+                        500: '#7A6045',
+                        400: '#9E8367',
+                      },
                       gold: {
-                        100: '#FDF7E7',
-                        200: '#F7E7BE',
-                        300: '#F5DEB3',
-                        400: '#E5C158',
-                        500: '#D4AF37',
-                        600: '#B89222',
+                        100: '#FBF3DD',
+                        200: '#F5E2B3',
+                        300: '#EDCE82',
+                        400: '#E4B853',
+                        500: '#D4A037',
+                        600: '#B88325',
+                        700: '#946518',
                       }
                     }
                   }
@@ -68,7 +82,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-screen bg-[#090807] text-[#f5deb3] font-sans antialiased">
+      <body className="min-h-screen bg-[#F8F4EC] text-[#2C1D0E] font-sans antialiased">
         {children}
       </body>
     </html>

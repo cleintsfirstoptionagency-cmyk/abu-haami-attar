@@ -79,16 +79,16 @@ export default function Home() {
   const cartTotalCount = cart.reduce((acc, curr) => acc + curr.quantity, 0);
 
   return (
-    <div className="min-h-screen bg-[#090807] text-[#f5deb3] flex flex-col font-sans selection:bg-amber-500 selection:text-black">
-      {/* 1. Mobile Header (Matches Reference 1) */}
+    <div className="min-h-screen bg-[#F8F4EC] text-[#2C1D0E] flex flex-col font-sans selection:bg-[#E2B858] selection:text-[#2C1D0E]">
+      {/* 1. Navbar (Adaptive Mobile & Laptop) */}
       <Navbar
         cartCount={cartTotalCount}
         onOpenCart={() => setIsCartOpen(true)}
         onOpenWhatsAppGuide={() => setIsWhatsAppModalOpen(true)}
       />
 
-      <main className="flex-1 max-w-md mx-auto w-full">
-        {/* 2. Hero Section (Marble podium & White Oudh 6ml) */}
+      <main className="flex-1 w-full">
+        {/* 2. Hero Section (2-Column on Laptop/Desktop, 1-Column on Mobile) */}
         <Hero
           onExplore={() => {
             const el = document.getElementById('collection');
@@ -97,34 +97,36 @@ export default function Home() {
         />
 
         {/* 3. Section Title with Golden Flourish (Matches Image 1) */}
-        <section id="collection" className="pt-8 pb-4 text-center px-4">
+        <section id="collection" className="pt-12 sm:pt-16 pb-6 text-center max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-center gap-3 mb-2">
-            <span className="w-8 h-[1px] bg-gradient-to-r from-transparent to-amber-500/60" />
-            <span className="text-amber-400 text-sm">✦</span>
-            <span className="w-8 h-[1px] bg-gradient-to-l from-transparent to-amber-500/60" />
+            <span className="w-12 h-[1px] bg-gradient-to-r from-transparent to-[#B88325]/70" />
+            <span className="text-[#B88325] text-sm">✦</span>
+            <span className="w-12 h-[1px] bg-gradient-to-l from-transparent to-[#B88325]/70" />
           </div>
-          <h2 className="text-2xl sm:text-3xl font-serif italic text-[#fcf9f2] font-semibold tracking-wide">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif italic text-[#2C1D0E] font-bold tracking-tight">
             Our Collection
           </h2>
-          <p className="text-xs sm:text-sm font-serif italic text-amber-300/80 mt-1">
+          <p className="text-sm sm:text-base font-serif italic text-[#8F6A2A] mt-1.5 font-medium">
             Discover Timeless Fragrances
           </p>
         </section>
 
-        {/* 4. 2-Column Mobile Product Grid (Matches Image 1 & 2) */}
-        <section className="px-4 py-4">
+        {/* 4. Product Grid: 2 Columns on Mobile, 4 Columns on Laptop/Desktop! */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
           {loading ? (
-            <div className="py-20 text-center">
-              <div className="w-8 h-8 mx-auto border-2 border-amber-500 border-t-transparent rounded-full animate-spin mb-3" />
-              <p className="text-xs text-amber-300/70 font-mono">Fetching Live Products from Shopify...</p>
+            <div className="py-24 text-center">
+              <div className="w-9 h-9 mx-auto border-3 border-[#D4A037] border-t-transparent rounded-full animate-spin mb-3" />
+              <p className="text-xs text-[#8C765C] font-mono">Fetching Live Products from Shopify...</p>
             </div>
           ) : products.length === 0 ? (
-            <div className="p-8 text-center rounded-2xl bg-[#120e0b] border border-amber-900/40">
-              <p className="text-sm font-serif text-[#e0d6c8]">No products published in Shopify yet.</p>
-              <p className="text-xs text-[#8c7f70] mt-1">Add products in Shopify Admin and they will appear here automatically.</p>
+            <div className="p-10 text-center rounded-3xl bg-[#FFFDF9] border border-[#DEC99D] max-w-md mx-auto shadow-xs">
+              <p className="text-base font-serif italic text-[#2C1D0E] font-bold">No products published in Shopify yet.</p>
+              <p className="text-xs text-[#7A634D] mt-1.5 leading-relaxed">
+                Add products in your Shopify Admin dashboard and they will appear here in this royal collection automatically.
+              </p>
             </div>
           ) : (
-            <div className="grid grid-cols-2 gap-3 sm:gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
               {products.map((product) => (
                 <ProductCard
                   key={product.id}
@@ -136,11 +138,72 @@ export default function Home() {
           )}
         </section>
 
-        {/* 5. Trust Badges & Curved Arch Footer (Matches Image 1) */}
+        {/* 5. Scent Pyramid Educational Guide (Desktop & Laptop Enhanced) */}
+        <section id="pyramid-guide" className="py-14 sm:py-20 bg-[#FFFDF9] border-y border-[#E8DCBE]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-14">
+              <span className="text-[11px] uppercase tracking-widest text-[#B88325] font-bold block mb-1">
+                Fragrance Architecture
+              </span>
+              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-serif italic text-[#2C1D0E] font-bold">
+                The 3-Tier Olfactory Journey
+              </h3>
+              <p className="mt-2 text-xs sm:text-sm text-[#735D46] leading-relaxed">
+                Unlike synthetic commercial alcohol sprays, pure botanical attars unfold across your skin in three distinct harmonic tiers over 16+ hours.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+              {/* Tier 1 */}
+              <div className="p-6 sm:p-8 rounded-2xl sm:rounded-3xl bg-[#FAF6EE] border border-[#E0D0B6] hover:border-[#B88325] transition duration-300 shadow-2xs">
+                <span className="text-[10px] uppercase font-bold tracking-widest text-[#8C6D3B] block mb-2">
+                  Tier 01 * Opening
+                </span>
+                <h4 className="text-xl sm:text-2xl font-serif italic font-bold text-[#2C1D0E] mb-2">
+                  Top Notes
+                </h4>
+                <p className="text-xs text-[#B88325] font-semibold mb-3">Duration: Initial 15 - 30 Minutes</p>
+                <p className="text-xs sm:text-sm text-[#66523F] leading-relaxed">
+                  The initial luminous impression upon application. Fresh bergamot, aromatic spices, and morning floral dews that immediately captivate.
+                </p>
+              </div>
+
+              {/* Tier 2 */}
+              <div className="p-6 sm:p-8 rounded-2xl sm:rounded-3xl bg-[#FFF9EC] border border-[#DFC694] hover:border-[#B88325] transition duration-300 shadow-xs">
+                <span className="text-[10px] uppercase font-bold tracking-widest text-[#B88325] block mb-2">
+                  Tier 02 * The Soul
+                </span>
+                <h4 className="text-xl sm:text-2xl font-serif italic font-bold text-[#2C1D0E] mb-2">
+                  Heart Notes
+                </h4>
+                <p className="text-xs text-[#B88325] font-semibold mb-3">Duration: 30 Mins - 5 Hours</p>
+                <p className="text-xs sm:text-sm text-[#66523F] leading-relaxed">
+                  The true character of the attar that warms with your pulse points. Velvety Damascus roses, sweet lotus, and amber accords.
+                </p>
+              </div>
+
+              {/* Tier 3 */}
+              <div className="p-6 sm:p-8 rounded-2xl sm:rounded-3xl bg-[#FAF6EE] border border-[#E0D0B6] hover:border-[#B88325] transition duration-300 shadow-2xs">
+                <span className="text-[10px] uppercase font-bold tracking-widest text-[#8C6D3B] block mb-2">
+                  Tier 03 * The Sillage
+                </span>
+                <h4 className="text-xl sm:text-2xl font-serif italic font-bold text-[#2C1D0E] mb-2">
+                  Base Notes
+                </h4>
+                <p className="text-xs text-[#B88325] font-semibold mb-3">Duration: 5 - 24+ Hours</p>
+                <p className="text-xs sm:text-sm text-[#66523F] leading-relaxed">
+                  The deepest, richest molecular foundations. Aged Cambodian agarwood, Mysore sandalwood, and musk that linger indefinitely on fabric.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 6. Trust Badges & Curved Arch Footer */}
         <Footer onOpenWhatsApp={() => setIsWhatsAppModalOpen(true)} />
       </main>
 
-      {/* 6. Fixed Mobile Bottom Navigation Bar (Home, Categories, Wishlist, Account, Cart) */}
+      {/* 7. Mobile-Only Fixed Bottom Nav Bar (Hidden on Laptop/Desktop) */}
       <MobileBottomNav
         cartCount={cartTotalCount}
         onOpenCart={() => setIsCartOpen(true)}

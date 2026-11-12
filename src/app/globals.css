@@ -1,11 +1,11 @@
 :root {
-  --background: #090807;
-  --foreground: #f6f3eb;
-  --gold-primary: #d4af37;
-  --gold-light: #f5deb3;
-  --gold-glow: rgba(212, 175, 55, 0.25);
-  --card-bg: #14110e;
-  --card-border: #2b231a;
+  --bg-cream: #f8f4ec;
+  --bg-card: #ffffff;
+  --border-gold: #e5d4b8;
+  --text-dark: #2a1a0a;
+  --text-muted: #736250;
+  --gold-primary: #d4a037;
+  --gold-gradient: linear-gradient(135deg, #f5dba1 0%, #d8a543 50%, #b88325 100%);
 }
 
 * {
@@ -13,24 +13,25 @@
 }
 
 html, body {
-  background-color: #090807 !important;
-  color: #f6f3eb !important;
+  background-color: #f8f4ec !important;
+  color: #2a1a0a !important;
   margin: 0;
   padding: 0;
   overflow-x: hidden;
+  font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
-/* Custom scrollbar for luxury feel */
+/* Custom scrollbar for royal feel */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 7px;
 }
 ::-webkit-scrollbar-track {
-  background: #0d0b09;
+  background: #f2ece0;
 }
 ::-webkit-scrollbar-thumb {
-  background: #2b231a;
-  border-radius: 3px;
+  background: #d6be9a;
+  border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #d4af37;
+  background: #b89154;
 }
