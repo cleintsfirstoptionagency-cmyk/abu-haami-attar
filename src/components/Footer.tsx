@@ -5,10 +5,11 @@ import { WhatsAppIcon } from './Icons';
 
 export const Footer: React.FC<{ onOpenWhatsApp: () => void }> = ({ onOpenWhatsApp }) => {
   return (
-    <footer className="bg-[#F8F4EC] text-[#5C442D] pt-12 pb-24 md:pb-16 border-t border-[#E8DCBE]">
+    <footer className="bg-[#F8F4EC] text-[#5C442D] pt-10 pb-16 border-t border-[#E8DCBE]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* 4 Trust Badges (Matches Reference Image 1) */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 py-6 px-4 sm:px-8 rounded-2xl sm:rounded-3xl bg-[#FFFDF9] border border-[#E0CFB3] text-center shadow-xs mb-12">
+        
+        {/* 4 Trust Badges (Matches Reference Image) */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 py-6 px-4 sm:px-8 rounded-2xl sm:rounded-3xl bg-[#FFFDF9] border border-[#E0CFB3] text-center shadow-xs mb-10">
           {/* Badge 1: 100% Authentic */}
           <div className="flex flex-col sm:flex-row items-center sm:text-left gap-2 sm:gap-3 p-2">
             <div className="w-10 h-10 rounded-full bg-[#FAF3E3] border border-[#D9C496] flex items-center justify-center text-[#B88325] shrink-0">
@@ -62,15 +63,15 @@ export const Footer: React.FC<{ onOpenWhatsApp: () => void }> = ({ onOpenWhatsAp
           </div>
         </div>
 
-        {/* Ornate Curved Arch Banner (Matches Reference Image 1) */}
-        <div className="rounded-3xl bg-gradient-to-b from-[#251A10] via-[#1A120B] to-[#120C07] border border-[#523A25] p-8 sm:p-12 text-center text-[#D9C5A7] shadow-xl">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-full border border-[#D4A037] bg-[#2C1F13] flex items-center justify-center text-[#E2B858] font-serif text-xl font-bold shadow-xs">
-              ع
-            </div>
-            <span className="text-3xl sm:text-4xl font-serif italic text-[#FDF7E7] font-bold">
-              Abu Haani
-            </span>
+        {/* Ornate Curved Arch Banner with Official Abu Haani 3D Logo */}
+        <div className="rounded-3xl bg-gradient-to-b from-[#21160C] via-[#160E07] to-[#0D0804] border border-[#47301B] p-8 sm:p-12 text-center text-[#D9C5A7] shadow-xl">
+          <div className="flex items-center justify-center mb-4">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/logo.png"
+              alt="Abu Haani"
+              className="h-10 sm:h-12 w-auto object-contain brightness-110"
+            />
           </div>
 
           <p className="text-xs sm:text-sm text-[#A8947C] max-w-md mx-auto mb-6">

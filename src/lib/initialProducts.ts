@@ -31,3 +31,4 @@ export const INITIAL_SHOPIFY_PRODUCTS: AttarProduct[] = [
     ],
   },
 ];
+
