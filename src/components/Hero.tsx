@@ -201,43 +201,24 @@ export const Hero: React.FC<{ onExplore: () => void }> = () => {
       </button>
 
       {/* 
-        Compact Small BUY NOW Pill Button & Golden Indicator Dots:
-        - Sleek, compact size matching reference
-        - Dynamically links to the active slide's product
-        - Continuous liquid splash / shine ripple animation
+        Sleek Compact BUY NOW Pill Button placed exactly at the bottom of the hero photo
+        - Dots indicator completely removed as requested
+        - Dynamically links to the active slide's product on Shopify
+        - Features continuous liquid splash / shine wave animation
       */}
-      <div className="absolute bottom-2.5 sm:bottom-3.5 inset-x-0 z-30 flex flex-col items-center gap-1.5 pointer-events-auto px-4">
-        
-        {/* Compact Small Sleek BUY NOW Pill Button */}
+      <div className="absolute bottom-3 sm:bottom-4 inset-x-0 z-30 flex justify-center pointer-events-auto px-4">
         <a
           href={`https://${STORE_DOMAIN}/products/${currentSlide.handle}`}
-          className="relative overflow-hidden px-5 py-1.5 sm:px-6 sm:py-2 rounded-full font-bold text-[11px] sm:text-xs tracking-wide uppercase bg-gradient-to-r from-[#F5D88E] via-[#E2B858] to-[#C99632] animate-button-glow text-[#221307] shadow-[0_3px_15px_rgba(226,184,88,0.6)] active:scale-95 transition-all flex items-center gap-1.5 border border-[#FFF0B8]"
+          className="relative overflow-hidden px-6 py-1.5 sm:px-7 sm:py-2 rounded-full font-bold text-[11px] sm:text-xs tracking-wider uppercase bg-gradient-to-r from-[#F5D88E] via-[#E2B858] to-[#C99632] animate-button-glow text-[#221307] shadow-[0_4px_18px_rgba(226,184,88,0.65)] active:scale-95 transition-all flex items-center gap-1.5 border border-[#FFF0B8]"
         >
           {/* Continuous Liquid Splash / Shine Ripple Animation */}
           <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent animate-button-splash pointer-events-none" />
           
-          <span className="relative z-10 flex items-center gap-1 font-bold font-sans">
+          <span className="relative z-10 flex items-center gap-1.5 font-bold font-sans">
             <span>Buy Now</span>
             <span className="text-xs font-black">→</span>
           </span>
         </a>
-
-        {/* Golden Indicator Dots (Exact match to reference image: • • • ▬ •) */}
-        <div className="px-2.5 py-1 sm:px-3 sm:py-1 rounded-full bg-black/60 backdrop-blur-md border border-[#3A2615] flex items-center gap-1.5 sm:gap-2 shadow-[0_4px_15px_rgba(0,0,0,0.8)]">
-          {HERO_SLIDES.map((slide, idx) => (
-            <button
-              key={slide.id}
-              onClick={() => scrollToSlide(idx)}
-              className={`rounded-full transition-all duration-300 ${
-                currentIndex === idx
-                  ? 'w-6 h-2 bg-gradient-to-r from-[#F5D88E] via-[#E2B858] to-[#C99632] shadow-[0_0_10px_rgba(226,184,88,0.9)]'
-                  : 'w-2 h-2 bg-[#6E553E] hover:bg-[#A88864]'
-              }`}
-              aria-label={`Go to slide ${idx + 1}: ${slide.title}`}
-            />
-          ))}
-        </div>
-
       </div>
 
     </section>

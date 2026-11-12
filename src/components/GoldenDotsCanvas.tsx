@@ -119,3 +119,4 @@ export const GoldenDotsCanvas: React.FC = () => {
     />
   );
 };
+
