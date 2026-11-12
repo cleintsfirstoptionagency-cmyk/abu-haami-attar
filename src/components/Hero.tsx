@@ -1,91 +1,47 @@
 'use client';
 
 import React from 'react';
-import { SparklesIcon, ShieldCheckIcon, TruckIcon } from './Icons';
 
 export const Hero: React.FC<{ onExplore: () => void }> = ({ onExplore }) => {
   return (
-    <section className="relative overflow-hidden py-20 lg:py-32 border-b border-[#2b231a] bg-radial from-[#1e1710] via-[#0b0907] to-[#050403]">
-      {/* Decorative Golden Ambient Glows */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-amber-500/10 rounded-full blur-[140px] pointer-events-none" />
+    <section className="relative overflow-hidden bg-gradient-to-b from-[#16110c] via-[#0d0906] to-[#090807] pb-8 pt-4">
+      <div className="max-w-md mx-auto px-4 text-center">
+        {/* Luxury Hero Visual (Matches Image 1: Marble, incense, florals, floating White Oudh) */}
+        <div className="relative aspect-[4/5] rounded-3xl overflow-hidden border border-amber-500/30 shadow-[0_15px_40px_rgba(0,0,0,0.8)] bg-radial from-[#241a10] to-[#0c0906] flex items-center justify-center">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="https://cdn.shopify.com/s/files/1/0852/1826/3299/files/2nd_de1f8517-6064-458b-898e-55c7a3326a9f.jpg?v=1794477876"
+            alt="Abu Haani White Oudh 6ml"
+            className="w-full h-full object-cover object-center scale-105"
+          />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        {/* Badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-amber-500/30 bg-amber-950/30 text-amber-300 text-xs tracking-widest uppercase mb-8 shadow-[0_0_20px_rgba(212,175,55,0.15)]">
-          <SparklesIcon className="w-3.5 h-3.5 text-amber-400" />
-          <span>Hand-Distilled Pure Concentrated Perfume Oils</span>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#090807]/90 via-transparent to-black/20 pointer-events-none" />
+
+          {/* Floating Subtle Headline at bottom of hero */}
+          <div className="absolute bottom-6 left-4 right-4 text-center">
+            <span className="text-[10px] uppercase font-bold tracking-[0.3em] text-amber-400 block mb-1">
+              Hand-Crafted Artisanal Essence
+            </span>
+            <h2 className="text-2xl font-serif italic text-white drop-shadow-md">
+              White Oudh 6ml
+            </h2>
+            <button
+              onClick={onExplore}
+              className="mt-3 px-6 py-2 rounded-full bg-gradient-to-r from-[#edd085] via-[#d4af37] to-[#b68826] text-black font-semibold text-xs tracking-wider shadow-lg active:scale-95 transition"
+            >
+              Order Now ->
+            </button>
+          </div>
         </div>
 
-        {/* Title */}
-        <h1 className="text-4xl sm:text-6xl lg:text-7xl font-serif font-normal text-[#fcf9f2] tracking-tight max-w-4xl mx-auto leading-[1.15]">
-          The Lost Art of <span className="italic font-light text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-amber-100">Eternal Royal Scents</span>
-        </h1>
-
-        {/* Subtitle */}
-        <p className="mt-6 text-base sm:text-lg text-[#b8ab97] max-w-2xl mx-auto font-light leading-relaxed">
-          Crafted from 100% natural wild agarwood, hydro-distilled Kannauj roses, and celestial white musk. Zero alcohol, zero synthetics — pure botanical majesty that stays with you from sunrise to midnight.
-        </p>
-
-        {/* CTA Buttons */}
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-          <button
-            onClick={onExplore}
-            className="px-8 py-4 rounded-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-black font-semibold tracking-wider uppercase text-xs hover:shadow-[0_0_25px_rgba(212,175,55,0.4)] transition duration-300 hover:scale-105"
-          >
-            Explore Pure Attars
-          </button>
-          <a
-            href="#pyramid-guide"
-            className="px-8 py-4 rounded-full border border-amber-500/30 text-amber-200 hover:border-amber-400/60 font-medium tracking-wider uppercase text-xs transition duration-300 bg-[#120f0b]/50"
-          >
-            How Fragrance Notes Work
-          </a>
-        </div>
-
-        {/* Trust Badges */}
-        <div className="mt-16 pt-10 border-t border-[#241e17] grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto text-left">
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-[#18130d] border border-amber-900/50 text-amber-400">
-              <ShieldCheckIcon className="w-5 h-5" />
-            </div>
-            <div>
-              <p className="text-xs font-semibold text-[#f5deb3]">100% Pure & Halal</p>
-              <p className="text-[11px] text-[#8c7f70]">0% Synthetic Alcohol</p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-[#18130d] border border-amber-900/50 text-amber-400">
-              <TruckIcon className="w-5 h-5" />
-            </div>
-            <div>
-              <p className="text-xs font-semibold text-[#f5deb3]">Delhivery / Shiprocket</p>
-              <p className="text-[11px] text-[#8c7f70]">Express 2-3 Day Delivery</p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-[#18130d] border border-amber-900/50 text-amber-400">
-              <SparklesIcon className="w-5 h-5" />
-            </div>
-            <div>
-              <p className="text-xs font-semibold text-[#f5deb3]">16+ Hours Longevity</p>
-              <p className="text-[11px] text-[#8c7f70]">Intense concentrated oil</p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-[#18130d] border border-amber-900/50 text-amber-400">
-              <span className="text-sm font-bold">₹</span>
-            </div>
-            <div>
-              <p className="text-xs font-semibold text-[#f5deb3]">COD & Prepaid</p>
-              <p className="text-[11px] text-[#8c7f70]">Cash on Delivery Available</p>
-            </div>
-          </div>
+        {/* Carousel Pagination Dots (Matches Image 1) */}
+        <div className="mt-4 flex items-center justify-center gap-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#3d2e1d]" />
+          <span className="w-2.5 h-2.5 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(212,175,55,0.6)]" />
+          <span className="w-1.5 h-1.5 rounded-full bg-[#3d2e1d]" />
+          <span className="w-1.5 h-1.5 rounded-full bg-[#3d2e1d]" />
         </div>
       </div>
     </section>
   );
 };
-

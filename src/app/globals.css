@@ -1,5 +1,3 @@
-@import "tailwindcss";
-
 :root {
   --background: #090807;
   --foreground: #f6f3eb;
@@ -10,13 +8,16 @@
   --card-border: #2b231a;
 }
 
-body {
-  background-color: var(--background);
-  color: var(--foreground);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  background-color: #090807 !important;
+  color: #f6f3eb !important;
+  margin: 0;
+  padding: 0;
   overflow-x: hidden;
-  selection-background-color: #d4af37;
-  selection-color: #090807;
 }
 
 /* Custom scrollbar for luxury feel */
