@@ -28,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <head>
         {/* Luxury Typography Fonts */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -82,7 +82,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-screen bg-[#F8F4EC] text-[#2C1D0E] font-sans antialiased">
+      <body className="min-h-screen bg-[#F8F4EC] text-[#2C1D0E] font-sans antialiased" suppressHydrationWarning>
         {children}
       </body>
     </html>
