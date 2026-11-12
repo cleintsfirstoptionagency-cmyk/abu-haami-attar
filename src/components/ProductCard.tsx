@@ -9,26 +9,16 @@ interface ProductCardProps {
 
 const STORE_DOMAIN = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN || 'ezf1x7-pn.myshopify.com';
 
-// Custom luxury badge for each top product
-const TOP_BADGES: Record<string, { label: string; icon: string }> = {
-  'white-oud-attar-6-ml': { label: 'TOP SELLER', icon: '👑' },
-  'ruh-gulab-attar-6-ml': { label: 'ROYAL ROSE', icon: '✨' },
-  'ameer-al-oud-attar-6-ml': { label: 'TOP CHOICE', icon: '🔥' },
-  'dream-oud-attar-6-ml': { label: 'BESTSELLER', icon: '💎' },
-  'turkish-attar-6-ml': { label: 'EXOTIC BLEND', icon: '✦' },
-};
-
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const currentVariant = product.variants[0];
   const productUrl = `https://${STORE_DOMAIN}/products/${product.handle}`;
-  const badgeInfo = TOP_BADGES[product.handle] || { label: 'TOP PRODUCT', icon: '👑' };
 
   return (
     <a
       href={productUrl}
-      className="group relative rounded-2xl sm:rounded-3xl bg-[#FFFDF9] border border-[#DFCBA0] hover:border-[#B88325] overflow-hidden transition-all duration-300 shadow-[0_4px_18px_rgba(66,46,27,0.08)] hover:shadow-[0_12px_30px_rgba(184,131,37,0.25)] flex flex-col justify-between block select-none transform hover:-translate-y-1"
+      className="group relative rounded-2xl sm:rounded-3xl bg-[#FFFDF9] border border-[#DEC99D] hover:border-[#B88325] overflow-hidden transition-all duration-300 shadow-[0_4px_16px_rgba(66,46,27,0.06)] hover:shadow-[0_12px_28px_rgba(184,131,37,0.22)] flex flex-col justify-between block select-none transform hover:-translate-y-1"
     >
-      {/* 1. Full-Fit Product Image with Continuous Golden Light Shimmer */}
+      {/* 1. Full-Fit Product Image (Clean without any overlapping labels/badges) */}
       <div className="relative aspect-[4/5] sm:aspect-square w-full overflow-hidden bg-[#161009]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
@@ -37,19 +27,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
           loading="lazy"
         />
-
-        {/* Continuous Luxury Light Shine Sweep Animation */}
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none animate-card-shine" />
-
-        <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent pointer-events-none" />
-
-        {/* Top Product Golden Badge with Glowing Pulse */}
-        <div className="absolute top-2.5 left-2.5 z-10">
-          <div className="animate-top-badge flex items-center gap-1 bg-gradient-to-r from-[#F6D374] via-[#FFF0B8] to-[#E5B542] text-[#221307] text-[9px] sm:text-[10px] font-black uppercase tracking-wider px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full shadow-[0_2px_12px_rgba(226,184,88,0.7)] border border-[#FFF5D0]">
-            <span className="text-[10px] leading-none">{badgeInfo.icon}</span>
-            <span>{badgeInfo.label}</span>
-          </div>
-        </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent pointer-events-none" />
       </div>
 
       {/* 2. Product Info & Action Button */}
@@ -66,11 +44,16 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           </div>
         </div>
 
-        {/* 3. Golden BUY NOW Button with Continuous Flowing Shimmer Animation */}
+        {/* 3. Golden BUY NOW Button with Continuous Splash Animation */}
         <div className="mt-3">
-          <div className="w-full py-2.5 sm:py-3 px-3 rounded-full font-bold text-xs tracking-wider uppercase transition-all duration-300 flex items-center justify-center gap-1.5 shadow-sm active:scale-95 bg-gradient-to-r from-[#F5D88E] via-[#E2B858] to-[#C99632] animate-gold-button text-[#2C1D0E] hover:brightness-105 shadow-[0_3px_12px_rgba(184,131,37,0.35)] font-sans cursor-pointer">
-            <span>BUY NOW</span>
-            <span className="text-sm">→</span>
+          <div className="relative overflow-hidden w-full py-2.5 sm:py-3 px-3 rounded-full font-bold text-xs tracking-wider uppercase transition-all duration-300 flex items-center justify-center gap-1.5 shadow-sm active:scale-95 bg-gradient-to-r from-[#F5D88E] via-[#E2B858] to-[#C99632] animate-button-glow text-[#2C1D0E] hover:brightness-105 font-sans cursor-pointer border border-[#FFF0B8]/60">
+            {/* Continuous Liquid Splash / Shine Ripple Animation */}
+            <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/55 to-transparent animate-button-splash pointer-events-none" />
+            
+            <span className="relative z-10 flex items-center gap-1.5 font-bold">
+              <span>BUY NOW</span>
+              <span className="text-sm font-black">→</span>
+            </span>
           </div>
         </div>
       </div>

@@ -3,30 +3,47 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { GoldenDotsOverlay } from './GoldenDotsOverlay';
 
+const STORE_DOMAIN = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN || 'ezf1x7-pn.myshopify.com';
+
 const HERO_SLIDES = [
   {
-    id: 'white-oudh',
-    title: 'White Oudh',
+    id: 'white-oud',
+    title: 'White Oud Attar – 6 ml',
+    shortName: 'White Oud',
+    handle: 'white-oud-attar-6-ml',
+    price: 599,
     src: '/hero/1-white-oudh.jpg',
   },
   {
     id: 'dream-oud',
-    title: 'Dream Oud',
+    title: 'Dream Oud Attar – 6 ml',
+    shortName: 'Dream Oud',
+    handle: 'dream-oud-attar-6-ml',
+    price: 599,
     src: '/hero/2-dream-oud.jpg',
   },
   {
     id: 'ameer-al-oud',
-    title: 'Ameer Al Oud',
+    title: 'Ameer Al Oud Attar – 6 ml',
+    shortName: 'Ameer Al Oud',
+    handle: 'ameer-al-oud-attar-6-ml',
+    price: 599,
     src: '/hero/3-ameer-al-oud.jpg',
   },
   {
     id: 'ruh-gulab',
-    title: 'Ruh Gulab',
+    title: 'Ruh Gulab Attar – 6 ml',
+    shortName: 'Ruh Gulab',
+    handle: 'ruh-gulab-attar-6-ml',
+    price: 599,
     src: '/hero/4-ruh-gulab.jpg',
   },
   {
     id: 'turkish',
-    title: 'Turkish',
+    title: 'Turkish Attar – 6 ml',
+    shortName: 'Turkish',
+    handle: 'turkish-attar-6-ml',
+    price: 599,
     src: '/hero/5-turkish.jpg',
   },
 ];
@@ -71,7 +88,7 @@ export const Hero: React.FC<{ onExplore: () => void }> = () => {
     scrollToSlide(next);
   }, [currentIndex, scrollToSlide]);
 
-  // Continuous auto-advance every 4.5s (unless user is interacting)
+  // Continuous auto-advance every 4.5s
   useEffect(() => {
     const interval = setInterval(() => {
       if (!isInteracting.current && !isDragging.current) {
@@ -126,13 +143,14 @@ export const Hero: React.FC<{ onExplore: () => void }> = () => {
     return () => el.removeEventListener('scroll', handleScroll);
   }, [handleScroll]);
 
+  const currentSlide = HERO_SLIDES[currentIndex];
+
   return (
     <section className="relative w-full bg-[#0A0704] overflow-hidden select-none border-b border-[#2B1D10]">
       
       {/* 
         Horizontal Touch / Hand Swipeable Carousel:
         - Full-fit images starting from top edge
-        - Header sits directly on top of these photos
         - Auto-advances smoothly & touch-swipeable
       */}
       <div
@@ -167,14 +185,14 @@ export const Hero: React.FC<{ onExplore: () => void }> = () => {
 
       {/* 
         Continuous Dotted Animation:
-        - Rendered ON TOP OF the carousel with z-20 so it floats directly over the hero photos on mobile
+        - Floating glowing golden dots & stars rendered directly over the hero photo with z-20
       */}
       <GoldenDotsOverlay />
 
       {/* Subtle Desktop Side Navigation Arrows */}
       <button
         onClick={handlePrev}
-        className="hidden sm:flex absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-black/50 hover:bg-black/80 text-[#E2B858] border border-[#3D2817] backdrop-blur-sm items-center justify-center transition active:scale-95 shadow-lg"
+        className="hidden sm:flex absolute left-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-full bg-black/50 hover:bg-black/80 text-[#E2B858] border border-[#3D2817] backdrop-blur-sm items-center justify-center transition active:scale-95 shadow-lg"
         aria-label="Previous slide"
       >
         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -184,7 +202,7 @@ export const Hero: React.FC<{ onExplore: () => void }> = () => {
 
       <button
         onClick={handleNext}
-        className="hidden sm:flex absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-black/50 hover:bg-black/80 text-[#E2B858] border border-[#3D2817] backdrop-blur-sm items-center justify-center transition active:scale-95 shadow-lg"
+        className="hidden sm:flex absolute right-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-full bg-black/50 hover:bg-black/80 text-[#E2B858] border border-[#3D2817] backdrop-blur-sm items-center justify-center transition active:scale-95 shadow-lg"
         aria-label="Next slide"
       >
         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -192,9 +210,30 @@ export const Hero: React.FC<{ onExplore: () => void }> = () => {
         </svg>
       </button>
 
-      {/* Golden Indicator Dots (at bottom edge of image) */}
-      <div className="absolute bottom-2 sm:bottom-3 inset-x-0 z-20 flex items-center justify-center pointer-events-auto">
-        <div className="px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-[#3A2615] flex items-center gap-1.5 sm:gap-2 shadow-[0_4px_15px_rgba(0,0,0,0.8)]">
+      {/* 
+        Dynamic BUY NOW Button & Golden Indicator Dots:
+        - Button updates dynamically to the active slide's product
+        - Features continuous liquid splash / shine ripple animation
+      */}
+      <div className="absolute bottom-2.5 sm:bottom-4 inset-x-0 z-30 flex flex-col items-center gap-2 pointer-events-auto px-4">
+        
+        {/* Dynamic BUY NOW Button for whichever photo is currently visible */}
+        <a
+          href={`https://${STORE_DOMAIN}/products/${currentSlide.handle}`}
+          className="relative overflow-hidden px-6 sm:px-8 py-2.5 sm:py-3 rounded-full font-bold text-xs sm:text-sm tracking-wider uppercase bg-gradient-to-r from-[#F5D88E] via-[#E2B858] to-[#C99632] animate-button-glow text-[#221307] shadow-[0_4px_22px_rgba(226,184,88,0.65)] active:scale-95 transition-all flex items-center gap-2 border border-[#FFF0B8]"
+        >
+          {/* Continuous Liquid Splash / Shine Ripple Animation */}
+          <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/55 to-transparent animate-button-splash pointer-events-none" />
+          
+          <span className="relative z-10 flex items-center gap-2 font-bold font-sans">
+            <span>BUY NOW</span>
+            <span className="text-[11px] font-semibold opacity-85">({currentSlide.shortName})</span>
+            <span className="text-sm font-black">→</span>
+          </span>
+        </a>
+
+        {/* Golden Indicator Dots (Exact match to reference: • • • ▬ •) */}
+        <div className="px-2.5 py-1 sm:px-3 sm:py-1 rounded-full bg-black/60 backdrop-blur-md border border-[#3A2615] flex items-center gap-1.5 sm:gap-2 shadow-[0_4px_15px_rgba(0,0,0,0.8)]">
           {HERO_SLIDES.map((slide, idx) => (
             <button
               key={slide.id}
@@ -208,6 +247,7 @@ export const Hero: React.FC<{ onExplore: () => void }> = () => {
             />
           ))}
         </div>
+
       </div>
 
     </section>
