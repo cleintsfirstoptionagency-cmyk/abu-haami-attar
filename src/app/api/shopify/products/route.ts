@@ -19,6 +19,13 @@ export async function GET() {
               url
               altText
             }
+            images(first: 10) {
+              edges {
+                node {
+                  url
+                }
+              }
+            }
             priceRange {
               minVariantPrice {
                 amount
@@ -84,6 +91,7 @@ export async function GET() {
         reviewsCount: 1,
         badge: 'Live in Store',
         featuredImage: p.featuredImage?.url || 'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=800&q=80',
+        images: (p.images?.edges || []).map((imgEdge: any) => imgEdge.node.url),
         notes: {
           top: ['Pure White Oud', 'Warm Bergamot'],
           heart: ['Sweet Amber', 'Velvet Rose'],

@@ -24,6 +24,11 @@ export default function ProductDetailPage({
     notFound();
   }
 
+  const galleryImages = product.images && product.images.length > 0
+    ? product.images
+    : [product.featuredImage];
+
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -37,6 +42,14 @@ export default function ProductDetailPage({
     setIsRedirecting(true);
     const checkoutUrl = `https://${STORE_DOMAIN}/cart/${numericVariantId}:${quantity}`;
     window.location.href = checkoutUrl;
+  };
+
+  const handlePrevImage = () => {
+    setActiveImageIndex((prev) => (prev - 1 + galleryImages.length) % galleryImages.length);
+  };
+
+  const handleNextImage = () => {
+    setActiveImageIndex((prev) => (prev + 1) % galleryImages.length);
   };
 
   return (
@@ -97,28 +110,100 @@ export default function ProductDetailPage({
           <span className="text-[#2C1D0E] font-semibold truncate">{product.title}</span>
         </nav>
 
-        {/* 2-Column Product Grid (Image Left / Buy Box Right) */}
+        {/* 2-Column Product Grid (Interactive Gallery Left / Buy Box Right) */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
           
-          {/* Left: High-Res Edge-to-Edge Image with Luxury Frame */}
-          <div className="relative rounded-3xl overflow-hidden border border-[#DEC99D] shadow-[0_10px_35px_rgba(66,46,27,0.12)] bg-[#120B06]">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={product.featuredImage}
-              alt={product.title}
-              className="w-full aspect-[4/5] object-cover object-center"
-            />
-            {/* Subtle light sweep */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none animate-card-shine" />
+          {/* ==================================================================== */}
+          {/* LEFT: INTERACTIVE MULTI-IMAGE GALLERY                                */}
+          {/* ==================================================================== */}
+          <div className="flex flex-col space-y-3">
             
-            <div className="absolute top-4 left-4">
-              <span className="px-3 py-1 rounded-full bg-black/60 backdrop-blur-md text-[#E2B858] text-[11px] font-bold border border-[#E2B858]/40">
-                100% Non-Alcoholic Artisanal Attar
-              </span>
+            {/* Main Active Image Viewer */}
+            <div className="relative rounded-3xl overflow-hidden border border-[#DEC99D] shadow-[0_10px_35px_rgba(66,46,27,0.12)] bg-[#120B06] aspect-[4/5] group">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={galleryImages[activeImageIndex]}
+                alt={`${product.title} - View ${activeImageIndex + 1}`}
+                className="w-full h-full object-cover object-center transition-all duration-300"
+              />
+              
+              {/* Diagonal Light Sweep */}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none animate-card-shine" />
+              
+              {/* Top Left Pure Artisanal Tag */}
+              <div className="absolute top-4 left-4 z-10">
+                <span className="px-3 py-1 rounded-full bg-black/60 backdrop-blur-md text-[#E2B858] text-[11px] font-bold border border-[#E2B858]/40 shadow-md">
+                  100% Non-Alcoholic Artisanal Attar
+                </span>
+              </div>
+
+              {/* Top Right Image Counter (e.g. 1 / 5) */}
+              <div className="absolute top-4 right-4 z-10">
+                <span className="px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md text-[#F8F4EC] text-xs font-bold font-sans border border-[#DEC99D]/40 shadow-md">
+                  {activeImageIndex + 1} / {galleryImages.length}
+                </span>
+              </div>
+
+              {/* Prev Arrow */}
+              {galleryImages.length > 1 && (
+                <button
+                  type="button"
+                  onClick={handlePrevImage}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/50 hover:bg-black/80 text-[#E2B858] border border-[#DFCBA0]/50 backdrop-blur-md flex items-center justify-center transition active:scale-90 shadow-lg"
+                  aria-label="Previous photo"
+                >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+              )}
+
+              {/* Next Arrow */}
+              {galleryImages.length > 1 && (
+                <button
+                  type="button"
+                  onClick={handleNextImage}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/50 hover:bg-black/80 text-[#E2B858] border border-[#DFCBA0]/50 backdrop-blur-md flex items-center justify-center transition active:scale-90 shadow-lg"
+                  aria-label="Next photo"
+                >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              )}
             </div>
+
+            {/* Thumbnail Row Underneath (Clickable) */}
+            {galleryImages.length > 1 && (
+              <div className="flex items-center gap-2.5 sm:gap-3 overflow-x-auto py-1 px-0.5 no-scrollbar select-none">
+                {galleryImages.map((imgUrl, idx) => (
+                  <button
+                    key={`thumb-${idx}`}
+                    type="button"
+                    onClick={() => setActiveImageIndex(idx)}
+                    className={`relative w-16 h-16 sm:w-20 sm:h-20 shrink-0 rounded-2xl overflow-hidden transition-all duration-300 ${
+                      activeImageIndex === idx
+                        ? 'border-2 border-[#D4A037] shadow-[0_0_12px_rgba(212,160,55,0.7)] scale-105'
+                        : 'border border-[#DEC99D]/70 opacity-60 hover:opacity-100 hover:border-[#D4A037]'
+                    }`}
+                    aria-label={`View photo ${idx + 1}`}
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={imgUrl}
+                      alt={`${product.title} thumbnail ${idx + 1}`}
+                      className="w-full h-full object-cover object-center"
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
+
           </div>
 
-          {/* Right: Buy Box & Product Attributes */}
+          {/* ==================================================================== */}
+          {/* RIGHT: BUY BOX & PRODUCT DETAILS                                     */}
+          {/* ==================================================================== */}
           <div className="flex flex-col space-y-5">
             
             {/* Title & Ratings */}

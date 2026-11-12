@@ -1,13 +1,13 @@
 import { AttarProduct } from '@/types/product';
 
-// All 5 Verified Live Products directly synced from Shopify (ezf1x7-pn.myshopify.com)
+// All 5 Verified Live Products directly synced from Shopify with full Image Galleries
 export const INITIAL_SHOPIFY_PRODUCTS: AttarProduct[] = [
   {
     id: "gid://shopify/Product/9799679672579",
     title: "White Oud Attar – 6 ml",
     handle: "white-oud-attar-6-ml",
     tagline: "Authentic Pure Scent * Live from Shopify",
-    description: "White Oud 6 ml attar ke saath apne fragrance collection ko dein ek khaas jagah. Iski compact bottle ko saath rakhna aasaan hai, chahe aap ghar par hon ya safar mein. Apne liye chun rahe hon ya kisi apne ko gift dene ke liye, White Oud ko apne collection ka hissa banayein",
+    description: "White Oud 6 ml attar ke saath apne fragrance collection ko dein ek khaas jagah. Iski compact bottle ko saath rakhna aasaan hai, chahe aap ghar par hon ya safar mein. Apne liye chun rahe hon ya kisi apne ko gift dene ke liye, White Oud ko apne collection ka hissa banayein.",
     origin: "Artisanal Distillation",
     gender: "Unisex",
     longevity: "14-18 Hours",
@@ -16,6 +16,14 @@ export const INITIAL_SHOPIFY_PRODUCTS: AttarProduct[] = [
     reviewsCount: 1,
     badge: "Live in Store",
     featuredImage: "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/Front_3b05fe52-7480-48e8-aae7-85b7d6fdcb1f.jpg?v=1794477876",
+    images: [
+      "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/Front_3b05fe52-7480-48e8-aae7-85b7d6fdcb1f.jpg?v=1794477876",
+      "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/2nd_de1f8517-6064-458b-898e-55c7a3326a9f.jpg?v=1794477876",
+      "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/5th_b883858f-6c40-4850-b0bc-3cc584d81f29.jpg?v=1794477876",
+      "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/3rd_b257cc74-c60e-4df2-b070-58e639d2dfd9.jpg?v=1794477876",
+      "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/4th_0cbeaa6f-17d5-4b14-ab8b-48218df17022.jpg?v=1794477876",
+      "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/WO6ml.jpg?v=1794477876",
+    ],
     notes: {
       top: ["Pure White Oud", "Warm Bergamot"],
       heart: ["Sweet Amber", "Velvet Rose"],
@@ -37,7 +45,7 @@ export const INITIAL_SHOPIFY_PRODUCTS: AttarProduct[] = [
     title: "Ruh Gulab Attar – 6 ml",
     handle: "ruh-gulab-attar-6-ml",
     tagline: "Authentic Pure Scent * Live from Shopify",
-    description: "Abu Haami Ruh Gulab Attar ke saath apne fragrance collection mein jodein ek khaas andaaz. 6 ml ki compact bottle aur saath diya gaya presentation box ise apne liye chunne ya kisi apne ko gift dene ka ek khoobsurat option banate hain",
+    description: "Abu Haami Ruh Gulab Attar ke saath apne fragrance collection mein jodein ek khaas andaaz. 6 ml ki compact bottle aur saath diya gaya presentation box ise apne liye chunne ya kisi apne ko gift dene ka ek khoobsurat option banate hain.",
     origin: "Artisanal Distillation",
     gender: "Unisex",
     longevity: "14-18 Hours",
@@ -46,6 +54,13 @@ export const INITIAL_SHOPIFY_PRODUCTS: AttarProduct[] = [
     reviewsCount: 1,
     badge: "Live in Store",
     featuredImage: "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/Front_4d089673-3467-4ac0-8824-3b72aad06275.jpg?v=1794484586",
+    images: [
+      "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/Front_4d089673-3467-4ac0-8824-3b72aad06275.jpg?v=1794484586",
+      "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/2nd_2d273a80-7209-4100-983c-4b5737634bee.jpg?v=1794484586",
+      "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/3rd_dba44b6c-7d96-47eb-87ee-ffd96243f541.jpg?v=1794484586",
+      "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/4th_a8e444eb-4616-4bc8-9fcc-55e931ca2989.jpg?v=1794484586",
+      "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/5th_ce430026-9ad0-4c00-9b8e-a832d10d533a.jpg?v=1794484586",
+    ],
     notes: {
       top: ["Pure Damascus Rose", "Sweet Petals"],
       heart: ["Velvet Amber", "Floral Mist"],
@@ -76,6 +91,13 @@ export const INITIAL_SHOPIFY_PRODUCTS: AttarProduct[] = [
     reviewsCount: 1,
     badge: "Live in Store",
     featuredImage: "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/front_8f2d97b9-97c4-4a07-b586-1e4a0fc7115b.jpg?v=1794485397",
+    images: [
+      "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/front_8f2d97b9-97c4-4a07-b586-1e4a0fc7115b.jpg?v=1794485397",
+      "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/2nd_6cc5e53c-dbda-4d67-8509-bbe9d4976dd8.jpg?v=1794485396",
+      "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/3rd_2c36b370-2009-47d8-b756-5e8e29fa51cd.jpg?v=1794485397",
+      "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/4th_a3b26608-cfc3-45c2-b276-ed89abb17fee.jpg?v=1794485396",
+      "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/5th_118acffb-0395-44ff-9e7e-40b3a56a7e30.jpg?v=1794485396",
+    ],
     notes: {
       top: ["Royal Agarwood", "Smoked Incense"],
       heart: ["Warm Amber", "Spice Essence"],
@@ -106,6 +128,13 @@ export const INITIAL_SHOPIFY_PRODUCTS: AttarProduct[] = [
     reviewsCount: 1,
     badge: "Live in Store",
     featuredImage: "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/Front_c461ac9a-ddc3-4827-8ae2-c3ce978c81f2.jpg?v=1794485650",
+    images: [
+      "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/Front_c461ac9a-ddc3-4827-8ae2-c3ce978c81f2.jpg?v=1794485650",
+      "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/5th_30a07719-1d64-436d-8e0c-da090f1c27f1.jpg?v=1794485650",
+      "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/2nd_8531bb20-bcff-4568-80c5-8c684e3f986f.jpg?v=1794485650",
+      "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/3rd_098a4d5f-c359-48c8-8e02-6a26ffce9b6a.jpg?v=1794485650",
+      "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/4th_db7c48cb-fb4e-41d5-941a-9b52b1378023.jpg?v=1794485650",
+    ],
     notes: {
       top: ["Caramelized Sugar", "Saffron Threads"],
       heart: ["Sweet Agarwood", "Rose Petals"],
@@ -136,6 +165,13 @@ export const INITIAL_SHOPIFY_PRODUCTS: AttarProduct[] = [
     reviewsCount: 1,
     badge: "Live in Store",
     featuredImage: "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/Front_0ecdb63c-2f65-48af-a31f-7140039c7200.jpg?v=1794486074",
+    images: [
+      "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/Front_0ecdb63c-2f65-48af-a31f-7140039c7200.jpg?v=1794486074",
+      "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/4th_3250f9ef-77a0-48ba-94bb-466bdc5a31bc.jpg?v=1794486074",
+      "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/3rd_5fcb9c38-c033-421b-b697-46ba7b07712e.jpg?v=1794486074",
+      "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/2nd_bca8291a-e258-4220-abee-ac8a61b0f55a.jpg?v=1794486074",
+      "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/5th_580b6fc6-95e8-423e-bb63-31b94a01ed0e.jpg?v=1794486074",
+    ],
     notes: {
       top: ["White Lotus", "Fresh Bergamot"],
       heart: ["Turkish Rose", "Spiced Amber"],

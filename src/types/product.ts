@@ -25,6 +25,7 @@ export interface AttarProduct {
   gender: 'Unisex' | 'Masculine' | 'Feminine';
   origin: string; // e.g., "Kannauj, India" | "Cambodia / Assam"
   featuredImage: string;
+  images?: string[];
   badge?: string; // e.g., "Bestseller", "Pure Dehn Al Oud", "Limited Harvest"
   rating: number;
   reviewsCount: number;
