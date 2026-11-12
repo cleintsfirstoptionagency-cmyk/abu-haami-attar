@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { AnnouncementBar } from '@/components/AnnouncementBar';
 import { Navbar } from '@/components/Navbar';
 import { Hero } from '@/components/Hero';
 import { ProductCard } from '@/components/ProductCard';
@@ -88,29 +89,32 @@ export default function Home() {
     <div className="min-h-screen bg-[#F8F4EC] text-[#2C1D0E] flex flex-col font-sans selection:bg-[#E2B858] selection:text-[#2C1D0E]">
       
       {/* 
-        1. Overlaid Luxury Navbar:
-        - Positioned fixed at the top OVER the hero photo
-        - Announcement bar + Logo + Search 🔍 + Cart 🛒 + Menu ☰
-        - Smooth transition from translucent overlay to solid blur on scroll
+        1. Bright 24K Gold Auto-Scrolling Marquee Strip:
+        - Continuous infinite horizontal ticker
+        - Bright gold radiant gradient
       */}
-      <Navbar
-        cartCount={cartTotalCount}
-        onOpenCart={() => setIsCartOpen(true)}
-        onOpenSearch={() => setIsSearchOpen(true)}
-        onOpenMenu={() => setIsMenuOpen(true)}
-        onSelectCollection={scrollToCollection}
-      />
+      <AnnouncementBar />
+
+      {/* 
+        2. Hero Section with Floating Overlaid Header & Golden Dotted Animation:
+        - Header (Logo, Search 🔍, Cart 🛒, Menu ☰) floats directly on top of the hero image
+        - Logo is made bigger & prominent
+        - Hero image goes all the way up to the top
+        - Continuous glowing dotted particle animation runs continuously over the image
+        - 5 images horizontally scrollable by hand/swipe or auto-play
+      */}
+      <div className="relative w-full bg-[#0A0704]">
+        <Navbar
+          cartCount={cartTotalCount}
+          onOpenCart={() => setIsCartOpen(true)}
+          onOpenSearch={() => setIsSearchOpen(true)}
+          onOpenMenu={() => setIsMenuOpen(true)}
+          onSelectCollection={scrollToCollection}
+        />
+        <Hero onExplore={scrollToCollection} />
+      </div>
 
       <main className="flex-1 w-full">
-        {/* 
-          2. Hero Section:
-          - Contains all 5 user uploaded images (White Oudh, Dream Oud, Ameer Al Oud, Ruh Gulab, Turkish)
-          - Horizontally scrollable with touch / hand swipe
-          - Golden pagination dots at bottom
-          - The logo & buttons sit directly over the top of the photo
-        */}
-        <Hero onExplore={scrollToCollection} />
-
         {/* 3. DIRECTLY INTO: Our Collection Section */}
         <section id="collection" className="pt-10 sm:pt-14 pb-4 text-center max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-center gap-3 mb-2">
