@@ -193,8 +193,8 @@ export const Hero: React.FC<{ onExplore: () => void }> = () => {
       </button>
 
       {/* Golden Indicator Dots (at bottom edge of image) */}
-      <div className="absolute bottom-3.5 sm:bottom-5 inset-x-0 z-20 flex items-center justify-center pointer-events-auto">
-        <div className="px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-[#3A2615] flex items-center gap-2 shadow-[0_4px_15px_rgba(0,0,0,0.8)]">
+      <div className="absolute bottom-2 sm:bottom-3 inset-x-0 z-20 flex items-center justify-center pointer-events-auto">
+        <div className="px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-[#3A2615] flex items-center gap-1.5 sm:gap-2 shadow-[0_4px_15px_rgba(0,0,0,0.8)]">
           {HERO_SLIDES.map((slide, idx) => (
             <button
               key={slide.id}

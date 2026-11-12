@@ -1,23 +1,22 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { AttarProduct, AttarVariant } from '@/types/product';
+import { AttarProduct } from '@/types/product';
 import { SparklesIcon } from './Icons';
 
 interface SearchModalProps {
   isOpen: boolean;
   onClose: () => void;
   products: AttarProduct[];
-  onAddToCart: (product: AttarProduct, variant: AttarVariant) => void;
 }
 
+const STORE_DOMAIN = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN || 'ezf1x7-pn.myshopify.com';
 const POPULAR_SEARCHES = ['White Oudh', 'Dream Oud', 'Ameer Al Oud', 'Ruh Gulab', 'Turkish'];
 
 export const SearchModal: React.FC<SearchModalProps> = ({
   isOpen,
   onClose,
   products,
-  onAddToCart,
 }) => {
   const [query, setQuery] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
@@ -48,6 +47,10 @@ export const SearchModal: React.FC<SearchModalProps> = ({
         p.description.toLowerCase().includes(query.toLowerCase())
       )
     : products;
+
+  const handleProductClick = (handle: string) => {
+    window.location.href = `https://${STORE_DOMAIN}/products/${handle}`;
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-12 sm:pt-20 px-4 bg-black/80 backdrop-blur-md animate-fade-in">
@@ -122,7 +125,8 @@ export const SearchModal: React.FC<SearchModalProps> = ({
               return (
                 <div
                   key={p.id}
-                  className="flex items-center justify-between gap-3 p-3 rounded-2xl bg-[#1A120B] border border-[#2D1E12] hover:border-[#B88325]/50 transition group"
+                  onClick={() => handleProductClick(p.handle)}
+                  className="flex items-center justify-between gap-3 p-3 rounded-2xl bg-[#1A120B] border border-[#2D1E12] hover:border-[#B88325]/50 transition group cursor-pointer"
                 >
                   <div className="flex items-center gap-3">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -143,13 +147,13 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                   </div>
 
                   <button
-                    onClick={() => {
-                      onAddToCart(p, variant);
-                      onClose();
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleProductClick(p.handle);
                     }}
-                    className="px-4 py-2 rounded-full text-xs font-bold bg-gradient-to-r from-[#F5D88E] via-[#E2B858] to-[#C99632] text-[#2C1D0E] hover:brightness-105 active:scale-95 transition shadow-sm"
+                    className="px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider bg-gradient-to-r from-[#F5D88E] via-[#E2B858] to-[#C99632] text-[#2C1D0E] hover:brightness-105 active:scale-95 transition shadow-sm font-sans"
                   >
-                    Buy Now
+                    BUY NOW
                   </button>
                 </div>
               );
@@ -166,4 +170,3 @@ export const SearchModal: React.FC<SearchModalProps> = ({
     </div>
   );
 };
-

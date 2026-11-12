@@ -1,27 +1,28 @@
 'use client';
 
-import React, { useState } from 'react';
-import { AttarProduct, AttarVariant } from '@/types/product';
-import { CheckIcon } from './Icons';
+import React from 'react';
+import { AttarProduct } from '@/types/product';
 
 interface ProductCardProps {
   product: AttarProduct;
-  onAddToCart: (product: AttarProduct, variant: AttarVariant) => void;
 }
 
-export const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
-  const currentVariant = product.variants[0];
-  const [added, setAdded] = useState(false);
+const STORE_DOMAIN = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN || 'ezf1x7-pn.myshopify.com';
 
-  const handleAdd = (e: React.MouseEvent) => {
+export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+  const currentVariant = product.variants[0];
+  const productUrl = `https://${STORE_DOMAIN}/products/${product.handle}`;
+
+  const handleRedirect = (e: React.MouseEvent) => {
     e.stopPropagation();
-    onAddToCart(product, currentVariant);
-    setAdded(true);
-    setTimeout(() => setAdded(false), 1600);
+    window.location.href = productUrl;
   };
 
   return (
-    <div className="group relative rounded-2xl sm:rounded-3xl bg-[#FFFDF9] border border-[#DEC99D] hover:border-[#B88325] overflow-hidden transition-all duration-300 shadow-[0_4px_15px_rgba(66,46,27,0.06)] hover:shadow-[0_10px_25px_rgba(184,131,37,0.18)] flex flex-col justify-between">
+    <div
+      onClick={handleRedirect}
+      className="group relative rounded-2xl sm:rounded-3xl bg-[#FFFDF9] border border-[#DEC99D] hover:border-[#B88325] overflow-hidden transition-all duration-300 shadow-[0_4px_15px_rgba(66,46,27,0.06)] hover:shadow-[0_10px_25px_rgba(184,131,37,0.18)] flex flex-col justify-between cursor-pointer"
+    >
       {/* 1. Full-Fit Product Image (Edge-to-Edge without gaps) */}
       <div className="relative aspect-[4/5] sm:aspect-square w-full overflow-hidden bg-[#161009]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -46,26 +47,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }
           </div>
         </div>
 
-        {/* 3. Golden Pill Action Button (Matches Reference: "Buy Now ->") */}
+        {/* 3. Golden BUY NOW Button (Directly redirects to Shopify product) */}
         <div className="mt-3">
           <button
             type="button"
-            onClick={handleAdd}
-            disabled={added}
-            className={`w-full py-2.5 sm:py-3 px-3 rounded-full font-bold text-xs tracking-wide transition-all duration-300 flex items-center justify-center gap-1.5 shadow-sm active:scale-95 ${
-              added
-                ? 'bg-emerald-600 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)]'
-                : 'bg-gradient-to-r from-[#F5D88E] via-[#E2B858] to-[#C99632] text-[#2C1D0E] hover:brightness-105 shadow-[0_3px_10px_rgba(184,131,37,0.2)]'
-            }`}
+            onClick={handleRedirect}
+            className="w-full py-2.5 sm:py-3 px-3 rounded-full font-bold text-xs tracking-wider uppercase transition-all duration-300 flex items-center justify-center gap-1.5 shadow-sm active:scale-95 bg-gradient-to-r from-[#F5D88E] via-[#E2B858] to-[#C99632] text-[#2C1D0E] hover:brightness-105 shadow-[0_3px_10px_rgba(184,131,37,0.25)] font-sans"
           >
-            {added ? (
-              <>
-                <CheckIcon className="w-4 h-4 text-white" />
-                <span>Added to Bag!</span>
-              </>
-            ) : (
-              <span>Buy Now -&gt;</span>
-            )}
+            <span>BUY NOW</span>
+            <span className="text-sm">→</span>
           </button>
         </div>
       </div>
