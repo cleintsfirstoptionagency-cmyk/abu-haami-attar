@@ -5,6 +5,8 @@ import { Navbar } from '@/components/Navbar';
 import { Hero } from '@/components/Hero';
 import { ProductCard } from '@/components/ProductCard';
 import { CartDrawer } from '@/components/CartDrawer';
+import { SearchModal } from '@/components/SearchModal';
+import { MenuDrawer } from '@/components/MenuDrawer';
 import { WhatsAppAutomationModal } from '@/components/WhatsAppAutomationModal';
 import { Footer } from '@/components/Footer';
 import { INITIAL_SHOPIFY_PRODUCTS } from '@/lib/initialProducts';
@@ -15,6 +17,8 @@ export default function Home() {
   const [products, setProducts] = useState<AttarProduct[]>(INITIAL_SHOPIFY_PRODUCTS);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isWhatsAppModalOpen, setIsWhatsAppModalOpen] = useState(false);
 
   // Silent background sync with Shopify Storefront API
@@ -73,25 +77,39 @@ export default function Home() {
     setCart((prev) => prev.filter((item) => item.variantId !== variantId));
   };
 
+  const scrollToCollection = () => {
+    const el = document.getElementById('collection');
+    el?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   const cartTotalCount = cart.reduce((acc, curr) => acc + curr.quantity, 0);
 
   return (
     <div className="min-h-screen bg-[#F8F4EC] text-[#2C1D0E] flex flex-col font-sans selection:bg-[#E2B858] selection:text-[#2C1D0E]">
-      {/* 1. Header with single-line announcement strip and official Abu Haani gold logo */}
+      
+      {/* 
+        1. Overlaid Luxury Navbar:
+        - Positioned fixed at the top OVER the hero photo
+        - Announcement bar + Logo + Search 🔍 + Cart 🛒 + Menu ☰
+        - Smooth transition from translucent overlay to solid blur on scroll
+      */}
       <Navbar
         cartCount={cartTotalCount}
         onOpenCart={() => setIsCartOpen(true)}
-        onOpenWhatsAppGuide={() => setIsWhatsAppModalOpen(true)}
+        onOpenSearch={() => setIsSearchOpen(true)}
+        onOpenMenu={() => setIsMenuOpen(true)}
+        onSelectCollection={scrollToCollection}
       />
 
       <main className="flex-1 w-full">
-        {/* 2. Hero Section (Clean fitted image, zero text overlays) */}
-        <Hero
-          onExplore={() => {
-            const el = document.getElementById('collection');
-            el?.scrollIntoView({ behavior: 'smooth' });
-          }}
-        />
+        {/* 
+          2. Hero Section:
+          - Contains all 5 user uploaded images (White Oudh, Dream Oud, Ameer Al Oud, Ruh Gulab, Turkish)
+          - Horizontally scrollable with touch / hand swipe
+          - Golden pagination dots at bottom
+          - The logo & buttons sit directly over the top of the photo
+        */}
+        <Hero onExplore={scrollToCollection} />
 
         {/* 3. DIRECTLY INTO: Our Collection Section */}
         <section id="collection" className="pt-10 sm:pt-14 pb-4 text-center max-w-7xl mx-auto px-4">
@@ -132,6 +150,22 @@ export default function Home() {
         cart={cart}
         onUpdateQuantity={handleUpdateQuantity}
         onRemoveItem={handleRemoveItem}
+      />
+
+      {/* Search Modal */}
+      <SearchModal
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+        products={products}
+        onAddToCart={handleAddToCart}
+      />
+
+      {/* Luxury Navigation Menu Drawer */}
+      <MenuDrawer
+        isOpen={isMenuOpen}
+        onClose={() => setIsMenuOpen(false)}
+        onOpenWhatsAppGuide={() => setIsWhatsAppModalOpen(true)}
+        onSelectCollection={scrollToCollection}
       />
 
       {/* WhatsApp Automation Simulator Modal */}
