@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { GoldenDotsOverlay } from './GoldenDotsOverlay';
+import { GoldenDotsCanvas } from './GoldenDotsCanvas';
 
 const STORE_DOMAIN = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN || 'ezf1x7-pn.myshopify.com';
 
@@ -9,41 +9,31 @@ const HERO_SLIDES = [
   {
     id: 'white-oud',
     title: 'White Oud Attar – 6 ml',
-    shortName: 'White Oud',
     handle: 'white-oud-attar-6-ml',
-    price: 599,
     src: '/hero/1-white-oudh.jpg',
   },
   {
     id: 'dream-oud',
     title: 'Dream Oud Attar – 6 ml',
-    shortName: 'Dream Oud',
     handle: 'dream-oud-attar-6-ml',
-    price: 599,
     src: '/hero/2-dream-oud.jpg',
   },
   {
     id: 'ameer-al-oud',
     title: 'Ameer Al Oud Attar – 6 ml',
-    shortName: 'Ameer Al Oud',
     handle: 'ameer-al-oud-attar-6-ml',
-    price: 599,
     src: '/hero/3-ameer-al-oud.jpg',
   },
   {
     id: 'ruh-gulab',
     title: 'Ruh Gulab Attar – 6 ml',
-    shortName: 'Ruh Gulab',
     handle: 'ruh-gulab-attar-6-ml',
-    price: 599,
     src: '/hero/4-ruh-gulab.jpg',
   },
   {
     id: 'turkish',
     title: 'Turkish Attar – 6 ml',
-    shortName: 'Turkish',
     handle: 'turkish-attar-6-ml',
-    price: 599,
     src: '/hero/5-turkish.jpg',
   },
 ];
@@ -184,10 +174,10 @@ export const Hero: React.FC<{ onExplore: () => void }> = () => {
       </div>
 
       {/* 
-        Continuous Dotted Animation:
-        - Floating glowing golden dots & stars rendered directly over the hero photo with z-20
+        Continuous Floating Golden Dotted & Sparkles Canvas:
+        - Native GPU-accelerated HTML5 Canvas guaranteed to render on all mobile screens
       */}
-      <GoldenDotsOverlay />
+      <GoldenDotsCanvas />
 
       {/* Subtle Desktop Side Navigation Arrows */}
       <button
@@ -211,28 +201,28 @@ export const Hero: React.FC<{ onExplore: () => void }> = () => {
       </button>
 
       {/* 
-        Dynamic BUY NOW Button & Golden Indicator Dots:
-        - Button updates dynamically to the active slide's product
-        - Features continuous liquid splash / shine ripple animation
+        Compact Small BUY NOW Pill Button & Golden Indicator Dots:
+        - Sleek, compact size matching reference
+        - Dynamically links to the active slide's product
+        - Continuous liquid splash / shine ripple animation
       */}
-      <div className="absolute bottom-2.5 sm:bottom-4 inset-x-0 z-30 flex flex-col items-center gap-2 pointer-events-auto px-4">
+      <div className="absolute bottom-2.5 sm:bottom-3.5 inset-x-0 z-30 flex flex-col items-center gap-1.5 pointer-events-auto px-4">
         
-        {/* Dynamic BUY NOW Button for whichever photo is currently visible */}
+        {/* Compact Small Sleek BUY NOW Pill Button */}
         <a
           href={`https://${STORE_DOMAIN}/products/${currentSlide.handle}`}
-          className="relative overflow-hidden px-6 sm:px-8 py-2.5 sm:py-3 rounded-full font-bold text-xs sm:text-sm tracking-wider uppercase bg-gradient-to-r from-[#F5D88E] via-[#E2B858] to-[#C99632] animate-button-glow text-[#221307] shadow-[0_4px_22px_rgba(226,184,88,0.65)] active:scale-95 transition-all flex items-center gap-2 border border-[#FFF0B8]"
+          className="relative overflow-hidden px-5 py-1.5 sm:px-6 sm:py-2 rounded-full font-bold text-[11px] sm:text-xs tracking-wide uppercase bg-gradient-to-r from-[#F5D88E] via-[#E2B858] to-[#C99632] animate-button-glow text-[#221307] shadow-[0_3px_15px_rgba(226,184,88,0.6)] active:scale-95 transition-all flex items-center gap-1.5 border border-[#FFF0B8]"
         >
           {/* Continuous Liquid Splash / Shine Ripple Animation */}
-          <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/55 to-transparent animate-button-splash pointer-events-none" />
+          <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent animate-button-splash pointer-events-none" />
           
-          <span className="relative z-10 flex items-center gap-2 font-bold font-sans">
-            <span>BUY NOW</span>
-            <span className="text-[11px] font-semibold opacity-85">({currentSlide.shortName})</span>
-            <span className="text-sm font-black">→</span>
+          <span className="relative z-10 flex items-center gap-1 font-bold font-sans">
+            <span>Buy Now</span>
+            <span className="text-xs font-black">→</span>
           </span>
         </a>
 
-        {/* Golden Indicator Dots (Exact match to reference: • • • ▬ •) */}
+        {/* Golden Indicator Dots (Exact match to reference image: • • • ▬ •) */}
         <div className="px-2.5 py-1 sm:px-3 sm:py-1 rounded-full bg-black/60 backdrop-blur-md border border-[#3A2615] flex items-center gap-1.5 sm:gap-2 shadow-[0_4px_15px_rgba(0,0,0,0.8)]">
           {HERO_SLIDES.map((slide, idx) => (
             <button
