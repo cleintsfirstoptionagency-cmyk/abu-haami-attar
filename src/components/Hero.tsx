@@ -9,36 +9,47 @@ const HERO_SLIDES = [
   {
     id: 'white-oud',
     title: 'White Oud Attar – 6 ml',
+    shortName: 'White Oud',
     handle: 'white-oud-attar-6-ml',
+    price: 599,
     src: '/hero/1-white-oudh.jpg',
   },
   {
     id: 'dream-oud',
     title: 'Dream Oud Attar – 6 ml',
+    shortName: 'Dream Oud',
     handle: 'dream-oud-attar-6-ml',
+    price: 599,
     src: '/hero/2-dream-oud.jpg',
   },
   {
     id: 'ameer-al-oud',
     title: 'Ameer Al Oud Attar – 6 ml',
+    shortName: 'Ameer Al Oud',
     handle: 'ameer-al-oud-attar-6-ml',
+    price: 599,
     src: '/hero/3-ameer-al-oud.jpg',
   },
   {
     id: 'ruh-gulab',
     title: 'Ruh Gulab Attar – 6 ml',
+    shortName: 'Ruh Gulab',
     handle: 'ruh-gulab-attar-6-ml',
+    price: 599,
     src: '/hero/4-ruh-gulab.jpg',
   },
   {
     id: 'turkish',
     title: 'Turkish Attar – 6 ml',
+    shortName: 'Turkish',
     handle: 'turkish-attar-6-ml',
+    price: 599,
     src: '/hero/5-turkish.jpg',
   },
 ];
 
 export const Hero: React.FC<{ onExplore: () => void }> = () => {
+  // Mobile Carousel State
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
   const isInteracting = useRef(false);
@@ -46,7 +57,7 @@ export const Hero: React.FC<{ onExplore: () => void }> = () => {
   const startX = useRef(0);
   const scrollLeftStart = useRef(0);
 
-  // Sync current index when user scrolls or swipes
+  // Sync current index when user scrolls or swipes on mobile
   const handleScroll = useCallback(() => {
     if (!scrollRef.current) return;
     const { scrollLeft, clientWidth } = scrollRef.current;
@@ -68,17 +79,12 @@ export const Hero: React.FC<{ onExplore: () => void }> = () => {
     setCurrentIndex(index);
   }, []);
 
-  const handlePrev = () => {
-    const prev = (currentIndex - 1 + HERO_SLIDES.length) % HERO_SLIDES.length;
-    scrollToSlide(prev);
-  };
-
   const handleNext = useCallback(() => {
     const next = (currentIndex + 1) % HERO_SLIDES.length;
     scrollToSlide(next);
   }, [currentIndex, scrollToSlide]);
 
-  // Continuous auto-advance every 4.5s
+  // Continuous auto-advance every 4.5s on mobile
   useEffect(() => {
     const interval = setInterval(() => {
       if (!isInteracting.current && !isDragging.current) {
@@ -89,7 +95,7 @@ export const Hero: React.FC<{ onExplore: () => void }> = () => {
     return () => clearInterval(interval);
   }, [handleNext]);
 
-  // Touch and Mouse drag support
+  // Touch and Mouse drag support for mobile
   const handleMouseDown = (e: React.MouseEvent) => {
     if (!scrollRef.current) return;
     isDragging.current = true;
@@ -139,86 +145,161 @@ export const Hero: React.FC<{ onExplore: () => void }> = () => {
     <section className="relative w-full bg-[#0A0704] overflow-hidden select-none border-b border-[#2B1D10]">
       
       {/* 
-        Horizontal Touch / Hand Swipeable Carousel:
-        - Full-fit images starting from top edge
-        - Auto-advances smoothly & touch-swipeable
+        ========================================================================
+        1. MOBILE VIEW (< lg): UNCHANGED EXACT 1-BY-1 TOUCH SWIPE CAROUSEL
+        ========================================================================
       */}
-      <div
-        ref={scrollRef}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUpOrLeave}
-        onMouseLeave={handleMouseUpOrLeave}
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
-        className="flex w-full overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar touch-pan-x cursor-grab active:cursor-grabbing"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-      >
-        {HERO_SLIDES.map((slide, idx) => (
-          <div
-            key={slide.id}
-            className="w-full shrink-0 snap-center flex items-center justify-center relative bg-[#0A0704]"
-          >
-            <div className="w-full max-w-4xl mx-auto flex items-center justify-center">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={slide.src}
-                alt={`Abu Haani ${slide.title} Artisanal Attar`}
-                className="w-full h-auto max-h-[76vh] sm:max-h-[85vh] object-contain sm:object-cover object-center pointer-events-none"
-                loading={idx === 0 ? 'eager' : 'lazy'}
-                draggable={false}
-              />
+      <div className="block lg:hidden relative w-full">
+        {/* Swipeable Carousel */}
+        <div
+          ref={scrollRef}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUpOrLeave}
+          onMouseLeave={handleMouseUpOrLeave}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+          className="flex w-full overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar touch-pan-x cursor-grab active:cursor-grabbing"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        >
+          {HERO_SLIDES.map((slide, idx) => (
+            <div
+              key={slide.id}
+              className="w-full shrink-0 snap-center flex items-center justify-center relative bg-[#0A0704]"
+            >
+              <div className="w-full max-w-4xl mx-auto flex items-center justify-center">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={slide.src}
+                  alt={`Abu Haani ${slide.title} Artisanal Attar`}
+                  className="w-full h-auto max-h-[76vh] object-contain object-center pointer-events-none"
+                  loading={idx === 0 ? 'eager' : 'lazy'}
+                  draggable={false}
+                />
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
+
+        {/* Mobile Golden Dots Canvas Animation */}
+        <GoldenDotsCanvas />
+
+        {/* Mobile Sleek Compact BUY NOW Pill Button */}
+        <div className="absolute bottom-3 inset-x-0 z-30 flex justify-center pointer-events-auto px-4">
+          <a
+            href={`https://${STORE_DOMAIN}/products/${currentSlide.handle}`}
+            className="relative overflow-hidden px-6 py-1.5 rounded-full font-bold text-[11px] tracking-wider uppercase bg-gradient-to-r from-[#F5D88E] via-[#E2B858] to-[#C99632] animate-button-glow text-[#221307] shadow-[0_4px_18px_rgba(226,184,88,0.65)] active:scale-95 transition-all flex items-center gap-1.5 border border-[#FFF0B8]"
+          >
+            <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent animate-button-splash pointer-events-none" />
+            <span className="relative z-10 flex items-center gap-1.5 font-bold font-sans">
+              <span>Buy Now</span>
+              <span className="text-xs font-black">→</span>
+            </span>
+          </a>
+        </div>
       </div>
 
       {/* 
-        Continuous Floating Golden Dotted & Sparkles Canvas:
-        - Native GPU-accelerated HTML5 Canvas guaranteed to render on all mobile screens
+        ========================================================================
+        2. LAPTOP / DESKTOP VIEW (>= lg): CONTINUOUS MULTI-IMAGE INFINITE LOOP
+        ========================================================================
       */}
-      <GoldenDotsCanvas />
+      <div className="hidden lg:block relative w-full pt-20 pb-10 overflow-hidden">
+        
+        {/* Subtle Heading Above Loop Track */}
+        <div className="text-center mb-6">
+          <p className="text-xs uppercase tracking-widest text-[#E2B858] font-bold font-sans">
+            ✦ Artisanal Fragrance Showcase ✦
+          </p>
+          <h2 className="text-2xl font-serif italic text-[#F8F4EC] mt-1 font-bold">
+            Pure Distilled Attars • 6ml Standard Editions
+          </h2>
+        </div>
 
-      {/* Subtle Desktop Side Navigation Arrows */}
-      <button
-        onClick={handlePrev}
-        className="hidden sm:flex absolute left-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-full bg-black/50 hover:bg-black/80 text-[#E2B858] border border-[#3D2817] backdrop-blur-sm items-center justify-center transition active:scale-95 shadow-lg"
-        aria-label="Previous slide"
-      >
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-        </svg>
-      </button>
+        {/* Infinite Continuous Loop Track (Set 1 + Set 2) */}
+        <div className="w-full overflow-hidden flex select-none cursor-pointer">
+          <div className="animate-hero-loop-track flex items-center gap-6 py-2 px-3">
+            
+            {/* Set 1: All 5 Images */}
+            {HERO_SLIDES.map((slide) => (
+              <a
+                key={`loop-1-${slide.id}`}
+                href={`https://${STORE_DOMAIN}/products/${slide.handle}`}
+                className="w-[280px] xl:w-[310px] aspect-[4/5] shrink-0 rounded-3xl overflow-hidden relative border border-[#DFCBA0]/30 hover:border-[#E2B858] shadow-[0_10px_35px_rgba(0,0,0,0.8)] group transition-all duration-300 hover:scale-[1.03] block bg-[#140E0A]"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={slide.src}
+                  alt={slide.title}
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
 
-      <button
-        onClick={handleNext}
-        className="hidden sm:flex absolute right-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-full bg-black/50 hover:bg-black/80 text-[#E2B858] border border-[#3D2817] backdrop-blur-sm items-center justify-center transition active:scale-95 shadow-lg"
-        aria-label="Next slide"
-      >
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-        </svg>
-      </button>
+                {/* Info & Buy Now Button at Bottom of Each Card */}
+                <div className="absolute bottom-4 inset-x-4 flex items-center justify-between z-10">
+                  <div>
+                    <h3 className="text-sm font-serif italic font-bold text-[#F8F4EC] group-hover:text-[#E2B858] transition">
+                      {slide.shortName}
+                    </h3>
+                    <p className="text-xs text-[#E2B858] font-bold font-sans">
+                      ₹{slide.price} (6ml)
+                    </p>
+                  </div>
 
-      {/* 
-        Sleek Compact BUY NOW Pill Button placed exactly at the bottom of the hero photo
-        - Dots indicator completely removed as requested
-        - Dynamically links to the active slide's product on Shopify
-        - Features continuous liquid splash / shine wave animation
-      */}
-      <div className="absolute bottom-3 sm:bottom-4 inset-x-0 z-30 flex justify-center pointer-events-auto px-4">
-        <a
-          href={`https://${STORE_DOMAIN}/products/${currentSlide.handle}`}
-          className="relative overflow-hidden px-6 py-1.5 sm:px-7 sm:py-2 rounded-full font-bold text-[11px] sm:text-xs tracking-wider uppercase bg-gradient-to-r from-[#F5D88E] via-[#E2B858] to-[#C99632] animate-button-glow text-[#221307] shadow-[0_4px_18px_rgba(226,184,88,0.65)] active:scale-95 transition-all flex items-center gap-1.5 border border-[#FFF0B8]"
-        >
-          {/* Continuous Liquid Splash / Shine Ripple Animation */}
-          <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent animate-button-splash pointer-events-none" />
-          
-          <span className="relative z-10 flex items-center gap-1.5 font-bold font-sans">
-            <span>Buy Now</span>
-            <span className="text-xs font-black">→</span>
-          </span>
-        </a>
+                  <span className="relative overflow-hidden px-4 py-1.5 rounded-full font-bold text-[11px] uppercase tracking-wide bg-gradient-to-r from-[#F5D88E] via-[#E2B858] to-[#C99632] animate-button-glow text-[#221307] shadow-md flex items-center gap-1 border border-[#FFF0B8]/80 group-hover:brightness-110">
+                    <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent animate-button-splash pointer-events-none" />
+                    <span className="relative z-10 flex items-center gap-1 font-bold">
+                      <span>Buy Now</span>
+                      <span className="text-xs font-black">→</span>
+                    </span>
+                  </span>
+                </div>
+              </a>
+            ))}
+
+            {/* Set 2: Seamless Infinite Duplicate */}
+            {HERO_SLIDES.map((slide) => (
+              <a
+                key={`loop-2-${slide.id}`}
+                href={`https://${STORE_DOMAIN}/products/${slide.handle}`}
+                className="w-[280px] xl:w-[310px] aspect-[4/5] shrink-0 rounded-3xl overflow-hidden relative border border-[#DFCBA0]/30 hover:border-[#E2B858] shadow-[0_10px_35px_rgba(0,0,0,0.8)] group transition-all duration-300 hover:scale-[1.03] block bg-[#140E0A]"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={slide.src}
+                  alt={slide.title}
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
+
+                {/* Info & Buy Now Button at Bottom of Each Card */}
+                <div className="absolute bottom-4 inset-x-4 flex items-center justify-between z-10">
+                  <div>
+                    <h3 className="text-sm font-serif italic font-bold text-[#F8F4EC] group-hover:text-[#E2B858] transition">
+                      {slide.shortName}
+                    </h3>
+                    <p className="text-xs text-[#E2B858] font-bold font-sans">
+                      ₹{slide.price} (6ml)
+                    </p>
+                  </div>
+
+                  <span className="relative overflow-hidden px-4 py-1.5 rounded-full font-bold text-[11px] uppercase tracking-wide bg-gradient-to-r from-[#F5D88E] via-[#E2B858] to-[#C99632] animate-button-glow text-[#221307] shadow-md flex items-center gap-1 border border-[#FFF0B8]/80 group-hover:brightness-110">
+                    <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent animate-button-splash pointer-events-none" />
+                    <span className="relative z-10 flex items-center gap-1 font-bold">
+                      <span>Buy Now</span>
+                      <span className="text-xs font-black">→</span>
+                    </span>
+                  </span>
+                </div>
+              </a>
+            ))}
+
+          </div>
+        </div>
+
+        {/* Laptop Golden Canvas Particles */}
+        <GoldenDotsCanvas />
+
       </div>
 
     </section>

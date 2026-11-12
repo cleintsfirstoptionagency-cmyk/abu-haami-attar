@@ -57,7 +57,28 @@ html, body {
   animation-play-state: paused;
 }
 
-/* 2. Hardware-Accelerated Floating Golden Dotted Animation */
+/* 2. Desktop Laptop Hero Infinite Loop Track */
+@keyframes heroLoopTrack {
+  0% {
+    transform: translate3d(0%, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-hero-loop-track {
+  display: flex;
+  width: max-content;
+  animation: heroLoopTrack 32s linear infinite;
+  will-change: transform;
+}
+
+.animate-hero-loop-track:hover {
+  animation-play-state: paused;
+}
+
+/* 3. Hardware-Accelerated Floating Golden Dotted Animation */
 @keyframes floatDottedParticle {
   0% {
     transform: translate3d(0, 0, 0) scale(0.7);
@@ -77,7 +98,7 @@ html, body {
   }
 }
 
-/* 3. Continuous Liquid Gold Splash / Shine Ripple across BUY NOW button */
+/* 4. Continuous Liquid Gold Splash / Shine Ripple across BUY NOW button */
 @keyframes buttonSplashShine {
   0% {
     transform: translate3d(-160%, 0, 0) skewX(-25deg);
@@ -101,7 +122,7 @@ html, body {
   will-change: transform, opacity;
 }
 
-/* 4. Luxury Button Radiant Splash Pulse */
+/* 5. Luxury Button Radiant Splash Pulse */
 @keyframes buttonGlowPulse {
   0%, 100% {
     box-shadow: 0 4px 18px rgba(226, 184, 88, 0.45), 0 0 0 0 rgba(226, 184, 88, 0.4);
