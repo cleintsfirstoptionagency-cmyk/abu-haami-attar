@@ -57,7 +57,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             onClick={onSelectCollection}
             className="hover:text-[#E2B858] transition-colors drop-shadow"
           >
-            Our Collection
+            Our Top Collection
           </button>
           <button
             onClick={onOpenMenu}

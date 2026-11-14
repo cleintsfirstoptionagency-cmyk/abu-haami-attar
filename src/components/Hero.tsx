@@ -1,9 +1,6 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { GoldenDotsCanvas } from './GoldenDotsCanvas';
-
-const STORE_DOMAIN = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN || 'ezf1x7-pn.myshopify.com';
 
 const HERO_SLIDES = [
   {
@@ -146,11 +143,11 @@ export const Hero: React.FC<{ onExplore: () => void }> = () => {
       
       {/* 
         ========================================================================
-        1. MOBILE VIEW (< lg): UNCHANGED EXACT 1-BY-1 TOUCH SWIPE CAROUSEL
+        1. MOBILE VIEW (< lg): CLEAN LUXURY 1-BY-1 TOUCH SWIPE CAROUSEL
         ========================================================================
       */}
       <div className="block lg:hidden relative w-full">
-        {/* Swipeable Carousel */}
+        {/* Swipeable Carousel with Crystal Clear Photos */}
         <div
           ref={scrollRef}
           onMouseDown={handleMouseDown}
@@ -181,20 +178,14 @@ export const Hero: React.FC<{ onExplore: () => void }> = () => {
           ))}
         </div>
 
-        {/* Mobile Golden Dots Canvas Animation */}
-        <GoldenDotsCanvas />
-
-        {/* Mobile Sleek Compact BUY NOW Pill Button */}
+        {/* Mobile Sleek Minimalist BUY NOW Pill Button */}
         <div className="absolute bottom-3 inset-x-0 z-30 flex justify-center pointer-events-auto px-4">
           <a
             href={`/products/${currentSlide.handle}`}
-            className="relative overflow-hidden px-6 py-1.5 rounded-full font-bold text-[11px] tracking-wider uppercase bg-gradient-to-r from-[#F5D88E] via-[#E2B858] to-[#C99632] animate-button-glow text-[#221307] shadow-[0_4px_18px_rgba(226,184,88,0.65)] active:scale-95 transition-all flex items-center gap-1.5 border border-[#FFF0B8]"
+            className="px-6 py-2 rounded-full font-bold text-xs tracking-wider uppercase bg-gradient-to-r from-[#F5D88E] via-[#E2B858] to-[#C99632] hover:brightness-105 text-[#221307] shadow-[0_4px_16px_rgba(226,184,88,0.4)] active:scale-95 transition-all flex items-center gap-1.5 border border-[#FFF0B8]/80"
           >
-            <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent animate-button-splash pointer-events-none" />
-            <span className="relative z-10 flex items-center gap-1.5 font-bold font-sans">
-              <span>Buy Now</span>
-              <span className="text-xs font-black">→</span>
-            </span>
+            <span className="font-bold font-sans">Buy Now</span>
+            <span className="text-xs font-black">→</span>
           </a>
         </div>
       </div>
@@ -204,7 +195,7 @@ export const Hero: React.FC<{ onExplore: () => void }> = () => {
         2. LAPTOP / DESKTOP VIEW (>= lg): CONTINUOUS MULTI-IMAGE INFINITE LOOP
         ========================================================================
       */}
-      <div className="hidden lg:block relative w-full pt-20 pb-10 overflow-hidden">
+      <div className="hidden lg:block relative w-full pt-10 pb-6 overflow-hidden">
         
         {/* Subtle Heading Above Loop Track */}
         <div className="text-center mb-6">
@@ -246,12 +237,9 @@ export const Hero: React.FC<{ onExplore: () => void }> = () => {
                     </p>
                   </div>
 
-                  <span className="relative overflow-hidden px-4 py-1.5 rounded-full font-bold text-[11px] uppercase tracking-wide bg-gradient-to-r from-[#F5D88E] via-[#E2B858] to-[#C99632] animate-button-glow text-[#221307] shadow-md flex items-center gap-1 border border-[#FFF0B8]/80 group-hover:brightness-110">
-                    <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent animate-button-splash pointer-events-none" />
-                    <span className="relative z-10 flex items-center gap-1 font-bold">
-                      <span>Buy Now</span>
-                      <span className="text-xs font-black">→</span>
-                    </span>
+                  <span className="px-4 py-1.5 rounded-full font-bold text-[11px] uppercase tracking-wide bg-gradient-to-r from-[#F5D88E] via-[#E2B858] to-[#C99632] text-[#221307] shadow-md flex items-center gap-1 border border-[#FFF0B8]/80 group-hover:brightness-110 transition">
+                    <span>Buy Now</span>
+                    <span className="text-xs font-black">→</span>
                   </span>
                 </div>
               </a>
@@ -283,12 +271,9 @@ export const Hero: React.FC<{ onExplore: () => void }> = () => {
                     </p>
                   </div>
 
-                  <span className="relative overflow-hidden px-4 py-1.5 rounded-full font-bold text-[11px] uppercase tracking-wide bg-gradient-to-r from-[#F5D88E] via-[#E2B858] to-[#C99632] animate-button-glow text-[#221307] shadow-md flex items-center gap-1 border border-[#FFF0B8]/80 group-hover:brightness-110">
-                    <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent animate-button-splash pointer-events-none" />
-                    <span className="relative z-10 flex items-center gap-1 font-bold">
-                      <span>Buy Now</span>
-                      <span className="text-xs font-black">→</span>
-                    </span>
+                  <span className="px-4 py-1.5 rounded-full font-bold text-[11px] uppercase tracking-wide bg-gradient-to-r from-[#F5D88E] via-[#E2B858] to-[#C99632] text-[#221307] shadow-md flex items-center gap-1 border border-[#FFF0B8]/80 group-hover:brightness-110 transition">
+                    <span>Buy Now</span>
+                    <span className="text-xs font-black">→</span>
                   </span>
                 </div>
               </a>
@@ -296,9 +281,6 @@ export const Hero: React.FC<{ onExplore: () => void }> = () => {
 
           </div>
         </div>
-
-        {/* Laptop Golden Canvas Particles */}
-        <GoldenDotsCanvas />
 
       </div>
 

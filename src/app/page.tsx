@@ -78,8 +78,8 @@ export default function Home() {
 
       <main className="flex-1 w-full">
         {/* 3. DIRECTLY INTO: Our Top Collection Section (Tight & Compact Spacing) */}
-        <section id="collection" className="pt-4 sm:pt-6 pb-1 text-center max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-center gap-3 mb-1.5">
+        <section id="collection" className="pt-3 sm:pt-4 pb-1 text-center max-w-7xl mx-auto px-4">
+          <div className="flex items-center justify-center gap-3 mb-1">
             <span className="w-10 sm:w-12 h-[1px] bg-gradient-to-r from-transparent to-[#B88325]/70" />
             <span className="text-[#B88325] text-xs sm:text-sm animate-pulse">✦</span>
             <span className="w-10 sm:w-12 h-[1px] bg-gradient-to-l from-transparent to-[#B88325]/70" />
@@ -93,7 +93,7 @@ export default function Home() {
         </section>
 
         {/* 4. Products Grid: 2 Columns on Mobile, 4 Columns on Laptop/Desktop */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 sm:py-4 pb-12 sm:pb-16">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-2 pb-10 sm:pb-14">
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
             {products.map((product) => (
               <ProductCard

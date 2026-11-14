@@ -71,7 +71,7 @@ export const MenuDrawer: React.FC<MenuDrawerProps> = ({
                 className="w-full text-left px-4 py-3 rounded-xl hover:bg-[#1E130A] text-[#F8F4EC] hover:text-[#E2B858] font-serif text-base tracking-wide flex items-center justify-between transition group"
               >
                 <span className="flex items-center gap-2">
-                  <span>Our Collection</span>
+                  <span>Our Top Collection</span>
                   <span className="text-[10px] uppercase tracking-widest px-2 py-0.5 rounded-full bg-[#E2B858]/20 text-[#E2B858] font-sans font-bold">
                     Pure 6ml
                   </span>
