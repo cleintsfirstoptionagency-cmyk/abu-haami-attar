@@ -285,6 +285,60 @@ export const Hero: React.FC<{ onExplore: () => void }> = () => {
 
       </div>
 
+      {/* 
+        ========================================================================
+        3. HERO TRUST BADGE PILL STRIP (Exact Match to Reference Image)
+        ========================================================================
+      */}
+      <div className="w-full max-w-4xl mx-auto px-3 sm:px-6 pt-3 pb-5 sm:pb-6 relative z-20">
+        <div className="w-full rounded-2xl sm:rounded-full bg-[#FFFDF9] border border-[#DEC99D]/90 shadow-[0_8px_30px_rgba(0,0,0,0.35)] py-2.5 sm:py-3.5 px-2 sm:px-6 grid grid-cols-4 items-center divide-x divide-[#DEC99D]/70">
+          
+          {/* 1. Free Shipping */}
+          <div className="flex flex-col items-center justify-center text-center px-1 sm:px-2">
+            <svg className="w-5 h-5 sm:w-6 sm:h-6 text-[#2C1D0E] shrink-0" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M1 8h4a.75.75 0 000-1.5H1a.75.75 0 000 1.5zm-1 3.5h5a.75.75 0 000-1.5H0a.75.75 0 000 1.5zm2 3.5h3a.75.75 0 000-1.5H2a.75.75 0 000 1.5z" />
+              <path d="M7 6a1 1 0 011-1h8a1 1 0 011 1v2.5h3.2a1 1 0 01.78.38l2.6 3.25c.27.34.42.76.42 1.2V16a1 1 0 01-1 1h-.8a2.5 2.5 0 01-4.9 0h-4.6a2.5 2.5 0 01-4.9 0H7a1 1 0 01-1-1V6zm10.75 3.5l1.6 2h-1.6V9.5z" />
+              <circle cx="8.5" cy="17" r="1.5" />
+              <circle cx="18" cy="17" r="1.5" />
+            </svg>
+            <span className="text-[10px] xs:text-[11px] sm:text-xs font-bold text-[#2C1D0E] font-sans tracking-tight mt-1 sm:mt-1.5 leading-tight">
+              Free Shipping
+            </span>
+          </div>
+
+          {/* 2. 100% Original */}
+          <div className="flex flex-col items-center justify-center text-center px-1 sm:px-2">
+            <svg className="w-5 h-5 sm:w-6 sm:h-6 text-[#2C1D0E] shrink-0" viewBox="0 0 24 24" fill="currentColor">
+              <path fillRule="evenodd" d="M12.516 2.17a.75.75 0 00-1.032 0 11.209 11.209 0 01-7.877 3.08.75.75 0 00-.722.515A12.74 12.74 0 002.5 9.75c0 5.942 4.064 10.933 9.563 12.348a.749.749 0 00.374 0c5.499-1.415 9.563-6.406 9.563-12.348 0-1.39-.223-2.73-.635-3.985a.75.75 0 00-.722-.516l-.143.001c-2.996 0-5.717-1.17-7.734-3.08zm3.094 8.016a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clipRule="evenodd" />
+            </svg>
+            <span className="text-[10px] xs:text-[11px] sm:text-xs font-bold text-[#2C1D0E] font-sans tracking-tight mt-1 sm:mt-1.5 leading-tight">
+              100% Original
+            </span>
+          </div>
+
+          {/* 3. Premium Quality */}
+          <div className="flex flex-col items-center justify-center text-center px-1 sm:px-2">
+            <svg className="w-5 h-5 sm:w-6 sm:h-6 text-[#2C1D0E] shrink-0" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M7.4 3h9.2L21 8.5 12 21 3 8.5 7.4 3zm1.18 1.5l-2.8 3.5h3.61l.9-3.5H8.58zm3.42 0h-1.6l-.9 3.5h5l-.9-3.5H12zm3.42 0l.9 3.5h3.61l-2.8-3.5h-1.71zm-9.83 5l5.83 8.73V9.5H5.59zm7.41 8.73l5.83-8.73h-5.83v8.73z" />
+            </svg>
+            <span className="text-[10px] xs:text-[11px] sm:text-xs font-bold text-[#2C1D0E] font-sans tracking-tight mt-1 sm:mt-1.5 leading-tight">
+              Premium Quality
+            </span>
+          </div>
+
+          {/* 4. Dedicated Support */}
+          <div className="flex flex-col items-center justify-center text-center px-1 sm:px-2">
+            <svg className="w-5 h-5 sm:w-6 sm:h-6 text-[#2C1D0E] shrink-0" viewBox="0 0 24 24" fill="currentColor">
+              <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75v3a2.25 2.25 0 002.25 2.25h1.5a.75.75 0 00.75-.75v-4.5a.75.75 0 00-.75-.75H4.5A8.25 8.25 0 0112 3.75a8.25 8.25 0 017.5 7.5h-1.5a.75.75 0 00-.75.75v4.5c0 .414.336.75.75.75h1.5v.75a3 3 0 01-3 3h-2.25a.75.75 0 000 1.5H16.5a4.5 4.5 0 004.5-4.5v-6c0-5.385-4.365-9.75-9.75-9.75z" clipRule="evenodd" />
+            </svg>
+            <span className="text-[10px] xs:text-[11px] sm:text-xs font-bold text-[#2C1D0E] font-sans tracking-tight mt-1 sm:mt-1.5 leading-tight">
+              Dedicated Support
+            </span>
+          </div>
+
+        </div>
+      </div>
+
     </section>
   );
 };
