@@ -31,27 +31,20 @@ export const Hero: React.FC<{ onExplore: () => void }> = ({ onExplore }) => {
         ========================================================================
         HERO VIDEO CONTAINER
         - Exact Native Video Ratio: 1:1 Aspect Ratio (720x720)
-        - Mobile: Fits width smoothly without any horizontal or vertical crop
-        - Desktop / PC: Automatically scales with min(94vw, calc(100vh - 150px), 540px)
-          so the ENTIRE video is 100% visible at a single glance without scrolling!
+        - Mobile: Perfectly fitted inside mobile frame with clean luxury borders
+        - Desktop / PC: Max width 520px aspect-square, zero crop, zero letterbox
         - Zero text overlays: Video is 100% clean and unobstructed
         ========================================================================
       */}
-      <div className="relative w-full py-2 sm:py-4 px-2 sm:px-4 flex flex-col items-center justify-center">
+      <div className="relative w-full px-3 py-2 sm:px-6 sm:py-4 flex flex-col items-center justify-center">
         
         {/* Clickable Video Frame that links directly to Top Collection */}
         <div
           onClick={onExplore}
-          className="relative mx-auto rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0_15px_50px_rgba(0,0,0,0.85)] border border-[#DEC99D]/40 bg-[#120D08] cursor-pointer group transition-transform duration-300 hover:scale-[1.01] flex items-center justify-center"
-          style={{
-            width: 'min(94vw, calc(100vh - 145px), 540px)',
-            height: 'min(94vw, calc(100vh - 145px), 540px)',
-            maxWidth: '100%',
-            aspectRatio: '1 / 1',
-          }}
+          className="relative w-full max-w-[420px] sm:max-w-[480px] lg:max-w-[520px] aspect-square mx-auto rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0_15px_50px_rgba(0,0,0,0.85)] border border-[#DEC99D]/40 bg-black cursor-pointer group transition-transform duration-300 hover:scale-[1.01]"
           title="Click to explore Our Top Collection"
         >
-          {/* Native 1:1 Zero-Lag FastStart Web Video - Perfectly Fitted in Card Edge to Edge */}
+          {/* Native 1:1 Zero-Lag FastStart Web Video - Perfectly Fitted Edge to Edge */}
           <video
             ref={videoRef}
             src="/hero/combo.mp4"
@@ -61,7 +54,7 @@ export const Hero: React.FC<{ onExplore: () => void }> = ({ onExplore }) => {
             muted
             playsInline
             preload="auto"
-            className="w-full h-full object-cover object-center select-none pointer-events-none"
+            className="w-full h-full object-cover select-none pointer-events-none"
             style={{
               transform: 'translateZ(0)',
               backfaceVisibility: 'hidden',
