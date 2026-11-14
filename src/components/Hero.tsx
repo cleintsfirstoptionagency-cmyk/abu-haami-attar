@@ -57,6 +57,19 @@ export const Hero: React.FC<{ onExplore: () => void }> = () => {
   const touchStartX = useRef(0);
   const touchStartY = useRef(0);
 
+  // Desktop Showcase State
+  const [desktopIndex, setDesktopIndex] = useState(0);
+  const [isDesktopHovered, setIsDesktopHovered] = useState(false);
+
+  // Desktop Auto-advance every 5s when not hovered
+  useEffect(() => {
+    if (isDesktopHovered) return;
+    const interval = setInterval(() => {
+      setDesktopIndex((prev) => (prev + 1) % HERO_SLIDES.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [isDesktopHovered]);
+
   // Sync current index when user scrolls or swipes on mobile
   const handleScroll = useCallback(() => {
     if (!scrollRef.current) return;
@@ -204,85 +217,104 @@ export const Hero: React.FC<{ onExplore: () => void }> = () => {
 
       {/* 
         ========================================================================
-        2. LAPTOP / DESKTOP VIEW (>= lg): CONTINUOUS MULTI-IMAGE INFINITE LOOP
+        2. LAPTOP / DESKTOP VIEW (>= lg): GRAND CINEMATIC LUXURY SHOWCASE
         ========================================================================
       */}
-      <div className="hidden lg:block relative w-full pt-20 pb-8 overflow-hidden">
-        {/* Infinite Continuous Loop Track (Set 1 + Set 2) */}
-        <div className="w-full overflow-hidden flex select-none cursor-pointer relative z-10">
-          <div className="animate-hero-loop-track flex items-center gap-6 py-2 px-3">
-            
-            {/* Set 1: All 5 Images */}
-            {HERO_SLIDES.map((slide) => (
-              <a
-                key={`loop-1-${slide.id}`}
-                href={`/products/${slide.handle}`}
-                className="w-[280px] xl:w-[310px] aspect-[4/5] shrink-0 rounded-3xl overflow-hidden relative border border-[#DFCBA0]/30 hover:border-[#E2B858] shadow-[0_10px_35px_rgba(0,0,0,0.8)] group transition-all duration-300 hover:scale-[1.03] block bg-[#140E0A]"
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={slide.src}
-                  alt={slide.title}
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
+      <div
+        className="hidden lg:block relative w-full pt-20 pb-8 bg-[radial-gradient(ellipse_at_center,_rgba(226,184,88,0.12)_0%,_rgba(10,7,4,0.98)_70%)]"
+        onMouseEnter={() => setIsDesktopHovered(true)}
+        onMouseLeave={() => setIsDesktopHovered(false)}
+      >
+        <div className="max-w-6xl mx-auto px-6 relative flex flex-col items-center">
+          
+          {/* Main Showcase Stage */}
+          <div className="relative w-full h-[62vh] xl:h-[68vh] min-h-[500px] max-h-[680px] flex items-center justify-center">
+            {HERO_SLIDES.map((slide, idx) => {
+              const isActive = idx === desktopIndex;
+              return (
+                <a
+                  key={`desktop-${slide.id}`}
+                  href={`/products/${slide.handle}`}
+                  className={`absolute inset-0 flex items-center justify-center transition-all duration-700 ease-out group ${
+                    isActive
+                      ? 'opacity-100 z-10 scale-100 pointer-events-auto'
+                      : 'opacity-0 z-0 scale-95 pointer-events-none'
+                  }`}
+                  aria-label={`Explore ${slide.title}`}
+                >
+                  <div className="relative max-h-full flex items-center justify-center">
+                    {/* Bottle Photography */}
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={slide.src}
+                      alt={slide.title}
+                      className="max-h-[60vh] xl:max-h-[66vh] w-auto object-contain rounded-2xl shadow-[0_25px_60px_rgba(0,0,0,0.9)] group-hover:scale-[1.02] transition-transform duration-500"
+                      draggable={false}
+                    />
 
-                {/* Info & Buy Now Button at Bottom of Each Card */}
-                <div className="absolute bottom-4 inset-x-4 flex items-center justify-between z-10">
-                  <div>
-                    <h3 className="text-sm font-serif italic font-bold text-[#F8F4EC] group-hover:text-[#E2B858] transition">
-                      {slide.shortName}
-                    </h3>
-                    <p className="text-xs text-[#E2B858] font-bold font-sans">
-                      ₹{slide.price} (6ml)
-                    </p>
+                    {/* Subtle Hover Cue on Desktop */}
+                    <div className="absolute bottom-4 inset-x-0 flex justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                      <span className="px-5 py-2 rounded-full text-xs font-semibold uppercase tracking-widest bg-black/80 text-[#FFF0B8] border border-[#E2B858]/60 shadow-[0_8px_25px_rgba(0,0,0,0.8)] backdrop-blur-md flex items-center gap-2">
+                        <span>Click to view {slide.shortName}</span>
+                        <span className="text-[#E2B858] font-bold">→</span>
+                      </span>
+                    </div>
                   </div>
+                </a>
+              );
+            })}
 
-                  <span className="px-4 py-1.5 rounded-full font-bold text-[11px] uppercase tracking-wide bg-gradient-to-r from-[#F5D88E] via-[#E2B858] to-[#C99632] text-[#221307] shadow-md flex items-center gap-1 border border-[#FFF0B8]/80 group-hover:brightness-110 transition">
-                    <span>Buy Now</span>
-                    <span className="text-xs font-black">→</span>
-                  </span>
-                </div>
-              </a>
-            ))}
+            {/* Left Navigation Arrow */}
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                setDesktopIndex((prev) => (prev === 0 ? HERO_SLIDES.length - 1 : prev - 1));
+              }}
+              className="absolute left-2 xl:left-4 z-20 w-11 h-11 rounded-full bg-black/60 border border-[#DFCBA0]/30 hover:border-[#E2B858] hover:bg-[#E2B858] text-[#DFCBA0] hover:text-[#221307] flex items-center justify-center transition-all duration-300 shadow-xl backdrop-blur-md group"
+              aria-label="Previous Fragrance"
+            >
+              <svg className="w-5 h-5 transition-transform group-hover:-translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
 
-            {/* Set 2: Seamless Infinite Duplicate */}
-            {HERO_SLIDES.map((slide) => (
-              <a
-                key={`loop-2-${slide.id}`}
-                href={`/products/${slide.handle}`}
-                className="w-[280px] xl:w-[310px] aspect-[4/5] shrink-0 rounded-3xl overflow-hidden relative border border-[#DFCBA0]/30 hover:border-[#E2B858] shadow-[0_10px_35px_rgba(0,0,0,0.8)] group transition-all duration-300 hover:scale-[1.03] block bg-[#140E0A]"
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={slide.src}
-                  alt={slide.title}
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
-
-                {/* Info & Buy Now Button at Bottom of Each Card */}
-                <div className="absolute bottom-4 inset-x-4 flex items-center justify-between z-10">
-                  <div>
-                    <h3 className="text-sm font-serif italic font-bold text-[#F8F4EC] group-hover:text-[#E2B858] transition">
-                      {slide.shortName}
-                    </h3>
-                    <p className="text-xs text-[#E2B858] font-bold font-sans">
-                      ₹{slide.price} (6ml)
-                    </p>
-                  </div>
-
-                  <span className="px-4 py-1.5 rounded-full font-bold text-[11px] uppercase tracking-wide bg-gradient-to-r from-[#F5D88E] via-[#E2B858] to-[#C99632] text-[#221307] shadow-md flex items-center gap-1 border border-[#FFF0B8]/80 group-hover:brightness-110 transition">
-                    <span>Buy Now</span>
-                    <span className="text-xs font-black">→</span>
-                  </span>
-                </div>
-              </a>
-            ))}
-
+            {/* Right Navigation Arrow */}
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                setDesktopIndex((prev) => (prev + 1) % HERO_SLIDES.length);
+              }}
+              className="absolute right-2 xl:right-4 z-20 w-11 h-11 rounded-full bg-black/60 border border-[#DFCBA0]/30 hover:border-[#E2B858] hover:bg-[#E2B858] text-[#DFCBA0] hover:text-[#221307] flex items-center justify-center transition-all duration-300 shadow-xl backdrop-blur-md group"
+              aria-label="Next Fragrance"
+            >
+              <svg className="w-5 h-5 transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
           </div>
-        </div>
 
+          {/* Interactive Luxury Fragrance Selector Tabs */}
+          <div className="flex items-center justify-center gap-2.5 z-20 mt-4">
+            {HERO_SLIDES.map((slide, idx) => {
+              const isActive = desktopIndex === idx;
+              return (
+                <button
+                  key={`tab-${slide.id}`}
+                  onClick={() => setDesktopIndex(idx)}
+                  className={`px-4 py-2 rounded-full text-xs tracking-wider transition-all duration-300 flex items-center gap-1.5 ${
+                    isActive
+                      ? 'bg-gradient-to-r from-[#F3CD68] via-[#FFF0B8] to-[#E5B542] text-[#221307] font-bold shadow-[0_4px_16px_rgba(226,184,88,0.4)] scale-105'
+                      : 'bg-black/50 text-[#CBB99C] border border-[#DFCBA0]/25 hover:border-[#E2B858] hover:text-[#F8F4EC] backdrop-blur-sm'
+                  }`}
+                >
+                  {isActive && <span className="text-[10px] text-[#8F6A2A]">✦</span>}
+                  <span>{slide.shortName}</span>
+                </button>
+              );
+            })}
+          </div>
+
+        </div>
       </div>
 
     </section>
