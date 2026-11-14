@@ -55,11 +55,11 @@ function ProductDetailContent({
   return (
     <div className="min-h-screen bg-[#F8F4EC] text-[#2C1D0E] flex flex-col font-sans selection:bg-[#E2B858] selection:text-[#2C1D0E]">
       
-      {/* 1. Bright Golden Auto-Scrolling Announcement Strip */}
+      {/* 1. Golden Auto-Scrolling Announcement Strip */}
       <AnnouncementBar />
 
-      {/* 2. Top Header with 3D Gold Logo & Navigation */}
-      <header className="sticky top-0 z-40 bg-[#0A0704]/98 backdrop-blur-md border-b border-[#2B1D10] px-4 sm:px-6 lg:px-8 py-3 shadow-md">
+      {/* 2. Top Header in Light Royal Cream Aesthetic */}
+      <header className="sticky top-0 z-40 bg-[#FAF6EE]/95 backdrop-blur-md border-b border-[#DEC99D] px-4 sm:px-6 lg:px-8 py-3 shadow-2xs">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           
           {/* Logo links back to Home */}
@@ -67,17 +67,17 @@ function ProductDetailContent({
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/logo.png"
-              alt="Abu Haani"
-              className="h-9 sm:h-11 w-auto object-contain hover:scale-105 transition-transform"
+              alt="Abu Haani Parfumerie"
+              className="h-9 sm:h-11 w-auto object-contain hover:scale-105 transition-transform duration-300"
             />
           </Link>
 
-          {/* Right Header Icons */}
-          <div className="flex items-center gap-3">
+          {/* Right Header Navigation Icons */}
+          <div className="flex items-center gap-2.5 sm:gap-3">
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="p-2 text-[#E6DAC8] hover:text-[#E2B858] transition rounded-full hover:bg-white/10"
-              aria-label="Search"
+              className="p-2 text-[#5C442D] hover:text-[#8A5F1A] transition rounded-full hover:bg-[#F0E6D2] active:scale-95"
+              aria-label="Search Fragrances"
             >
               <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -86,8 +86,8 @@ function ProductDetailContent({
 
             <button
               onClick={() => setIsMenuOpen(true)}
-              className="p-2 text-[#E6DAC8] hover:text-[#E2B858] transition rounded-full hover:bg-white/10"
-              aria-label="Menu"
+              className="p-2 text-[#5C442D] hover:text-[#8A5F1A] transition rounded-full hover:bg-[#F0E6D2] active:scale-95"
+              aria-label="Open Navigation Menu"
             >
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
@@ -102,10 +102,10 @@ function ProductDetailContent({
       <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
         
         {/* Breadcrumb Navigation */}
-        <nav className="flex items-center gap-2 text-xs text-[#8C765C] mb-4 font-sans">
-          <Link href="/" className="hover:text-[#B88325] transition">Home</Link>
+        <nav className="flex items-center gap-2 text-xs text-[#8C765C] mb-4 font-sans select-none">
+          <Link href="/" className="hover:text-[#8A5F1A] transition">Home</Link>
           <span>/</span>
-          <Link href="/#collection" className="hover:text-[#B88325] transition">Our Top Collection</Link>
+          <Link href="/#collection" className="hover:text-[#8A5F1A] transition">Our Top Collection</Link>
           <span>/</span>
           <span className="text-[#2C1D0E] font-semibold truncate">{product.title}</span>
         </nav>
@@ -114,59 +114,58 @@ function ProductDetailContent({
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
           
           {/* ==================================================================== */}
-          {/* LEFT: INTERACTIVE MULTI-IMAGE GALLERY                                */}
+          {/* LEFT: INTERACTIVE MULTI-IMAGE GALLERY (LIGHT CLEAN STUDIO FRAMING)   */}
           {/* ==================================================================== */}
-          <div className="flex flex-col space-y-3">
+          <div className="flex flex-col space-y-3.5">
             
             {/* Main Active Image Viewer */}
-            <div className="relative rounded-3xl overflow-hidden border border-[#DEC99D] shadow-[0_10px_35px_rgba(66,46,27,0.12)] bg-[#120B06] aspect-[4/5] group">
+            <div className="relative rounded-3xl overflow-hidden border border-[#DEC99D] shadow-[0_10px_35px_rgba(66,46,27,0.08)] bg-[#FFFDF9] aspect-[4/5] sm:aspect-square lg:aspect-[4/5] flex items-center justify-center group select-none">
+              
+              {/* Product Bottle Image */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={galleryImages[activeImageIndex]}
                 alt={`${product.title} - View ${activeImageIndex + 1}`}
-                className="w-full h-full object-cover object-center transition-all duration-300"
+                className="w-full h-full object-contain object-center p-3 sm:p-5 transition-transform duration-500 group-hover:scale-105"
               />
-              
-              {/* Diagonal Light Sweep */}
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none animate-card-shine" />
               
               {/* Top Left Pure Artisanal Tag */}
               <div className="absolute top-4 left-4 z-10">
-                <span className="px-3 py-1 rounded-full bg-black/60 backdrop-blur-md text-[#E2B858] text-[11px] font-bold border border-[#E2B858]/40 shadow-md">
+                <span className="px-3 py-1 rounded-full bg-[#FAF0D8]/95 backdrop-blur-md text-[#8A5F1A] text-[11px] font-bold font-sans border border-[#E5CCA0] shadow-xs">
                   100% Non-Alcoholic Artisanal Attar
                 </span>
               </div>
 
               {/* Top Right Image Counter (e.g. 1 / 5) */}
               <div className="absolute top-4 right-4 z-10">
-                <span className="px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md text-[#F8F4EC] text-xs font-bold font-sans border border-[#DEC99D]/40 shadow-md">
+                <span className="px-2.5 py-1 rounded-full bg-[#FFFDF9]/95 backdrop-blur-md text-[#5C442D] text-xs font-bold font-sans border border-[#DEC99D] shadow-xs">
                   {activeImageIndex + 1} / {galleryImages.length}
                 </span>
               </div>
 
-              {/* Prev Arrow */}
+              {/* Previous Photo Arrow */}
               {galleryImages.length > 1 && (
                 <button
                   type="button"
                   onClick={handlePrevImage}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/50 hover:bg-black/80 text-[#E2B858] border border-[#DFCBA0]/50 backdrop-blur-md flex items-center justify-center transition active:scale-90 shadow-lg"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-[#FFFDF9]/90 hover:bg-[#FAF0D8] text-[#8A5F1A] border border-[#DEC99D] backdrop-blur-md flex items-center justify-center transition active:scale-90 shadow-sm"
                   aria-label="Previous photo"
                 >
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
                   </svg>
                 </button>
               )}
 
-              {/* Next Arrow */}
+              {/* Next Photo Arrow */}
               {galleryImages.length > 1 && (
                 <button
                   type="button"
                   onClick={handleNextImage}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/50 hover:bg-black/80 text-[#E2B858] border border-[#DFCBA0]/50 backdrop-blur-md flex items-center justify-center transition active:scale-90 shadow-lg"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-[#FFFDF9]/90 hover:bg-[#FAF0D8] text-[#8A5F1A] border border-[#DEC99D] backdrop-blur-md flex items-center justify-center transition active:scale-90 shadow-sm"
                   aria-label="Next photo"
                 >
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                   </svg>
                 </button>
@@ -181,10 +180,10 @@ function ProductDetailContent({
                     key={`thumb-${idx}`}
                     type="button"
                     onClick={() => setActiveImageIndex(idx)}
-                    className={`relative w-16 h-16 sm:w-20 sm:h-20 shrink-0 rounded-2xl overflow-hidden transition-all duration-300 ${
+                    className={`relative w-16 h-16 sm:w-20 sm:h-20 shrink-0 rounded-2xl overflow-hidden bg-[#FFFDF9] transition-all duration-300 ${
                       activeImageIndex === idx
-                        ? 'border-2 border-[#D4A037] shadow-[0_0_12px_rgba(212,160,55,0.7)] scale-105'
-                        : 'border border-[#DEC99D]/70 opacity-60 hover:opacity-100 hover:border-[#D4A037]'
+                        ? 'border-2 border-[#8A5F1A] shadow-[0_0_12px_rgba(138,95,26,0.4)] scale-105'
+                        : 'border border-[#DEC99D] opacity-70 hover:opacity-100 hover:border-[#8A5F1A]'
                     }`}
                     aria-label={`View photo ${idx + 1}`}
                   >
@@ -192,7 +191,7 @@ function ProductDetailContent({
                     <img
                       src={imgUrl}
                       alt={`${product.title} thumbnail ${idx + 1}`}
-                      className="w-full h-full object-cover object-center"
+                      className="w-full h-full object-contain p-1"
                     />
                   </button>
                 ))}
@@ -206,48 +205,48 @@ function ProductDetailContent({
           {/* ==================================================================== */}
           <div className="flex flex-col space-y-5">
             
-            {/* Title & Ratings */}
+            {/* Title & Verified Ratings */}
             <div>
-              <div className="flex items-center gap-2 text-[#B88325] text-xs font-bold mb-1.5 font-sans">
-                <span>★★★★★</span>
-                <span className="text-[#2C1D0E]">5.0 (Verified Luxury Fragrance)</span>
+              <div className="flex items-center gap-2 text-[#8A5F1A] text-xs font-bold mb-1.5 font-sans">
+                <span className="tracking-widest">★★★★★</span>
+                <span className="text-[#2C1D0E] font-medium">5.0 (Verified Royal Fragrance)</span>
               </div>
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-serif italic text-[#2C1D0E] font-bold">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-serif italic text-[#2C1D0E] font-bold tracking-tight">
                 {product.title}
               </h1>
-              <p className="text-xs sm:text-sm text-[#8C765C] mt-1 font-serif italic">
+              <p className="text-xs sm:text-sm text-[#735A42] mt-1 font-serif italic">
                 {product.tagline || 'Artisanal Distillation • 16+ Hours Royal Longevity'}
               </p>
             </div>
 
             {/* Price Box */}
-            <div className="p-4 rounded-2xl bg-[#FFFDF9] border border-[#DEC99D] flex items-center justify-between">
+            <div className="p-4 sm:p-5 rounded-2xl bg-[#FFFDF9] border border-[#DEC99D] flex items-center justify-between shadow-2xs">
               <div>
                 <div className="flex items-baseline gap-2.5">
-                  <span className="text-2xl sm:text-3xl font-extrabold text-[#7A5B1C] font-sans">
+                  <span className="text-2xl sm:text-3xl font-extrabold text-[#8A5F1A] font-sans">
                     ₹{variant.price.toLocaleString('en-IN')}
                   </span>
-                  <span className="text-sm text-[#9E8367] line-through font-sans">
+                  <span className="text-sm text-[#A6886A] line-through font-sans">
                     ₹999
                   </span>
-                  <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-extrabold uppercase font-sans">
+                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] font-extrabold uppercase font-sans">
                     Save 40%
                   </span>
                 </div>
-                <p className="text-[11px] text-[#8C765C] mt-0.5">
+                <p className="text-[11px] text-[#7A634D] mt-0.5">
                   Inclusive of all taxes • Free Courier across India
                 </p>
               </div>
 
               <div className="text-right">
-                <span className="text-xs font-bold text-[#2C1D0E] px-2.5 py-1 rounded-lg bg-[#F2ECE0] border border-[#DFCBA0]">
-                  {variant.size || '6ml Standard'}
+                <span className="text-xs font-bold text-[#8A5F1A] px-3 py-1.5 rounded-xl bg-[#FAF0D8] border border-[#E5CCA0]">
+                  {variant.size || '6ml Pure Oil'}
                 </span>
               </div>
             </div>
 
             {/* Scarcity Banner */}
-            <div className="p-3 rounded-xl bg-[#FFF5E5] border border-[#F0D5A3] flex items-center gap-2.5 text-xs text-[#8A5200]">
+            <div className="p-3 rounded-xl bg-[#FFF8EE] border border-[#F0D5A3] flex items-center gap-2.5 text-xs text-[#8A5200]">
               <span className="text-base">🔥</span>
               <span className="font-semibold font-sans">
                 High Demand: Only 12 hand-bottled flacons remaining from this distillation batch.
@@ -256,14 +255,14 @@ function ProductDetailContent({
 
             {/* Quantity Selector */}
             <div className="flex items-center gap-4">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#736250] font-sans">
+              <span className="text-xs font-bold uppercase tracking-wider text-[#5C442D] font-sans">
                 Quantity:
               </span>
-              <div className="flex items-center rounded-full border border-[#DEC99D] bg-[#FFFDF9] px-2 py-1">
+              <div className="flex items-center rounded-full border border-[#DEC99D] bg-[#FFFDF9] px-2 py-1 shadow-2xs">
                 <button
                   type="button"
                   onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                  className="w-7 h-7 flex items-center justify-center font-bold text-sm text-[#7A5B1C] hover:bg-[#F2ECE0] rounded-full transition"
+                  className="w-7 h-7 flex items-center justify-center font-bold text-sm text-[#8A5F1A] hover:bg-[#FAF0D8] rounded-full transition"
                   aria-label="Decrease quantity"
                 >
                   -
@@ -274,7 +273,7 @@ function ProductDetailContent({
                 <button
                   type="button"
                   onClick={() => setQuantity((q) => Math.min(10, q + 1))}
-                  className="w-7 h-7 flex items-center justify-center font-bold text-sm text-[#7A5B1C] hover:bg-[#F2ECE0] rounded-full transition"
+                  className="w-7 h-7 flex items-center justify-center font-bold text-sm text-[#8A5F1A] hover:bg-[#FAF0D8] rounded-full transition"
                   aria-label="Increase quantity"
                 >
                   +
@@ -282,50 +281,49 @@ function ProductDetailContent({
               </div>
             </div>
 
-            {/* BIG PROMINENT BUY NOW BUTTON (Continuous Liquid Splash Animation) */}
+            {/* Grand 24K Gold BUY NOW Button */}
             <div>
               <button
                 type="button"
                 onClick={handleProceedToShopifyCheckout}
                 disabled={isRedirecting}
-                className="w-full relative overflow-hidden py-4 px-6 rounded-full font-extrabold text-sm sm:text-base tracking-wider uppercase bg-gradient-to-r from-[#F5D88E] via-[#E2B858] to-[#C99632] animate-button-glow text-[#221307] shadow-[0_6px_25px_rgba(226,184,88,0.7)] active:scale-95 transition-all flex items-center justify-center gap-2 border border-[#FFF0B8]"
+                className="w-full relative overflow-hidden py-4 px-6 rounded-full font-extrabold text-sm sm:text-base tracking-wider uppercase bg-gradient-to-r from-[#F5D88E] via-[#E2B858] to-[#C99632] animate-button-glow text-[#221307] shadow-[0_6px_25px_rgba(226,184,88,0.55)] active:scale-95 transition-all flex items-center justify-center gap-2 border border-[#FFF0B8]"
               >
-                {/* Continuous Splash Animation */}
-                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent animate-button-splash pointer-events-none" />
-                
                 <span className="relative z-10 flex items-center gap-2">
                   <span>{isRedirecting ? 'Directing to Checkout...' : `BUY NOW • ₹${(variant.price * quantity).toLocaleString('en-IN')}`}</span>
                   <span className="text-base font-black">→</span>
                 </span>
               </button>
 
-              <div className="mt-2 text-center text-[11px] text-[#705842] flex items-center justify-center gap-3">
+              <div className="mt-2 text-center text-[11px] text-[#7A634D] flex items-center justify-center gap-3">
                 <span>⚡ Instant Shopify Checkout</span>
                 <span>•</span>
                 <span>🛡️ COD & UPI Accepted</span>
+                <span>•</span>
+                <span>🔒 Insured Courier</span>
               </div>
             </div>
 
-            {/* Olfactory Pyramid / Fragrance Notes */}
-            <div className="p-4 rounded-2xl bg-[#FFFDF9] border border-[#DEC99D] space-y-3">
-              <h4 className="text-xs font-bold tracking-widest uppercase text-[#B88325] font-sans flex items-center gap-1.5">
+            {/* Olfactory Fragrance Pyramid */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-[#FFFDF9] border border-[#DEC99D] space-y-3 shadow-2xs">
+              <h4 className="text-xs font-bold tracking-widest uppercase text-[#8A5F1A] font-sans flex items-center gap-1.5">
                 <SparklesIcon className="w-3.5 h-3.5" />
                 <span>Fragrance Pyramid</span>
               </h4>
               <div className="grid grid-cols-3 gap-2 text-center pt-1">
-                <div className="p-2 rounded-xl bg-[#F8F4EC] border border-[#E8DCBE]">
+                <div className="p-2.5 rounded-xl bg-[#FAF6EE] border border-[#E8DDCA]">
                   <p className="text-[10px] text-[#8C765C] uppercase font-bold">Top Notes</p>
                   <p className="text-xs font-serif font-bold text-[#2C1D0E] mt-0.5">
                     {product.notes.top.join(', ')}
                   </p>
                 </div>
-                <div className="p-2 rounded-xl bg-[#F8F4EC] border border-[#E8DCBE]">
+                <div className="p-2.5 rounded-xl bg-[#FAF6EE] border border-[#E8DDCA]">
                   <p className="text-[10px] text-[#8C765C] uppercase font-bold">Heart Notes</p>
                   <p className="text-xs font-serif font-bold text-[#2C1D0E] mt-0.5">
                     {product.notes.heart.join(', ')}
                   </p>
                 </div>
-                <div className="p-2 rounded-xl bg-[#F8F4EC] border border-[#E8DCBE]">
+                <div className="p-2.5 rounded-xl bg-[#FAF6EE] border border-[#E8DDCA]">
                   <p className="text-[10px] text-[#8C765C] uppercase font-bold">Base Notes</p>
                   <p className="text-xs font-serif font-bold text-[#2C1D0E] mt-0.5">
                     {product.notes.base.join(', ')}
@@ -335,9 +333,9 @@ function ProductDetailContent({
             </div>
 
             {/* Description */}
-            <div className="p-4 rounded-2xl bg-[#FFFDF9] border border-[#DEC99D] space-y-2">
-              <h4 className="text-xs font-bold tracking-widest uppercase text-[#736250] font-sans">
-                Description
+            <div className="p-4 sm:p-5 rounded-2xl bg-[#FFFDF9] border border-[#DEC99D] space-y-2 shadow-2xs">
+              <h4 className="text-xs font-bold tracking-widest uppercase text-[#5C442D] font-sans">
+                Artisanal Description
               </h4>
               <p className="text-xs sm:text-sm text-[#422E1B] leading-relaxed font-sans">
                 {product.description}
@@ -346,11 +344,11 @@ function ProductDetailContent({
 
             {/* Trust Badges */}
             <div className="grid grid-cols-2 gap-3 pt-1">
-              <div className="flex items-center gap-2 p-2.5 rounded-xl bg-[#FFFDF9] border border-[#DEC99D] text-xs">
-                <ShieldCheckIcon className="w-4 h-4 text-[#B88325] shrink-0" />
+              <div className="flex items-center gap-2 p-2.5 rounded-xl bg-[#FFFDF9] border border-[#DEC99D] text-xs shadow-2xs">
+                <ShieldCheckIcon className="w-4 h-4 text-[#8A5F1A] shrink-0" />
                 <span className="font-semibold text-[#2C1D0E]">100% Pure Non-Alcoholic</span>
               </div>
-              <div className="flex items-center gap-2 p-2.5 rounded-xl bg-[#FFFDF9] border border-[#DEC99D] text-xs">
+              <div className="flex items-center gap-2 p-2.5 rounded-xl bg-[#FFFDF9] border border-[#DEC99D] text-xs shadow-2xs">
                 <span className="text-base leading-none">🚚</span>
                 <span className="font-semibold text-[#2C1D0E]">Free Insured Delivery</span>
               </div>
@@ -362,11 +360,11 @@ function ProductDetailContent({
 
       </main>
 
-      {/* 4. Mobile Sticky Bottom BUY NOW Bar */}
-      <div className="lg:hidden sticky bottom-0 z-40 bg-[#120B06]/98 backdrop-blur-md border-t border-[#362312] p-3 px-4 shadow-[0_-5px_20px_rgba(0,0,0,0.4)] flex items-center justify-between gap-3">
+      {/* 4. Mobile Sticky Bottom BUY NOW Bar in Light Luxury Theme */}
+      <div className="lg:hidden sticky bottom-0 z-40 bg-[#FFFDF9]/95 backdrop-blur-md border-t border-[#DEC99D] p-3 px-4 shadow-[0_-5px_20px_rgba(66,46,27,0.1)] flex items-center justify-between gap-3">
         <div>
-          <p className="text-[10px] text-[#A6886A] uppercase font-bold">Total Price</p>
-          <p className="text-lg font-bold text-[#E2B858] font-sans">
+          <p className="text-[10px] text-[#7A634D] uppercase font-bold">Total Price</p>
+          <p className="text-lg font-bold text-[#8A5F1A] font-sans">
             ₹{(variant.price * quantity).toLocaleString('en-IN')}
           </p>
         </div>
@@ -375,9 +373,8 @@ function ProductDetailContent({
           type="button"
           onClick={handleProceedToShopifyCheckout}
           disabled={isRedirecting}
-          className="relative overflow-hidden flex-1 py-3 px-5 rounded-full font-extrabold text-xs tracking-wider uppercase bg-gradient-to-r from-[#F5D88E] via-[#E2B858] to-[#C99632] animate-button-glow text-[#221307] shadow-lg active:scale-95 transition-all flex items-center justify-center gap-1.5 border border-[#FFF0B8]"
+          className="relative overflow-hidden flex-1 py-3 px-5 rounded-full font-extrabold text-xs tracking-wider uppercase bg-gradient-to-r from-[#F5D88E] via-[#E2B858] to-[#C99632] animate-button-glow text-[#221307] shadow-md active:scale-95 transition-all flex items-center justify-center gap-1.5 border border-[#FFF0B8]"
         >
-          <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent animate-button-splash pointer-events-none" />
           <span className="relative z-10 flex items-center gap-1.5 font-bold">
             <span>{isRedirecting ? 'Directing...' : 'BUY NOW'}</span>
             <span className="text-sm font-black">→</span>

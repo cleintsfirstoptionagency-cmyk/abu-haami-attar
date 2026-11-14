@@ -10,8 +10,7 @@ interface SearchModalProps {
   products: AttarProduct[];
 }
 
-const STORE_DOMAIN = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN || 'ezf1x7-pn.myshopify.com';
-const POPULAR_SEARCHES = ['White Oudh', 'Dream Oud', 'Ameer Al Oud', 'Ruh Gulab', 'Turkish'];
+const POPULAR_SEARCHES = ['White Oud', 'Dream Oud', 'Ameer Al Oud', 'Ruh Gulab', 'Turkish'];
 
 export const SearchModal: React.FC<SearchModalProps> = ({
   isOpen,
@@ -53,15 +52,15 @@ export const SearchModal: React.FC<SearchModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-12 sm:pt-20 px-4 bg-black/80 backdrop-blur-md animate-fade-in">
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-12 sm:pt-20 px-4 bg-black/45 backdrop-blur-sm animate-fade-in select-none">
       {/* Backdrop click to close */}
       <div className="fixed inset-0 -z-10" onClick={onClose} />
 
-      <div className="w-full max-w-2xl bg-[#140E0A] border border-[#3D2817] rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col max-h-[80vh]">
+      <div className="w-full max-w-2xl bg-[#FFFDF9] border border-[#DEC99D] rounded-3xl shadow-[0_20px_50px_rgba(44,29,14,0.18)] overflow-hidden flex flex-col max-h-[80vh]">
         
         {/* Search Header */}
-        <div className="p-4 sm:p-5 border-b border-[#2D1E12] flex items-center gap-3">
-          <svg className="w-5 h-5 text-[#E2B858] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <div className="p-4 sm:p-5 border-b border-[#E8DDCA] flex items-center gap-3 bg-[#FAF6EE]">
+          <svg className="w-5 h-5 text-[#8A5F1A] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
 
@@ -70,14 +69,14 @@ export const SearchModal: React.FC<SearchModalProps> = ({
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search artisanal attars (e.g. White Oudh, Dream Oud)..."
-            className="w-full bg-transparent text-[#F8F4EC] placeholder-[#8C765C] text-sm sm:text-base outline-none font-sans"
+            placeholder="Search artisanal attars (e.g. White Oud, Dream Oud)..."
+            className="w-full bg-transparent text-[#2C1D0E] placeholder-[#8C765C] text-sm sm:text-base outline-none font-sans"
           />
 
           {query && (
             <button
               onClick={() => setQuery('')}
-              className="p-1 text-[#8C765C] hover:text-[#F8F4EC] transition"
+              className="p-1 text-[#8C765C] hover:text-[#2C1D0E] transition"
               aria-label="Clear query"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -88,7 +87,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
 
           <button
             onClick={onClose}
-            className="p-2 text-[#8C765C] hover:text-[#E2B858] transition rounded-full hover:bg-white/5"
+            className="p-1.5 rounded-full text-[#7A6045] hover:text-[#2C1D0E] hover:bg-[#F2ECE0] transition"
             aria-label="Close search"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -98,26 +97,25 @@ export const SearchModal: React.FC<SearchModalProps> = ({
         </div>
 
         {/* Quick Suggestion Pills */}
-        <div className="px-4 py-2.5 bg-[#0D0805] border-b border-[#24170D] flex items-center gap-2 overflow-x-auto no-scrollbar text-xs">
-          <span className="text-[#8C765C] font-serif italic shrink-0">Popular:</span>
-          {POPULAR_SEARCHES.map((tag) => (
+        <div className="px-4 sm:px-5 py-3 border-b border-[#E8DDCA] bg-[#FFFDF9] flex items-center gap-2 overflow-x-auto no-scrollbar">
+          <span className="text-xs text-[#8C765C] whitespace-nowrap font-medium">Popular:</span>
+          {POPULAR_SEARCHES.map((term) => (
             <button
-              key={tag}
-              onClick={() => setQuery(tag)}
-              className="px-2.5 py-1 rounded-full bg-[#1C130B] hover:bg-[#2E1E12] text-[#D4AF37] border border-[#3D2817] shrink-0 transition"
+              key={term}
+              onClick={() => setQuery(term)}
+              className="px-3 py-1 rounded-full text-xs bg-[#FAF6EE] border border-[#DEC99D] text-[#5C442D] hover:text-[#8A5F1A] hover:border-[#8A5F1A] hover:bg-[#FFF] transition whitespace-nowrap shadow-2xs"
             >
-              {tag}
+              {term}
             </button>
           ))}
         </div>
 
-        {/* Results Area */}
-        <div className="p-4 overflow-y-auto flex-1 space-y-3">
+        {/* Search Results List */}
+        <div className="overflow-y-auto p-4 sm:p-5 space-y-3 flex-1 bg-[#FFFDF9]">
           {filteredProducts.length === 0 ? (
             <div className="text-center py-12 text-[#8C765C]">
-              <SparklesIcon className="w-8 h-8 mx-auto text-[#7A5B1C] mb-2 opacity-50" />
-              <p className="font-serif italic text-base">No attar found for &ldquo;{query}&rdquo;</p>
-              <p className="text-xs text-[#6B553F] mt-1">Try searching for &quot;White Oudh&quot; or check our collection.</p>
+              <p className="text-sm">No artisanal attars found matching &ldquo;{query}&rdquo;.</p>
+              <p className="text-xs mt-1 text-[#A6886A]">Try searching for &quot;White Oud&quot; or &quot;Rose&quot;.</p>
             </div>
           ) : (
             filteredProducts.map((p) => {
@@ -126,44 +124,41 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                 <div
                   key={p.id}
                   onClick={() => handleProductClick(p.handle)}
-                  className="flex items-center justify-between gap-3 p-3 rounded-2xl bg-[#1A120B] border border-[#2D1E12] hover:border-[#B88325]/50 transition group cursor-pointer"
+                  className="flex items-center gap-4 p-3 rounded-2xl bg-[#FAF6EE] border border-[#E8DDCA] hover:border-[#DEC99D] hover:bg-[#FFF] transition-all cursor-pointer group shadow-2xs"
                 >
-                  <div className="flex items-center gap-3">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={p.featuredImage}
-                      alt={p.title}
-                      className="w-14 h-14 rounded-xl object-cover border border-[#3D2817]"
-                    />
-                    <div>
-                      <h4 className="text-sm font-serif italic text-[#F8F4EC] font-bold group-hover:text-[#E2B858] transition">
-                        {p.title}
-                      </h4>
-                      <div className="flex items-center gap-2 text-xs text-[#C99632] font-semibold mt-0.5">
-                        <span>₹{variant.price.toLocaleString('en-IN')}</span>
-                        <span className="text-[11px] text-[#8C765C] font-normal">({variant.size})</span>
-                      </div>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={p.featuredImage}
+                    alt={p.title}
+                    className="w-16 h-16 object-cover rounded-xl border border-[#DEC99D] group-hover:scale-105 transition duration-300"
+                  />
+                  <div className="flex-1 min-w-0">
+                    <h4 className="text-sm font-serif font-bold text-[#2C1D0E] group-hover:text-[#8A5F1A] transition truncate">
+                      {p.title}
+                    </h4>
+                    <p className="text-xs text-[#8C765C] line-clamp-1 mt-0.5">
+                      {p.tagline || p.description}
+                    </p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="text-xs font-bold text-[#8A5F1A]">
+                        ₹{variant?.price || 599}
+                      </span>
+                      <span className="text-[10px] text-[#A6886A]">6 ml</span>
                     </div>
                   </div>
-
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleProductClick(p.handle);
-                    }}
-                    className="px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider bg-gradient-to-r from-[#F5D88E] via-[#E2B858] to-[#C99632] text-[#2C1D0E] hover:brightness-105 active:scale-95 transition shadow-sm font-sans"
-                  >
-                    BUY NOW
-                  </button>
+                  <span className="text-[#A6886A] group-hover:text-[#8A5F1A] group-hover:translate-x-1 transition text-sm font-bold pr-2">
+                    →
+                  </span>
                 </div>
               );
             })
           )}
         </div>
 
-        {/* Footer */}
-        <div className="p-3 bg-[#0D0805] border-t border-[#24170D] text-center text-[11px] text-[#8C765C]">
-          100% Pure Non-Alcoholic Artisanal Attars • Free Shipping ₹999+
+        {/* Search Modal Footer */}
+        <div className="p-3 bg-[#FAF6EE] border-t border-[#E8DDCA] text-center text-xs text-[#8C765C] flex items-center justify-center gap-2">
+          <SparklesIcon className="w-3.5 h-3.5 text-[#8A5F1A]" />
+          <span>Press ESC or click outside to close</span>
         </div>
 
       </div>
