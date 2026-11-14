@@ -50,18 +50,10 @@ export default function Home() {
     <div className="min-h-screen bg-[#F8F4EC] text-[#2C1D0E] flex flex-col font-sans selection:bg-[#E2B858] selection:text-[#2C1D0E]">
       
       {/* 
-        1. Bright 24K Gold Auto-Scrolling Marquee Strip:
-        - Continuous infinite horizontal ticker
-        - Bright gold radiant gradient
-      */}
-      <AnnouncementBar />
-
-      {/* 
-        2. Hero Section with Floating Overlaid Header & Golden Dotted Animation:
+        1. Hero Section with Floating Overlaid Header:
         - Header (Logo, Search 🔍, Cart 🛒, Menu ☰) floats directly on top of the hero image
         - Logo is made bigger & prominent
-        - Hero image goes all the way up to the top
-        - Continuous glowing dotted particle animation runs continuously over the image
+        - Hero image goes all the way up to the very top edge
         - 5 images horizontally scrollable by hand/swipe or auto-play
       */}
       <div className="relative w-full bg-[#0A0704]">
@@ -74,6 +66,14 @@ export default function Home() {
         />
         <Hero onExplore={scrollToCollection} />
       </div>
+
+      {/* 
+        2. Refined Luxury Cream Marquee Ticker Strip:
+        - Moved directly below the moving hero photos
+        - Light warm royal cream background matching homepage aesthetic
+        - Subtle gold hairline borders and continuous infinite scroll
+      */}
+      <AnnouncementBar />
 
       <main className="flex-1 w-full">
         {/* 3. DIRECTLY INTO: Our Top Collection Section (Tight & Compact Spacing) */}

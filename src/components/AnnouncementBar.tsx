@@ -13,13 +13,13 @@ export const AnnouncementBar: React.FC = () => {
   ];
 
   return (
-    <div className="w-full bg-gradient-to-r from-[#F3CD68] via-[#FFF0B8] to-[#E5B542] text-[#221307] py-2 px-2 overflow-hidden shadow-sm border-b border-[#CFA032] select-none z-50 relative">
+    <div className="w-full bg-[#F4EEDF] text-[#2C1D0E] py-2.5 px-2 overflow-hidden border-y border-[#DEC99D]/80 select-none relative z-30 shadow-xs">
       <div className="animate-marquee-scroll flex items-center whitespace-nowrap">
         {/* Set 1 */}
         {tickerItems.map((text, idx) => (
           <div key={`item-1-${idx}`} className="inline-flex items-center gap-2.5 mx-4 sm:mx-6">
-            <SparklesIcon className="w-3.5 h-3.5 text-[#8F6614] shrink-0 fill-current" />
-            <span className="text-[11px] sm:text-xs font-bold tracking-wide uppercase font-sans">
+            <span className="text-[#B88325] text-xs">✦</span>
+            <span className="text-[11px] sm:text-xs font-bold tracking-wider uppercase font-sans text-[#2C1D0E]">
               {text}
             </span>
           </div>
@@ -28,8 +28,8 @@ export const AnnouncementBar: React.FC = () => {
         {/* Set 2 (for seamless loop) */}
         {tickerItems.map((text, idx) => (
           <div key={`item-2-${idx}`} className="inline-flex items-center gap-2.5 mx-4 sm:mx-6">
-            <SparklesIcon className="w-3.5 h-3.5 text-[#8F6614] shrink-0 fill-current" />
-            <span className="text-[11px] sm:text-xs font-bold tracking-wide uppercase font-sans">
+            <span className="text-[#B88325] text-xs">✦</span>
+            <span className="text-[11px] sm:text-xs font-bold tracking-wider uppercase font-sans text-[#2C1D0E]">
               {text}
             </span>
           </div>
