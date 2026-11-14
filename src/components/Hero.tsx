@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { IncenseSmokeCanvas } from './IncenseSmokeCanvas';
 
 const HERO_SLIDES = [
   {
@@ -163,9 +162,6 @@ export const Hero: React.FC<{ onExplore: () => void }> = () => {
         ========================================================================
       */}
       <div className="block lg:hidden relative w-full">
-        {/* Real-time Atmospheric Bakhoor & Incense Smoke Animation */}
-        <IncenseSmokeCanvas density="rich" />
-
         {/* Swipeable Carousel with Crystal Clear Photos - 100% Clickable to Product */}
         <div
           ref={scrollRef}
@@ -212,9 +208,6 @@ export const Hero: React.FC<{ onExplore: () => void }> = () => {
         ========================================================================
       */}
       <div className="hidden lg:block relative w-full pt-20 pb-8 overflow-hidden">
-        {/* Real-time Atmospheric Bakhoor & Incense Smoke Animation */}
-        <IncenseSmokeCanvas density="rich" />
-
         {/* Infinite Continuous Loop Track (Set 1 + Set 2) */}
         <div className="w-full overflow-hidden flex select-none cursor-pointer relative z-10">
           <div className="animate-hero-loop-track flex items-center gap-6 py-2 px-3">
