@@ -54,6 +54,9 @@ export const Hero: React.FC<{ onExplore: () => void }> = () => {
   const isDragging = useRef(false);
   const startX = useRef(0);
   const scrollLeftStart = useRef(0);
+  const hasMoved = useRef(false);
+  const touchStartX = useRef(0);
+  const touchStartY = useRef(0);
 
   // Sync current index when user scrolls or swipes on mobile
   const handleScroll = useCallback(() => {
@@ -97,6 +100,7 @@ export const Hero: React.FC<{ onExplore: () => void }> = () => {
   const handleMouseDown = (e: React.MouseEvent) => {
     if (!scrollRef.current) return;
     isDragging.current = true;
+    hasMoved.current = false;
     isInteracting.current = true;
     startX.current = e.pageX - scrollRef.current.offsetLeft;
     scrollLeftStart.current = scrollRef.current.scrollLeft;
@@ -104,9 +108,11 @@ export const Hero: React.FC<{ onExplore: () => void }> = () => {
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!isDragging.current || !scrollRef.current) return;
-    e.preventDefault();
     const x = e.pageX - scrollRef.current.offsetLeft;
     const walk = (x - startX.current) * 1.5;
+    if (Math.abs(walk) > 8) {
+      hasMoved.current = true;
+    }
     scrollRef.current.scrollLeft = scrollLeftStart.current - walk;
   };
 
@@ -119,8 +125,19 @@ export const Hero: React.FC<{ onExplore: () => void }> = () => {
     }, 2000);
   };
 
-  const handleTouchStart = () => {
+  const handleTouchStart = (e: React.TouchEvent) => {
     isInteracting.current = true;
+    hasMoved.current = false;
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    const dx = Math.abs(e.touches[0].clientX - touchStartX.current);
+    const dy = Math.abs(e.touches[0].clientY - touchStartY.current);
+    if (dx > 8 || dy > 8) {
+      hasMoved.current = true;
+    }
   };
 
   const handleTouchEnd = () => {
@@ -137,8 +154,6 @@ export const Hero: React.FC<{ onExplore: () => void }> = () => {
     return () => el.removeEventListener('scroll', handleScroll);
   }, [handleScroll]);
 
-  const currentSlide = HERO_SLIDES[currentIndex];
-
   return (
     <section className="relative w-full bg-[#0A0704] overflow-hidden select-none border-b border-[#2B1D10]">
       
@@ -151,7 +166,7 @@ export const Hero: React.FC<{ onExplore: () => void }> = () => {
         {/* Real-time Atmospheric Bakhoor & Incense Smoke Animation */}
         <IncenseSmokeCanvas density="rich" />
 
-        {/* Swipeable Carousel with Crystal Clear Photos */}
+        {/* Swipeable Carousel with Crystal Clear Photos - 100% Clickable to Product */}
         <div
           ref={scrollRef}
           onMouseDown={handleMouseDown}
@@ -159,14 +174,22 @@ export const Hero: React.FC<{ onExplore: () => void }> = () => {
           onMouseUp={handleMouseUpOrLeave}
           onMouseLeave={handleMouseUpOrLeave}
           onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
           className="flex w-full overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar touch-pan-x cursor-grab active:cursor-grabbing"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {HERO_SLIDES.map((slide, idx) => (
-            <div
+            <a
               key={slide.id}
-              className="w-full shrink-0 snap-center flex items-center justify-center relative bg-[#0A0704]"
+              href={`/products/${slide.handle}`}
+              onClick={(e) => {
+                if (hasMoved.current) {
+                  e.preventDefault();
+                }
+              }}
+              className="w-full shrink-0 snap-center flex items-center justify-center relative bg-[#0A0704] cursor-pointer"
+              aria-label={`View ${slide.title}`}
             >
               <div className="w-full max-w-4xl mx-auto flex items-center justify-center">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -178,19 +201,8 @@ export const Hero: React.FC<{ onExplore: () => void }> = () => {
                   draggable={false}
                 />
               </div>
-            </div>
+            </a>
           ))}
-        </div>
-
-        {/* Mobile Sleek Minimalist BUY NOW Pill Button */}
-        <div className="absolute bottom-3 inset-x-0 z-30 flex justify-center pointer-events-auto px-4">
-          <a
-            href={`/products/${currentSlide.handle}`}
-            className="px-6 py-2 rounded-full font-bold text-xs tracking-wider uppercase bg-gradient-to-r from-[#F5D88E] via-[#E2B858] to-[#C99632] hover:brightness-105 text-[#221307] shadow-[0_4px_16px_rgba(226,184,88,0.4)] active:scale-95 transition-all flex items-center gap-1.5 border border-[#FFF0B8]/80"
-          >
-            <span className="font-bold font-sans">Buy Now</span>
-            <span className="text-xs font-black">→</span>
-          </a>
         </div>
       </div>
 

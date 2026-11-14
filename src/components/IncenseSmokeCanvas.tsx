@@ -292,3 +292,4 @@ export const IncenseSmokeCanvas: React.FC<IncenseSmokeCanvasProps> = ({
     />
   );
 };
+
