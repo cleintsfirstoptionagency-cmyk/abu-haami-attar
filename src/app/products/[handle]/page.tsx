@@ -143,42 +143,26 @@ function ProductDetailContent({
           {/* ==================================================================== */}
           <div className="lg:col-span-6 space-y-3">
             
-            {/* The Main Media Frame Card (Exact Fatima Calligrapher Card Frame) */}
-            <div className="relative w-full aspect-square max-h-[460px] sm:max-h-[520px] rounded-2xl sm:rounded-3xl overflow-hidden bg-white shadow-sm flex items-center justify-center select-none group border border-gray-200">
+            {/* The Main Media Frame Card - Full Seamless Edge-to-Edge Fit, Zero Labels */}
+            <div className="relative w-full aspect-square max-h-[480px] sm:max-h-[540px] rounded-2xl sm:rounded-3xl overflow-hidden bg-[#140E0A] shadow-sm flex items-center justify-center select-none group border border-[#DFCBA0]/50">
               
-              {/* Image View Container with Clean Studio Background & Crisp Padding */}
-              <div className="w-full h-full flex items-center justify-center p-3 sm:p-5">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={galleryImages[activeImageIndex]}
-                  alt={`${product.title} - Photo ${activeImageIndex + 1}`}
-                  className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
-                />
-              </div>
-
-              {/* Slide Counter Badge on Top-Right */}
-              <div className="absolute top-3 right-3 z-20 pointer-events-none">
-                <span className="bg-black/75 backdrop-blur-md text-amber-300 font-mono text-[9px] sm:text-[10px] font-extrabold px-2.5 py-1 rounded-full border border-amber-500/30 shadow-xs">
-                  {activeImageIndex + 1} / {galleryImages.length}
-                </span>
-              </div>
-
-              {/* 100% Non-Alcoholic Badge on Top-Left */}
-              <div className="absolute top-3 left-3 z-20 pointer-events-none">
-                <span className="bg-white/95 backdrop-blur-md text-[#8A5F1A] text-[10px] sm:text-[11px] font-bold px-3 py-1 rounded-full border border-amber-300 shadow-xs">
-                  100% Artisanal Attar
-                </span>
-              </div>
+              {/* Product Photo: Completely Filled & Beautifully Fitted Edge-to-Edge */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={galleryImages[activeImageIndex]}
+                alt={`${product.title} - Photo ${activeImageIndex + 1}`}
+                className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+              />
 
               {/* Prev Slide Arrow Button */}
               {galleryImages.length > 1 && (
                 <button
                   type="button"
                   onClick={handlePrevImage}
-                  className="absolute left-2.5 sm:left-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/40 hover:bg-black/70 text-white backdrop-blur-md flex items-center justify-center transition active:scale-90 shadow-sm"
+                  className="absolute left-2.5 sm:left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/45 hover:bg-black/75 text-white/90 hover:text-white border border-white/20 hover:border-white/50 backdrop-blur-md flex items-center justify-center transition-all duration-300 active:scale-90 shadow-md group/arrow"
                   aria-label="Previous photo"
                 >
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover/arrow:-translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
                   </svg>
                 </button>
@@ -189,28 +173,44 @@ function ProductDetailContent({
                 <button
                   type="button"
                   onClick={handleNextImage}
-                  className="absolute right-2.5 sm:right-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/40 hover:bg-black/70 text-white backdrop-blur-md flex items-center justify-center transition active:scale-90 shadow-sm"
+                  className="absolute right-2.5 sm:right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/45 hover:bg-black/75 text-white/90 hover:text-white border border-white/20 hover:border-white/50 backdrop-blur-md flex items-center justify-center transition-all duration-300 active:scale-90 shadow-md group/arrow"
                   aria-label="Next photo"
                 >
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover/arrow:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                   </svg>
                 </button>
               )}
+
+              {/* Minimalist Luxury Progress Indicator Dots at Bottom */}
+              {galleryImages.length > 1 && (
+                <div className="absolute bottom-3 inset-x-0 z-20 flex items-center justify-center gap-1.5 pointer-events-none">
+                  {galleryImages.map((_, dotIdx) => (
+                    <span
+                      key={`dot-${dotIdx}`}
+                      className={`h-1.5 rounded-full transition-all duration-300 ${
+                        activeImageIndex === dotIdx
+                          ? 'w-6 bg-white shadow-sm'
+                          : 'w-1.5 bg-white/40'
+                      }`}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
 
-            {/* Thumbnails Row Underneath (Exact Fatima Calligrapher Thumbnail Cards) */}
+            {/* Thumbnails Row Underneath - Edge-to-Edge Cards */}
             {galleryImages.length > 1 && (
-              <div className="flex items-center gap-2 overflow-x-auto py-1 px-1 no-scrollbar select-none">
+              <div className="flex items-center gap-2 sm:gap-2.5 overflow-x-auto py-1 px-0.5 no-scrollbar select-none">
                 {galleryImages.map((imgUrl, idx) => (
                   <button
                     key={`thumb-${idx}`}
                     type="button"
                     onClick={() => setActiveImageIndex(idx)}
-                    className={`relative w-14 h-14 sm:w-16 sm:h-16 shrink-0 rounded-xl overflow-hidden bg-white transition-all duration-200 cursor-pointer p-1 ${
+                    className={`relative w-14 h-14 sm:w-16 sm:h-16 shrink-0 rounded-xl overflow-hidden transition-all duration-200 cursor-pointer ${
                       activeImageIndex === idx
-                        ? 'border-2 border-[#8A5F1A] shadow-sm scale-105'
-                        : 'border border-gray-200 opacity-70 hover:opacity-100 hover:border-gray-400'
+                        ? 'border-2 border-[#8A5F1A] shadow-md scale-105'
+                        : 'border border-gray-200/90 opacity-60 hover:opacity-100 hover:border-gray-400'
                     }`}
                     aria-label={`View photo ${idx + 1}`}
                   >
@@ -218,7 +218,7 @@ function ProductDetailContent({
                     <img
                       src={imgUrl}
                       alt={`${product.title} thumbnail ${idx + 1}`}
-                      className="w-full h-full object-contain"
+                      className="w-full h-full object-cover object-center"
                     />
                   </button>
                 ))}
