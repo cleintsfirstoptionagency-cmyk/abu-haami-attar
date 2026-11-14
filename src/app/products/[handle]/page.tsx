@@ -9,10 +9,11 @@ import { Footer } from '@/components/Footer';
 import { MenuDrawer } from '@/components/MenuDrawer';
 import { SearchModal } from '@/components/SearchModal';
 import { SparklesIcon, ShieldCheckIcon } from '@/components/Icons';
+import { IncenseSmokeCanvas } from '@/components/IncenseSmokeCanvas';
 
 const STORE_DOMAIN = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN || 'ezf1x7-pn.myshopify.com';
 
-export default function ProductDetailPage({
+function ProductDetailContent({
   params,
 }: {
   params: Promise<{ handle: string }>;
@@ -120,6 +121,9 @@ export default function ProductDetailPage({
             
             {/* Main Active Image Viewer */}
             <div className="relative rounded-3xl overflow-hidden border border-[#DEC99D] shadow-[0_10px_35px_rgba(66,46,27,0.12)] bg-[#120B06] aspect-[4/5] group">
+              {/* Atmospheric Bakhoor / Incense Smoke Animation for Hero Shot */}
+              {activeImageIndex === 0 && <IncenseSmokeCanvas density="subtle" />}
+
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={galleryImages[activeImageIndex]}
@@ -406,5 +410,21 @@ export default function ProductDetailPage({
       />
 
     </div>
+  );
+}
+
+export default function ProductDetailPage(props: {
+  params: Promise<{ handle: string }>;
+}) {
+  return (
+    <React.Suspense
+      fallback={
+        <div className="min-h-screen bg-[#F8F4EC] flex items-center justify-center">
+          <div className="w-8 h-8 rounded-full border-2 border-[#E2B858] border-t-transparent animate-spin" />
+        </div>
+      }
+    >
+      <ProductDetailContent {...props} />
+    </React.Suspense>
   );
 }

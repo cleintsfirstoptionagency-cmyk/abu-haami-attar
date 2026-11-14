@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { IncenseSmokeCanvas } from './IncenseSmokeCanvas';
 
 const HERO_SLIDES = [
   {
@@ -147,6 +148,9 @@ export const Hero: React.FC<{ onExplore: () => void }> = () => {
         ========================================================================
       */}
       <div className="block lg:hidden relative w-full">
+        {/* Real-time Atmospheric Bakhoor & Incense Smoke Animation */}
+        <IncenseSmokeCanvas density="rich" />
+
         {/* Swipeable Carousel with Crystal Clear Photos */}
         <div
           ref={scrollRef}
@@ -195,20 +199,12 @@ export const Hero: React.FC<{ onExplore: () => void }> = () => {
         2. LAPTOP / DESKTOP VIEW (>= lg): CONTINUOUS MULTI-IMAGE INFINITE LOOP
         ========================================================================
       */}
-      <div className="hidden lg:block relative w-full pt-10 pb-6 overflow-hidden">
-        
-        {/* Subtle Heading Above Loop Track */}
-        <div className="text-center mb-6">
-          <p className="text-xs uppercase tracking-widest text-[#E2B858] font-bold font-sans">
-            ✦ Artisanal Fragrance Showcase ✦
-          </p>
-          <h2 className="text-2xl font-serif italic text-[#F8F4EC] mt-1 font-bold">
-            Pure Distilled Attars • 6ml Standard Editions
-          </h2>
-        </div>
+      <div className="hidden lg:block relative w-full pt-20 pb-8 overflow-hidden">
+        {/* Real-time Atmospheric Bakhoor & Incense Smoke Animation */}
+        <IncenseSmokeCanvas density="rich" />
 
         {/* Infinite Continuous Loop Track (Set 1 + Set 2) */}
-        <div className="w-full overflow-hidden flex select-none cursor-pointer">
+        <div className="w-full overflow-hidden flex select-none cursor-pointer relative z-10">
           <div className="animate-hero-loop-track flex items-center gap-6 py-2 px-3">
             
             {/* Set 1: All 5 Images */}
