@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, use } from 'react';
+import React, { useState, useRef, useCallback, useEffect, use } from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { INITIAL_SHOPIFY_PRODUCTS } from '@/lib/initialProducts';
@@ -35,6 +35,25 @@ function ProductDetailContent({
   const [isRedirecting, setIsRedirecting] = useState(false);
   const [pincode, setPincode] = useState('');
   const [pincodeMessage, setPincodeMessage] = useState<string | null>(null);
+  const [showStickyBuy, setShowStickyBuy] = useState(false);
+  const buyRowRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!buyRowRef.current) {
+        setShowStickyBuy(window.scrollY > 200);
+        return;
+      }
+      const rect = buyRowRef.current.getBoundingClientRect();
+      // Show sticky bar whenever the in-page button has scrolled past or page scrolled > 200px
+      const shouldShow = rect.bottom < 80 || window.scrollY > 200;
+      setShowStickyBuy(shouldShow);
+    };
+
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const basePrice = product.variants[0]?.price || 599;
   
@@ -58,12 +77,61 @@ function ProductDetailContent({
     handleProceedToShopifyCheckout();
   };
 
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const isDragging = useRef(false);
+  const startX = useRef(0);
+  const scrollLeftStart = useRef(0);
+
+  const scrollToImage = useCallback((index: number) => {
+    if (!scrollRef.current) return;
+    const clientWidth = scrollRef.current.clientWidth;
+    scrollRef.current.scrollTo({
+      left: index * clientWidth,
+      behavior: 'smooth',
+    });
+    setActiveImageIndex(index);
+  }, []);
+
+  const handleScroll = useCallback(() => {
+    if (!scrollRef.current) return;
+    const { scrollLeft, clientWidth } = scrollRef.current;
+    if (clientWidth > 0) {
+      const newIndex = Math.round(scrollLeft / clientWidth);
+      if (newIndex >= 0 && newIndex < galleryImages.length && newIndex !== activeImageIndex) {
+        setActiveImageIndex(newIndex);
+      }
+    }
+  }, [galleryImages.length, activeImageIndex]);
+
   const handlePrevImage = () => {
-    setActiveImageIndex((prev) => (prev - 1 + galleryImages.length) % galleryImages.length);
+    const nextIdx = (activeImageIndex - 1 + galleryImages.length) % galleryImages.length;
+    scrollToImage(nextIdx);
   };
 
   const handleNextImage = () => {
-    setActiveImageIndex((prev) => (prev + 1) % galleryImages.length);
+    const nextIdx = (activeImageIndex + 1) % galleryImages.length;
+    scrollToImage(nextIdx);
+  };
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (!scrollRef.current) return;
+    isDragging.current = true;
+    startX.current = e.pageX - scrollRef.current.offsetLeft;
+    scrollLeftStart.current = scrollRef.current.scrollLeft;
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging.current || !scrollRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - scrollRef.current.offsetLeft;
+    const walk = (x - startX.current) * 1.5;
+    scrollRef.current.scrollLeft = scrollLeftStart.current - walk;
+  };
+
+  const handleMouseUpOrLeave = () => {
+    if (!isDragging.current) return;
+    isDragging.current = false;
+    handleScroll();
   };
 
   const checkPincode = () => {
@@ -143,70 +211,96 @@ function ProductDetailContent({
           {/* ==================================================================== */}
           <div className="lg:col-span-6 space-y-3">
             
-            {/* The Main Media Frame Card - Full Seamless Edge-to-Edge Fit, Zero Labels */}
-            <div className="relative w-full aspect-square max-h-[480px] sm:max-h-[540px] rounded-2xl sm:rounded-3xl overflow-hidden bg-[#140E0A] shadow-sm flex items-center justify-center select-none group border border-[#DFCBA0]/50">
-              
-              {/* Product Photo: Completely Filled & Beautifully Fitted Edge-to-Edge */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={galleryImages[activeImageIndex]}
-                alt={`${product.title} - Photo ${activeImageIndex + 1}`}
-                className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
-              />
-
-              {/* Prev Slide Arrow Button */}
-              {galleryImages.length > 1 && (
-                <button
-                  type="button"
-                  onClick={handlePrevImage}
-                  className="absolute left-2.5 sm:left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/45 hover:bg-black/75 text-white/90 hover:text-white border border-white/20 hover:border-white/50 backdrop-blur-md flex items-center justify-center transition-all duration-300 active:scale-90 shadow-md group/arrow"
-                  aria-label="Previous photo"
+            {/* The Main Media Frame Card - Full Horizontal Swipeable/Draggable Carousel */}
+            <div className="bg-white p-2 sm:p-2.5 rounded-2xl sm:rounded-3xl border border-[#DFCBA0]/60 shadow-xs">
+              <div className="relative w-full aspect-square max-h-[480px] sm:max-h-[540px] rounded-xl sm:rounded-2xl overflow-hidden bg-[#140E0A] flex items-center justify-center select-none group">
+                
+                {/* Horizontal Draggable & Touch-Swipeable Gallery of Images */}
+                <div
+                  ref={scrollRef}
+                  onScroll={handleScroll}
+                  onMouseDown={handleMouseDown}
+                  onMouseMove={handleMouseMove}
+                  onMouseUp={handleMouseUpOrLeave}
+                  onMouseLeave={handleMouseUpOrLeave}
+                  className="flex w-full h-full overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar touch-pan-x cursor-grab active:cursor-grabbing"
+                  style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
                 >
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover/arrow:-translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-                  </svg>
-                </button>
-              )}
-
-              {/* Next Slide Arrow Button */}
-              {galleryImages.length > 1 && (
-                <button
-                  type="button"
-                  onClick={handleNextImage}
-                  className="absolute right-2.5 sm:right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/45 hover:bg-black/75 text-white/90 hover:text-white border border-white/20 hover:border-white/50 backdrop-blur-md flex items-center justify-center transition-all duration-300 active:scale-90 shadow-md group/arrow"
-                  aria-label="Next photo"
-                >
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover/arrow:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                  </svg>
-                </button>
-              )}
-
-              {/* Minimalist Luxury Progress Indicator Dots at Bottom */}
-              {galleryImages.length > 1 && (
-                <div className="absolute bottom-3 inset-x-0 z-20 flex items-center justify-center gap-1.5 pointer-events-none">
-                  {galleryImages.map((_, dotIdx) => (
-                    <span
-                      key={`dot-${dotIdx}`}
-                      className={`h-1.5 rounded-full transition-all duration-300 ${
-                        activeImageIndex === dotIdx
-                          ? 'w-6 bg-white shadow-sm'
-                          : 'w-1.5 bg-white/40'
-                      }`}
-                    />
+                  {galleryImages.map((imgUrl, idx) => (
+                    <div
+                      key={`gallery-slide-${idx}`}
+                      className="w-full h-full shrink-0 snap-center flex items-center justify-center relative bg-[#140E0A]"
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={imgUrl}
+                        alt={`${product.title} - Photo ${idx + 1}`}
+                        className="w-full h-full object-cover object-center select-none pointer-events-none transition-transform duration-500 group-hover:scale-102"
+                        style={{
+                          imageRendering: '-webkit-optimize-contrast',
+                          transform: 'translateZ(0)',
+                          backfaceVisibility: 'hidden',
+                        }}
+                        draggable={false}
+                      />
+                    </div>
                   ))}
                 </div>
-              )}
+
+                {/* Prev Slide Arrow Button */}
+                {galleryImages.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={handlePrevImage}
+                    className="absolute left-2.5 sm:left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/60 hover:bg-black/85 text-white/90 hover:text-white border border-white/20 hover:border-white/50 backdrop-blur-md flex items-center justify-center transition-all duration-300 active:scale-90 shadow-md group/arrow cursor-pointer"
+                    aria-label="Previous photo"
+                  >
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover/arrow:-translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                    </svg>
+                  </button>
+                )}
+
+                {/* Next Slide Arrow Button */}
+                {galleryImages.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={handleNextImage}
+                    className="absolute right-2.5 sm:right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/60 hover:bg-black/85 text-white/90 hover:text-white border border-white/20 hover:border-white/50 backdrop-blur-md flex items-center justify-center transition-all duration-300 active:scale-90 shadow-md group/arrow cursor-pointer"
+                    aria-label="Next photo"
+                  >
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover/arrow:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                )}
+
+                {/* Minimalist Luxury Progress Indicator Dots at Bottom */}
+                {galleryImages.length > 1 && (
+                  <div className="absolute bottom-3 inset-x-0 z-20 flex items-center justify-center gap-1.5 pointer-events-none">
+                    {galleryImages.map((_, dotIdx) => (
+                      <span
+                        key={`dot-${dotIdx}`}
+                        className={`h-1.5 rounded-full transition-all duration-300 ${
+                          activeImageIndex === dotIdx
+                            ? 'w-6 bg-white shadow-sm'
+                            : 'w-1.5 bg-white/40'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
 
-            {/* Thumbnails Row Underneath - Edge-to-Edge Cards */}
+            {/* Thumbnails Row Underneath - Smooth Scroll Cards */}
             {galleryImages.length > 1 && (
               <div className="flex items-center gap-2 sm:gap-2.5 overflow-x-auto py-1 px-0.5 no-scrollbar select-none">
                 {galleryImages.map((imgUrl, idx) => (
                   <button
                     key={`thumb-${idx}`}
                     type="button"
-                    onClick={() => setActiveImageIndex(idx)}
+                    onClick={() => scrollToImage(idx)}
                     className={`relative w-14 h-14 sm:w-16 sm:h-16 shrink-0 rounded-xl overflow-hidden transition-all duration-200 cursor-pointer ${
                       activeImageIndex === idx
                         ? 'border-2 border-[#8A5F1A] shadow-md scale-105'
@@ -264,113 +358,158 @@ function ProductDetailContent({
                 </span>
               </div>
 
-              {/* Estimated Delivery Callout Box */}
-              <div className="flex items-center gap-1.5 text-[11px] sm:text-xs text-emerald-900 font-semibold mb-3 bg-emerald-50/90 px-3 py-1.5 rounded-xl border border-emerald-200/80 w-fit">
-                <span>🚚 Estimated Delivery: <b>Within 4-5 Days</b> (Dispatches in 24h)</span>
+              {/* Estimated Delivery Callout Box (Exact Image 3 Styling) */}
+              <div className="bg-[#ECFDF5] border border-[#A7F3D0] rounded-2xl px-3.5 py-2.5 text-xs sm:text-sm text-[#065F46] flex items-center gap-2 mb-2 shadow-2xs">
+                <span className="text-sm">🚚</span>
+                <span className="leading-tight">
+                  <span className="font-bold text-[#064E3B]">Estimated Delivery:</span> <b>Within 4-5 Days</b> <span className="text-[#047857] text-[11px] sm:text-xs">(Dispatches in 24h)</span>
+                </span>
               </div>
             </div>
 
-            {/* Select Package Edition Card (Exact Fatima Calligrapher Variant Card) */}
-            <div className="bg-white border border-gray-200 rounded-2xl p-3 sm:p-4 shadow-xs">
-              <div className="flex items-center justify-between mb-2">
+            {/* ONE ROW: Quantity Selector + Grand BUY NOW Button (Exact Image 3 Styling) */}
+            <div ref={buyRowRef} className="flex items-center gap-2 sm:gap-3 py-1">
+              
+              {/* Quantity Counter (Exact Image 3 Styling) */}
+              <div className="flex items-center rounded-2xl border border-gray-300/80 bg-white px-3 sm:px-3.5 py-2 sm:py-2.5 shadow-2xs shrink-0 gap-3 select-none">
+                <button
+                  type="button"
+                  onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                  className="font-bold text-lg sm:text-xl text-[#7A5318] hover:text-[#5C3D10] transition cursor-pointer select-none active:scale-90 px-1"
+                  aria-label="Decrease quantity"
+                >
+                  -
+                </button>
+                <span className="w-5 text-center text-sm sm:text-base font-extrabold text-[#2C1D0E] font-mono select-none">
+                  {quantity}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setQuantity((q) => Math.min(10, q + 1))}
+                  className="font-bold text-lg sm:text-xl text-[#7A5318] hover:text-[#5C3D10] transition cursor-pointer select-none active:scale-90 px-1"
+                  aria-label="Increase quantity"
+                >
+                  +
+                </button>
+              </div>
+
+              {/* BUY NOW Button in the same row (Exact Image 3 Styling) */}
+              <button
+                type="button"
+                onClick={handleProceedToShopifyCheckout}
+                disabled={isRedirecting}
+                className="flex-1 bg-gradient-to-r from-[#F5D88E] via-[#E2B858] to-[#C99632] text-[#221307] font-black py-3.5 sm:py-4 px-4 rounded-2xl shadow-[0_4px_18px_rgba(226,184,88,0.45)] flex items-center justify-center gap-2 text-xs sm:text-sm md:text-base hover:opacity-95 active:scale-98 transition-all cursor-pointer border border-[#FFF0B8]"
+              >
+                <span className="text-amber-600 text-sm sm:text-base drop-shadow-xs">⚡</span>
+                <span className="truncate tracking-wide">
+                  {isRedirecting
+                    ? 'DIRECTING TO CHECKOUT...'
+                    : `BUY NOW — COD (₹${totalPrice.toLocaleString('en-IN')})`}
+                </span>
+              </button>
+            </div>
+
+            {/* Select Package Edition Card (Exact Image 2 Vertical List Styling) */}
+            <div className="bg-white border border-[#E5CCA0]/60 rounded-2xl sm:rounded-3xl p-3.5 sm:p-4 shadow-xs">
+              <div className="flex items-center justify-between mb-3">
                 <label className="text-xs sm:text-sm font-bold text-[#2C1D0E] flex items-center gap-1.5">
                   <span className="text-[#8A5F1A]">✦</span>
                   <span>Select Package Edition:</span>
                 </label>
-                <span className="text-[9px] sm:text-[10px] font-bold text-[#8A5F1A] bg-[#FAF0D8] px-2 py-0.5 rounded-full border border-[#E5CCA0]">
+                <span className="text-[10px] sm:text-xs font-bold text-[#8A5F1A] bg-[#FAF0D8] px-2.5 py-0.5 rounded-full border border-[#E5CCA0]">
                   3 Options Available
                 </span>
               </div>
 
-              {/* 3 Package Option Cards */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              {/* 3 Package Option Cards - Stacked Vertically as full rows */}
+              <div className="flex flex-col gap-2.5 sm:gap-3">
                 
                 {/* Option 1: Standard 6ml */}
                 <button
                   type="button"
                   onClick={() => setSelectedEdition('standard')}
-                  className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer relative ${
+                  className={`w-full text-left p-3 sm:p-3.5 rounded-xl sm:rounded-2xl border-2 transition-all cursor-pointer relative ${
                     selectedEdition === 'standard'
-                      ? 'border-[#8A5F1A] bg-[#FAF6EE] ring-1 ring-[#8A5F1A]'
-                      : 'border-gray-200 bg-white hover:border-gray-300'
+                      ? 'border-[#7A5318] bg-[#FAF7EE] shadow-2xs'
+                      : 'border-gray-200/90 bg-white hover:border-gray-300'
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-[#2C1D0E]">1x Standard</span>
-                    <span className="text-xs font-black text-[#8A5F1A]">₹599</span>
+                    <div>
+                      <div className="text-xs sm:text-sm font-extrabold text-[#2C1D0E]">1x Standard</div>
+                      <div className="text-[11px] sm:text-xs text-gray-500 font-normal mt-0.5">6ml Single Flacon</div>
+                    </div>
+                    <div className="text-base sm:text-lg font-black text-[#2C1D0E]">₹599</div>
                   </div>
-                  <p className="text-[10px] text-gray-500 mt-0.5">6ml Single Flacon</p>
                 </button>
 
                 {/* Option 2: Royal Duo (Save Extra) */}
                 <button
                   type="button"
                   onClick={() => setSelectedEdition('duo')}
-                  className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer relative ${
+                  className={`w-full text-left p-3 sm:p-3.5 rounded-xl sm:rounded-2xl border-2 transition-all cursor-pointer relative ${
                     selectedEdition === 'duo'
-                      ? 'border-[#8A5F1A] bg-[#FAF6EE] ring-1 ring-[#8A5F1A]'
-                      : 'border-gray-200 bg-white hover:border-gray-300'
+                      ? 'border-[#7A5318] bg-[#FAF7EE] shadow-2xs'
+                      : 'border-gray-200/90 bg-white hover:border-gray-300'
                   }`}
                 >
-                  <span className="absolute -top-2 right-2 bg-emerald-600 text-white text-[8px] font-bold px-1.5 py-0.2 rounded-full uppercase">
-                    Save ₹100
+                  <span className="absolute -top-2.5 right-3.5 sm:right-4 bg-[#00875A] text-white text-[9.5px] sm:text-[10px] font-bold px-2 sm:px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-xs">
+                    SAVE ₹100
                   </span>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-[#2C1D0E]">2x Royal Duo</span>
-                    <span className="text-xs font-black text-[#8A5F1A]">₹1,099</span>
+                    <div>
+                      <div className="text-xs sm:text-sm font-extrabold text-[#2C1D0E]">2x Royal Duo</div>
+                      <div className="text-[11px] sm:text-xs text-gray-500 font-normal mt-0.5">Two 6ml Flacons</div>
+                    </div>
+                    <div className="text-base sm:text-lg font-black text-[#2C1D0E]">₹1,099</div>
                   </div>
-                  <p className="text-[10px] text-gray-500 mt-0.5">Two 6ml Flacons</p>
                 </button>
 
                 {/* Option 3: Full Collector Box */}
                 <button
                   type="button"
                   onClick={() => setSelectedEdition('box')}
-                  className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer relative ${
+                  className={`w-full text-left p-3 sm:p-3.5 rounded-xl sm:rounded-2xl border-2 transition-all cursor-pointer relative ${
                     selectedEdition === 'box'
-                      ? 'border-[#8A5F1A] bg-[#FAF6EE] ring-1 ring-[#8A5F1A]'
-                      : 'border-gray-200 bg-white hover:border-gray-300'
+                      ? 'border-[#7A5318] bg-[#FAF7EE] shadow-2xs'
+                      : 'border-gray-200/90 bg-white hover:border-gray-300'
                   }`}
                 >
-                  <span className="absolute -top-2 right-2 bg-amber-500 text-[#221307] text-[8px] font-extrabold px-1.5 py-0.2 rounded-full uppercase">
-                    Best Value
+                  <span className="absolute -top-2.5 right-3.5 sm:right-4 bg-[#D97706] text-white text-[9.5px] sm:text-[10px] font-extrabold px-2 sm:px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-xs">
+                    BEST VALUE
                   </span>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-[#2C1D0E]">All 5 Set</span>
-                    <span className="text-xs font-black text-[#8A5F1A]">₹2,499</span>
+                    <div>
+                      <div className="text-xs sm:text-sm font-extrabold text-[#2C1D0E]">All 5 Set</div>
+                      <div className="text-[11px] sm:text-xs text-gray-500 font-normal mt-0.5">5 Artisanal Flacons</div>
+                    </div>
+                    <div className="text-base sm:text-lg font-black text-[#2C1D0E]">₹2,499</div>
                   </div>
-                  <p className="text-[10px] text-gray-500 mt-0.5">5 Artisanal Flacons</p>
                 </button>
 
               </div>
             </div>
 
-            {/* Quantity Selector */}
-            <div className="flex items-center gap-3">
-              <span className="text-xs font-bold uppercase tracking-wider text-gray-700">
-                Quantity:
-              </span>
-              <div className="flex items-center rounded-xl border border-gray-300 bg-white px-2 py-1 shadow-2xs">
-                <button
-                  type="button"
-                  onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                  className="w-7 h-7 flex items-center justify-center font-bold text-sm text-[#8A5F1A] hover:bg-gray-100 rounded-lg transition"
-                  aria-label="Decrease quantity"
-                >
-                  -
-                </button>
-                <span className="w-8 text-center text-xs font-bold text-gray-900 font-mono">
-                  {quantity}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => setQuantity((q) => Math.min(10, q + 1))}
-                  className="w-7 h-7 flex items-center justify-center font-bold text-sm text-[#8A5F1A] hover:bg-gray-100 rounded-lg transition"
-                  aria-label="Increase quantity"
-                >
-                  +
-                </button>
-              </div>
+            {/* Secondary 2-Column Buttons: Add to Cart & WhatsApp Order */}
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={handleAddToCart}
+                className="w-full bg-white hover:bg-gray-50 text-[#2C1D0E] font-bold py-2.5 px-3 rounded-xl border border-gray-300 flex items-center justify-center gap-1.5 text-xs transition-colors shadow-xs cursor-pointer active:scale-95"
+              >
+                <span>🛒</span>
+                <span>Add to Cart</span>
+              </button>
+
+              <a
+                href={`https://wa.me/919970347703?text=Hello%20Abu%20Haani%2C%20I%20want%20to%20order%20${encodeURIComponent(product.title)}%20(${selectedEdition})`}
+                target="_blank"
+                rel="noreferrer"
+                className="w-full bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold py-2.5 px-3 rounded-xl border border-emerald-300 flex items-center justify-center gap-1.5 text-xs transition-colors shadow-xs active:scale-95"
+              >
+                <span>💬</span>
+                <span>Order on WhatsApp</span>
+              </a>
             </div>
 
             {/* 4 Trust & Quality Guarantee Badges (Exact Fatima Calligrapher 2x2 Grid) */}
@@ -448,48 +587,6 @@ function ProductDetailContent({
                   {pincodeMessage}
                 </div>
               )}
-            </div>
-
-            {/* PRIMARY CTA ACTION BUTTONS (Exact Fatima Calligrapher CTA Layout) */}
-            <div className="space-y-2">
-              
-              {/* Grand Cash on Delivery BUY NOW Button */}
-              <button
-                type="button"
-                onClick={handleProceedToShopifyCheckout}
-                disabled={isRedirecting}
-                className="w-full bg-gradient-to-r from-[#F5D88E] via-[#E2B858] to-[#C99632] text-[#221307] font-extrabold py-3.5 px-4 rounded-xl shadow-[0_4px_20px_rgba(226,184,88,0.55)] flex items-center justify-center gap-2 text-sm sm:text-base hover:opacity-95 active:scale-98 transition-all cursor-pointer border border-[#FFF0B8]"
-              >
-                <span>⚡</span>
-                <span>
-                  {isRedirecting
-                    ? 'DIRECTING TO CHECKOUT...'
-                    : `BUY NOW — CASH ON DELIVERY (₹${totalPrice.toLocaleString('en-IN')})`}
-                </span>
-              </button>
-
-              {/* Secondary 2-Column Buttons: Add to Cart & WhatsApp Order */}
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  type="button"
-                  onClick={handleAddToCart}
-                  className="w-full bg-white hover:bg-gray-50 text-[#2C1D0E] font-bold py-2.5 px-3 rounded-xl border border-gray-300 flex items-center justify-center gap-1.5 text-xs transition-colors shadow-xs cursor-pointer"
-                >
-                  <span>🛒</span>
-                  <span>Add to Cart</span>
-                </button>
-
-                <a
-                  href={`https://wa.me/919999999999?text=Hello%20Abu%20Haani%2C%20I%20want%20to%20order%20${encodeURIComponent(product.title)}%20(${selectedEdition})`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="w-full bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold py-2.5 px-3 rounded-xl border border-emerald-300 flex items-center justify-center gap-1.5 text-xs transition-colors shadow-xs"
-                >
-                  <span>💬</span>
-                  <span>Order on WhatsApp</span>
-                </a>
-              </div>
-
             </div>
 
             {/* Product Specifications & Authenticity Table (Exact Fatima Calligrapher Table) */}
@@ -612,24 +709,56 @@ function ProductDetailContent({
 
       </main>
 
-      {/* 5. Mobile Sticky Bottom BUY NOW Bar (Exact Fatima Calligrapher Sticky Bar) */}
-      <div className="lg:hidden sticky bottom-0 z-40 bg-white/98 backdrop-blur-md border-t border-gray-200 p-2.5 px-4 shadow-[0_-5px_20px_rgba(0,0,0,0.08)] flex items-center justify-between gap-3">
-        <div>
-          <p className="text-[9px] text-gray-400 uppercase font-bold">Total Price</p>
-          <p className="text-base font-extrabold text-[#2C1D0E]">
-            ₹{totalPrice.toLocaleString('en-IN')}
-          </p>
-        </div>
+      {/* 5. Sticky Floating Bottom Bar: ONLY Quantity + BUY NOW in ONE Row (Exact Same as Image 3) */}
+      <div
+        className={`fixed bottom-0 inset-x-0 z-[100] bg-[#FAF6EE]/95 backdrop-blur-md border-t border-[#DEC99D] shadow-[0_-8px_25px_rgba(44,29,14,0.18)] px-3 py-2.5 sm:py-3 transition-all duration-300 ${
+          showStickyBuy
+            ? 'translate-y-0 opacity-100 pointer-events-auto'
+            : 'translate-y-full opacity-0 pointer-events-none'
+        }`}
+        style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}
+      >
+        <div className="max-w-xl mx-auto flex items-center gap-2 sm:gap-3">
+          
+          {/* Quantity Selector: Exact same rounded-2xl white card */}
+          <div className="flex items-center rounded-2xl border border-gray-300/80 bg-white px-3 sm:px-3.5 py-2 sm:py-2.5 shadow-2xs shrink-0 gap-3 select-none">
+            <button
+              type="button"
+              onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+              className="font-bold text-lg sm:text-xl text-[#7A5318] hover:text-[#5C3D10] transition cursor-pointer select-none active:scale-90 px-1"
+              aria-label="Decrease quantity"
+            >
+              -
+            </button>
+            <span className="w-5 text-center text-sm sm:text-base font-extrabold text-[#2C1D0E] font-mono select-none">
+              {quantity}
+            </span>
+            <button
+              type="button"
+              onClick={() => setQuantity((q) => Math.min(10, q + 1))}
+              className="font-bold text-lg sm:text-xl text-[#7A5318] hover:text-[#5C3D10] transition cursor-pointer select-none active:scale-90 px-1"
+              aria-label="Increase quantity"
+            >
+              +
+            </button>
+          </div>
 
-        <button
-          type="button"
-          onClick={handleProceedToShopifyCheckout}
-          disabled={isRedirecting}
-          className="flex-1 py-3 px-4 rounded-xl font-extrabold text-xs tracking-wider uppercase bg-gradient-to-r from-[#F5D88E] via-[#E2B858] to-[#C99632] text-[#221307] shadow-md active:scale-95 transition-all flex items-center justify-center gap-1.5 border border-[#FFF0B8]"
-        >
-          <span>⚡</span>
-          <span>{isRedirecting ? 'Directing...' : 'BUY NOW — COD'}</span>
-        </button>
+          {/* BUY NOW Button: Exact same golden button */}
+          <button
+            type="button"
+            onClick={handleProceedToShopifyCheckout}
+            disabled={isRedirecting}
+            className="flex-1 bg-gradient-to-r from-[#F5D88E] via-[#E2B858] to-[#C99632] text-[#221307] font-black py-3.5 sm:py-4 px-4 rounded-2xl shadow-[0_4px_18px_rgba(226,184,88,0.45)] flex items-center justify-center gap-2 text-xs sm:text-sm md:text-base hover:opacity-95 active:scale-98 transition-all cursor-pointer border border-[#FFF0B8]"
+          >
+            <span className="text-amber-600 text-sm sm:text-base drop-shadow-xs">⚡</span>
+            <span className="truncate tracking-wide">
+              {isRedirecting
+                ? 'DIRECTING TO CHECKOUT...'
+                : `BUY NOW — COD (₹${totalPrice.toLocaleString('en-IN')})`}
+            </span>
+          </button>
+
+        </div>
       </div>
 
       {/* 6. Luxury Footer */}

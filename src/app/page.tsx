@@ -49,23 +49,17 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#F8F4EC] text-[#2C1D0E] flex flex-col font-sans selection:bg-[#E2B858] selection:text-[#2C1D0E]">
       
-      {/* 
-        1. Hero Section with Floating Overlaid Header:
-        - Header (Logo, Search 🔍, Cart 🛒, Menu ☰) floats directly on top of the hero image
-        - Logo is made bigger & prominent
-        - Hero image goes all the way up to the very top edge
-        - 5 images horizontally scrollable by hand/swipe or auto-play
-      */}
-      <div className="relative w-full bg-[#0A0704]">
-        <Navbar
-          cartCount={0}
-          onOpenCart={handleOpenShopifyCart}
-          onOpenSearch={() => setIsSearchOpen(true)}
-          onOpenMenu={() => setIsMenuOpen(true)}
-          onSelectCollection={scrollToCollection}
-        />
-        <Hero onExplore={scrollToCollection} />
-      </div>
+      {/* 1. Official Header Bar: Positioned above the video with clean luxury cream header bar */}
+      <Navbar
+        cartCount={0}
+        onOpenCart={handleOpenShopifyCart}
+        onOpenSearch={() => setIsSearchOpen(true)}
+        onOpenMenu={() => setIsMenuOpen(true)}
+        onSelectCollection={scrollToCollection}
+      />
+
+      {/* 2. Hero Section: Native 1:1 Video (Zero-Lag FastStart, Mobile & Desktop Fitted) */}
+      <Hero onExplore={scrollToCollection} />
 
       {/* 
         2. Refined Luxury Cream Marquee Ticker Strip:
