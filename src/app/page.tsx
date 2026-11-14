@@ -7,7 +7,6 @@ import { Hero } from '@/components/Hero';
 import { ProductCard } from '@/components/ProductCard';
 import { SearchModal } from '@/components/SearchModal';
 import { MenuDrawer } from '@/components/MenuDrawer';
-import { WhatsAppAutomationModal } from '@/components/WhatsAppAutomationModal';
 import { Footer } from '@/components/Footer';
 import { INITIAL_SHOPIFY_PRODUCTS } from '@/lib/initialProducts';
 import { AttarProduct } from '@/types/product';
@@ -105,7 +104,7 @@ export default function Home() {
         </section>
 
         {/* 5. Trust Bar & Luxury Footer (With official Abu Haani logo) */}
-        <Footer onOpenWhatsApp={() => setIsWhatsAppModalOpen(true)} />
+        <Footer onOpenWhatsApp={() => {}} />
       </main>
 
       {/* Search Modal (Directly opens product on Shopify) */}
@@ -119,14 +118,7 @@ export default function Home() {
       <MenuDrawer
         isOpen={isMenuOpen}
         onClose={() => setIsMenuOpen(false)}
-        onOpenWhatsAppGuide={() => setIsWhatsAppModalOpen(true)}
         onSelectCollection={scrollToCollection}
-      />
-
-      {/* WhatsApp Automation Simulator Modal */}
-      <WhatsAppAutomationModal
-        isOpen={isWhatsAppModalOpen}
-        onClose={() => setIsWhatsAppModalOpen(false)}
       />
     </div>
   );

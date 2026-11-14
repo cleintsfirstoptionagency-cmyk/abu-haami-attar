@@ -399,7 +399,6 @@ function ProductDetailContent({
       <MenuDrawer
         isOpen={isMenuOpen}
         onClose={() => setIsMenuOpen(false)}
-        onOpenWhatsAppGuide={() => window.open('https://wa.me/919999999999', '_blank')}
         onSelectCollection={() => {
           window.location.href = '/#collection';
         }}
