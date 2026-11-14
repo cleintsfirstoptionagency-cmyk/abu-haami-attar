@@ -34,7 +34,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
           rel="stylesheet"
         />
         {/* Tailwind Styling Engine */}
@@ -48,6 +48,9 @@ export default function RootLayout({
                     fontFamily: {
                       serif: ['"Playfair Display"', 'Georgia', 'serif'],
                       cinzel: ['"Cinzel"', 'serif'],
+                      sans: ['"Poppins"', '"Plus Jakarta Sans"', 'sans-serif'],
+                      poppins: ['"Poppins"', 'sans-serif'],
+                    },
                       sans: ['"Plus Jakarta Sans"', '-apple-system', 'sans-serif'],
                     },
                     colors: {
