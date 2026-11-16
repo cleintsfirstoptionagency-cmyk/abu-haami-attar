@@ -18,7 +18,6 @@ export default function Home() {
   const [products, setProducts] = useState<AttarProduct[]>(INITIAL_SHOPIFY_PRODUCTS);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isWhatsAppModalOpen, setIsWhatsAppModalOpen] = useState(false);
 
   // Silent background sync with Shopify Storefront API
   useEffect(() => {
@@ -98,7 +97,7 @@ export default function Home() {
         </section>
 
         {/* 5. Trust Bar & Luxury Footer (With official Abu Haani logo) */}
-        <Footer onOpenWhatsApp={() => {}} />
+        <Footer />
       </main>
 
       {/* Search Modal (Directly opens product on Shopify) */}

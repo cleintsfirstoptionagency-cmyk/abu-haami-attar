@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { INITIAL_SHOPIFY_PRODUCTS } from '@/lib/initialProducts';
 
 const SHOPIFY_DOMAIN = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN || 'ezf1x7-pn.myshopify.com';
 const SHOPIFY_STOREFRONT_TOKEN = process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN || '328fc62ab37c1638401420595cd651c2';
@@ -91,6 +92,7 @@ export async function GET() {
         reviewsCount: 1,
         badge: 'Live in Store',
         featuredImage: p.featuredImage?.url || 'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=800&q=80',
+        videoUrl: INITIAL_SHOPIFY_PRODUCTS.find((init) => init.handle === p.handle)?.videoUrl,
         images: (p.images?.edges || []).map((imgEdge: any) => imgEdge.node.url),
         notes: {
           top: ['Pure White Oud', 'Warm Bergamot'],

@@ -26,6 +26,7 @@ export interface AttarProduct {
   origin: string; // e.g., "Kannauj, India" | "Cambodia / Assam"
   featuredImage: string;
   images?: string[];
+  videoUrl?: string; // Direct Shopify CDN video link (.mp4)
   badge?: string; // e.g., "Bestseller", "Pure Dehn Al Oud", "Limited Harvest"
   rating: number;
   reviewsCount: number;

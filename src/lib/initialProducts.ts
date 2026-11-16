@@ -16,6 +16,7 @@ export const INITIAL_SHOPIFY_PRODUCTS: AttarProduct[] = [
     reviewsCount: 1,
     badge: "Live in Store",
     featuredImage: "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/Front_3b05fe52-7480-48e8-aae7-85b7d6fdcb1f.jpg?v=1794477876",
+    videoUrl: "https://cdn.shopify.com/videos/c/vp/14f4d71c749447de85139b077219c864/14f4d71c749447de85139b077219c864.HD-720p-4.5Mbps-101443062.mp4",
     images: [
       "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/Front_3b05fe52-7480-48e8-aae7-85b7d6fdcb1f.jpg?v=1794477876",
       "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/2nd_de1f8517-6064-458b-898e-55c7a3326a9f.jpg?v=1794477876",
@@ -54,6 +55,7 @@ export const INITIAL_SHOPIFY_PRODUCTS: AttarProduct[] = [
     reviewsCount: 1,
     badge: "Live in Store",
     featuredImage: "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/Front_4d089673-3467-4ac0-8824-3b72aad06275.jpg?v=1794484586",
+    videoUrl: "https://cdn.shopify.com/videos/c/vp/2f5a1347ae6e42a9895de046a26710cc/2f5a1347ae6e42a9895de046a26710cc.HD-720p-4.5Mbps-101443307.mp4",
     images: [
       "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/Front_4d089673-3467-4ac0-8824-3b72aad06275.jpg?v=1794484586",
       "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/2nd_2d273a80-7209-4100-983c-4b5737634bee.jpg?v=1794484586",
@@ -91,6 +93,7 @@ export const INITIAL_SHOPIFY_PRODUCTS: AttarProduct[] = [
     reviewsCount: 1,
     badge: "Live in Store",
     featuredImage: "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/front_8f2d97b9-97c4-4a07-b586-1e4a0fc7115b.jpg?v=1794485397",
+    videoUrl: "https://cdn.shopify.com/videos/c/vp/8e463318e1964810bd1e91ddf14f9f58/8e463318e1964810bd1e91ddf14f9f58.HD-720p-4.5Mbps-101443308.mp4",
     images: [
       "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/front_8f2d97b9-97c4-4a07-b586-1e4a0fc7115b.jpg?v=1794485397",
       "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/2nd_6cc5e53c-dbda-4d67-8509-bbe9d4976dd8.jpg?v=1794485396",
@@ -165,6 +168,7 @@ export const INITIAL_SHOPIFY_PRODUCTS: AttarProduct[] = [
     reviewsCount: 1,
     badge: "Live in Store",
     featuredImage: "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/Front_0ecdb63c-2f65-48af-a31f-7140039c7200.jpg?v=1794486074",
+    videoUrl: "https://cdn.shopify.com/videos/c/vp/a7924662f39b4038a71619bcda3a7d5f/a7924662f39b4038a71619bcda3a7d5f.HD-720p-4.5Mbps-101443306.mp4",
     images: [
       "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/Front_0ecdb63c-2f65-48af-a31f-7140039c7200.jpg?v=1794486074",
       "https://cdn.shopify.com/s/files/1/0852/1826/3299/files/4th_3250f9ef-77a0-48ba-94bb-466bdc5a31bc.jpg?v=1794486074",

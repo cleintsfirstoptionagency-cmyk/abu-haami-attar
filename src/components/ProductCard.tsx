@@ -16,7 +16,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       href={productUrl}
       className="group relative rounded-2xl sm:rounded-3xl bg-[#FFFDF9] border border-[#DEC99D] hover:border-[#B88325] overflow-hidden transition-all duration-300 shadow-[0_4px_16px_rgba(66,46,27,0.06)] hover:shadow-[0_12px_28px_rgba(184,131,37,0.18)] flex flex-col justify-between block select-none transform hover:-translate-y-1"
     >
-      {/* 1. Full-Fit Product Image (Clean without any overlapping labels/badges) */}
+      {/* 1. Full-Fit Product Image */}
       <div className="relative aspect-[4/5] sm:aspect-square w-full overflow-hidden bg-[#161009]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
@@ -42,13 +42,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           </div>
         </div>
 
-        {/* 3. Refined Golden BUY NOW Button */}
+        {/* 3. Exact Fatima Calligrapher Style BUY NOW Button */}
         <div className="mt-3">
-          <div className="relative overflow-hidden w-full py-2.5 sm:py-3 px-3 rounded-full font-bold text-xs tracking-wider uppercase transition-all duration-300 flex items-center justify-center gap-1.5 shadow-sm active:scale-95 bg-gradient-to-r from-[#F5D88E] via-[#E2B858] to-[#C99632] hover:brightness-105 text-[#2C1D0E] font-sans cursor-pointer border border-[#FFF0B8]/60 shadow-[0_3px_12px_rgba(184,131,37,0.2)]">
-            <span className="relative z-10 flex items-center gap-1.5 font-bold">
-              <span>BUY NOW</span>
-              <span className="text-sm font-black">→</span>
-            </span>
+          <div
+            style={{ touchAction: 'manipulation' }}
+            className="w-full py-2.5 sm:py-3 px-3 rounded-xl font-black text-xs sm:text-sm tracking-wide uppercase transition-all duration-200 flex items-center justify-center gap-1.5 shadow-gold-glow active:scale-95 gold-bg-gradient text-[#1A1208] font-sans cursor-pointer border border-[#F3E3B6]"
+          >
+            <span className="text-amber-800 text-xs pointer-events-none">⚡</span>
+            <span className="pointer-events-none">BUY NOW</span>
+            <span className="text-sm font-black pointer-events-none group-hover:translate-x-1 transition-transform">→</span>
           </div>
         </div>
       </div>

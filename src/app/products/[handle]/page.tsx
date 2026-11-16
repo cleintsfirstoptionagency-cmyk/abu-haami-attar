@@ -23,9 +23,21 @@ function ProductDetailContent({
     notFound();
   }
 
-  const galleryImages = product.images && product.images.length > 0
-    ? product.images
-    : [product.featuredImage];
+  type MediaSlide = {
+    type: 'image' | 'video';
+    src: string;
+    poster?: string;
+  };
+
+  const mediaSlides: MediaSlide[] = [
+    { type: 'image', src: product.featuredImage },
+    ...(product.videoUrl
+      ? [{ type: 'video' as const, src: product.videoUrl, poster: product.featuredImage }]
+      : []),
+    ...(product.images || [])
+      .filter((img) => img !== product.featuredImage)
+      .map((img) => ({ type: 'image' as const, src: img })),
+  ];
 
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [selectedEdition, setSelectedEdition] = useState<'standard' | 'duo' | 'box'>('standard');
@@ -35,42 +47,77 @@ function ProductDetailContent({
   const [isRedirecting, setIsRedirecting] = useState(false);
   const [pincode, setPincode] = useState('');
   const [pincodeMessage, setPincodeMessage] = useState<string | null>(null);
-  const [showStickyBuy, setShowStickyBuy] = useState(false);
-  const buyRowRef = useRef<HTMLDivElement>(null);
 
+  // Guarantee button unfreezes on browser Back / BFCache navigation
   useEffect(() => {
-    const handleScroll = () => {
-      if (!buyRowRef.current) {
-        setShowStickyBuy(window.scrollY > 200);
-        return;
-      }
-      const rect = buyRowRef.current.getBoundingClientRect();
-      // Show sticky bar whenever the in-page button has scrolled past or page scrolled > 200px
-      const shouldShow = rect.bottom < 80 || window.scrollY > 200;
-      setShowStickyBuy(shouldShow);
+    const handlePageShow = (e: PageTransitionEvent) => {
+      setIsRedirecting(false);
     };
-
-    handleScroll();
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('pageshow', handlePageShow);
+    return () => window.removeEventListener('pageshow', handlePageShow);
   }, []);
 
-  const basePrice = product.variants[0]?.price || 599;
-  
-  // Calculate price based on selected package edition
-  const editionMultiplier = selectedEdition === 'standard' ? 1 : selectedEdition === 'duo' ? 1.83 : 4.17;
-  const currentItemPrice = selectedEdition === 'standard' ? 599 : selectedEdition === 'duo' ? 1099 : 2499;
-  const currentMRP = selectedEdition === 'standard' ? 999 : selectedEdition === 'duo' ? 1998 : 4995;
+  const currentItemPrice = 599;
+  const currentMRP = 999;
   const totalPrice = currentItemPrice * quantity;
 
   const variant = product.variants[0];
   const numericVariantId = (variant.shopifyVariantId || variant.id).split('/').pop();
 
-  // Final Action: Direct 1-Click Redirect to Shopify Hosted Checkout
-  const handleProceedToShopifyCheckout = () => {
+  // Instant Background Pre-warming: Pre-loads the checkout session on page load
+  useEffect(() => {
+    if (!numericVariantId) return;
+    const checkoutUrl = `https://${STORE_DOMAIN}/cart/${numericVariantId}:${quantity}`;
+
+    // 1. Speculative document prefetch in browser cache
+    const prefetchLink = document.createElement('link');
+    prefetchLink.rel = 'prefetch';
+    prefetchLink.as = 'document';
+    prefetchLink.href = checkoutUrl;
+    document.head.appendChild(prefetchLink);
+
+    // 2. Prerender hint for modern Chrome / Safari
+    const prerenderLink = document.createElement('link');
+    prerenderLink.rel = 'prerender';
+    prerenderLink.href = checkoutUrl;
+    document.head.appendChild(prerenderLink);
+
+    // 3. Silent background fetch to initialize Shopify cart worker session
+    try {
+      fetch(checkoutUrl, { mode: 'no-cors', priority: 'high' }).catch(() => {});
+    } catch {}
+
+    return () => {
+      try {
+        if (prefetchLink.parentNode) document.head.removeChild(prefetchLink);
+        if (prerenderLink.parentNode) document.head.removeChild(prerenderLink);
+      } catch {}
+    };
+  }, [numericVariantId, quantity]);
+
+  const handlePreloadCheckout = () => {
+    try {
+      const checkoutUrl = `https://${STORE_DOMAIN}/cart/${numericVariantId}:${quantity}`;
+      fetch(checkoutUrl, { mode: 'no-cors', priority: 'high' }).catch(() => {});
+    } catch {}
+  };
+
+  // Final Action: Direct Instant 1-Click Redirect to Shopify Hosted Checkout (With auto-safety reset)
+  const handleProceedToShopifyCheckout = (e?: React.SyntheticEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    if (isRedirecting) return;
     setIsRedirecting(true);
     const checkoutUrl = `https://${STORE_DOMAIN}/cart/${numericVariantId}:${quantity}`;
-    window.location.href = checkoutUrl;
+    
+    // Safety auto-reset after 3.5s in case user cancels or returns via browser back
+    setTimeout(() => {
+      setIsRedirecting(false);
+    }, 3500);
+
+    window.location.assign(checkoutUrl);
   };
 
   const handleAddToCart = () => {
@@ -78,6 +125,7 @@ function ProductDetailContent({
   };
 
   const scrollRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const isDragging = useRef(false);
   const startX = useRef(0);
   const scrollLeftStart = useRef(0);
@@ -90,26 +138,40 @@ function ProductDetailContent({
       behavior: 'smooth',
     });
     setActiveImageIndex(index);
-  }, []);
+    if (videoRef.current) {
+      if (mediaSlides[index]?.type === 'video') {
+        videoRef.current.play().catch(() => {});
+      } else {
+        videoRef.current.pause();
+      }
+    }
+  }, [mediaSlides]);
 
   const handleScroll = useCallback(() => {
     if (!scrollRef.current) return;
     const { scrollLeft, clientWidth } = scrollRef.current;
     if (clientWidth > 0) {
       const newIndex = Math.round(scrollLeft / clientWidth);
-      if (newIndex >= 0 && newIndex < galleryImages.length && newIndex !== activeImageIndex) {
+      if (newIndex >= 0 && newIndex < mediaSlides.length && newIndex !== activeImageIndex) {
         setActiveImageIndex(newIndex);
+        if (videoRef.current) {
+          if (mediaSlides[newIndex]?.type === 'video') {
+            videoRef.current.play().catch(() => {});
+          } else {
+            videoRef.current.pause();
+          }
+        }
       }
     }
-  }, [galleryImages.length, activeImageIndex]);
+  }, [mediaSlides, activeImageIndex]);
 
   const handlePrevImage = () => {
-    const nextIdx = (activeImageIndex - 1 + galleryImages.length) % galleryImages.length;
+    const nextIdx = (activeImageIndex - 1 + mediaSlides.length) % mediaSlides.length;
     scrollToImage(nextIdx);
   };
 
   const handleNextImage = () => {
-    const nextIdx = (activeImageIndex + 1) % galleryImages.length;
+    const nextIdx = (activeImageIndex + 1) % mediaSlides.length;
     scrollToImage(nextIdx);
   };
 
@@ -192,7 +254,7 @@ function ProductDetailContent({
       </header>
 
       {/* 3. Main Product Detail Section - Exact Fatima Calligrapher 2-Column Responsive Layout */}
-      <main className="flex-1 max-w-6xl mx-auto w-full px-3 sm:px-6 py-3 sm:py-6">
+      <main className="flex-1 max-w-6xl mx-auto w-full px-3 sm:px-6 py-3 sm:py-6 pb-28 sm:pb-32">
         
         {/* Breadcrumb Navigation */}
         <nav className="flex items-center gap-1.5 text-xs text-[#8C765C] mb-3 sm:mb-4 select-none">
@@ -215,7 +277,27 @@ function ProductDetailContent({
             <div className="bg-white p-2 sm:p-2.5 rounded-2xl sm:rounded-3xl border border-[#DFCBA0]/60 shadow-xs">
               <div className="relative w-full aspect-square max-h-[480px] sm:max-h-[540px] rounded-xl sm:rounded-2xl overflow-hidden bg-[#140E0A] flex items-center justify-center select-none group">
                 
-                {/* Horizontal Draggable & Touch-Swipeable Gallery of Images */}
+                {/* Floating Circular Video Icon Button - Placed Bottom-Left */}
+                {product.videoUrl && (
+                  <button
+                    type="button"
+                    onClick={() => scrollToImage(1)}
+                    className={`absolute bottom-3 left-3 z-30 w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-all duration-300 shadow-[0_4px_16px_rgba(0,0,0,0.45)] backdrop-blur-md cursor-pointer ${
+                      activeImageIndex === 1
+                        ? 'bg-gradient-to-r from-[#F6DB8E] via-[#E4BA57] to-[#BF8D2B] text-[#1E1105] ring-2 ring-[#FFF0B8] scale-105 shadow-[0_0_20px_rgba(226,184,88,0.7)]'
+                        : 'bg-[#140E0A]/85 hover:bg-[#140E0A] text-[#F5D88E] border border-[#E2B858]/70 hover:scale-110 active:scale-95'
+                    }`}
+                    title={activeImageIndex === 1 ? 'Now Playing Video' : 'Watch Product Video'}
+                    aria-label="Play product video"
+                  >
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#E2B858] animate-ping absolute -top-0.5 -right-0.5 pointer-events-none" />
+                    <svg className="w-5 h-5 fill-current translate-x-0.5" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </button>
+                )}
+
+                {/* Horizontal Draggable & Touch-Swipeable Gallery of Media */}
                 <div
                   ref={scrollRef}
                   onScroll={handleScroll}
@@ -226,29 +308,45 @@ function ProductDetailContent({
                   className="flex w-full h-full overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar touch-pan-x cursor-grab active:cursor-grabbing"
                   style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
                 >
-                  {galleryImages.map((imgUrl, idx) => (
+                  {mediaSlides.map((slide, idx) => (
                     <div
                       key={`gallery-slide-${idx}`}
                       className="w-full h-full shrink-0 snap-center flex items-center justify-center relative bg-[#140E0A]"
                     >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={imgUrl}
-                        alt={`${product.title} - Photo ${idx + 1}`}
-                        className="w-full h-full object-cover object-center select-none pointer-events-none transition-transform duration-500 group-hover:scale-102"
-                        style={{
-                          imageRendering: '-webkit-optimize-contrast',
-                          transform: 'translateZ(0)',
-                          backfaceVisibility: 'hidden',
-                        }}
-                        draggable={false}
-                      />
+                      {slide.type === 'video' ? (
+                        <div className="w-full h-full relative bg-black flex items-center justify-center">
+                          <video
+                            ref={videoRef}
+                            src={slide.src}
+                            poster={slide.poster}
+                            playsInline
+                            autoPlay
+                            muted
+                            loop
+                            controls
+                            className="w-full h-full object-cover object-center"
+                          />
+                        </div>
+                      ) : (
+                        /* eslint-disable-next-line @next/next/no-img-element */
+                        <img
+                          src={slide.src}
+                          alt={`${product.title} - Photo ${idx + 1}`}
+                          className="w-full h-full object-cover object-center select-none pointer-events-none transition-transform duration-500 group-hover:scale-102"
+                          style={{
+                            imageRendering: '-webkit-optimize-contrast',
+                            transform: 'translateZ(0)',
+                            backfaceVisibility: 'hidden',
+                          }}
+                          draggable={false}
+                        />
+                      )}
                     </div>
                   ))}
                 </div>
 
                 {/* Prev Slide Arrow Button */}
-                {galleryImages.length > 1 && (
+                {mediaSlides.length > 1 && (
                   <button
                     type="button"
                     onClick={handlePrevImage}
@@ -262,7 +360,7 @@ function ProductDetailContent({
                 )}
 
                 {/* Next Slide Arrow Button */}
-                {galleryImages.length > 1 && (
+                {mediaSlides.length > 1 && (
                   <button
                     type="button"
                     onClick={handleNextImage}
@@ -276,9 +374,9 @@ function ProductDetailContent({
                 )}
 
                 {/* Minimalist Luxury Progress Indicator Dots at Bottom */}
-                {galleryImages.length > 1 && (
+                {mediaSlides.length > 1 && (
                   <div className="absolute bottom-3 inset-x-0 z-20 flex items-center justify-center gap-1.5 pointer-events-none">
-                    {galleryImages.map((_, dotIdx) => (
+                    {mediaSlides.map((_, dotIdx) => (
                       <span
                         key={`dot-${dotIdx}`}
                         className={`h-1.5 rounded-full transition-all duration-300 ${
@@ -294,9 +392,9 @@ function ProductDetailContent({
             </div>
 
             {/* Thumbnails Row Underneath - Smooth Scroll Cards */}
-            {galleryImages.length > 1 && (
+            {mediaSlides.length > 1 && (
               <div className="flex items-center gap-2 sm:gap-2.5 overflow-x-auto py-1 px-0.5 no-scrollbar select-none">
-                {galleryImages.map((imgUrl, idx) => (
+                {mediaSlides.map((slide, idx) => (
                   <button
                     key={`thumb-${idx}`}
                     type="button"
@@ -306,14 +404,33 @@ function ProductDetailContent({
                         ? 'border-2 border-[#8A5F1A] shadow-md scale-105'
                         : 'border border-gray-200/90 opacity-60 hover:opacity-100 hover:border-gray-400'
                     }`}
-                    aria-label={`View photo ${idx + 1}`}
+                    aria-label={`View ${slide.type} ${idx + 1}`}
                   >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={imgUrl}
-                      alt={`${product.title} thumbnail ${idx + 1}`}
-                      className="w-full h-full object-cover object-center"
-                    />
+                    {slide.type === 'video' ? (
+                      <div className="w-full h-full relative bg-[#140E0A] flex flex-col items-center justify-center">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={slide.poster || product.featuredImage}
+                          alt="Video thumbnail"
+                          className="w-full h-full object-cover opacity-60"
+                        />
+                        <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center gap-0.5">
+                          <div className="w-6 h-6 rounded-full bg-[#E2B858] text-[#1E1105] flex items-center justify-center shadow-md">
+                            <svg className="w-3 h-3 fill-current translate-x-0.5" viewBox="0 0 24 24">
+                              <path d="M8 5v14l11-7z" />
+                            </svg>
+                          </div>
+                          <span className="text-[8px] font-black text-[#F5D88E] tracking-wider">VIDEO</span>
+                        </div>
+                      </div>
+                    ) : (
+                      /* eslint-disable-next-line @next/next/no-img-element */
+                      <img
+                        src={slide.src}
+                        alt={`${product.title} thumbnail ${idx + 1}`}
+                        className="w-full h-full object-cover object-center"
+                      />
+                    )}
                   </button>
                 ))}
               </div>
@@ -367,149 +484,33 @@ function ProductDetailContent({
               </div>
             </div>
 
-            {/* ONE ROW: Quantity Selector + Grand BUY NOW Button (Exact Image 3 Styling) */}
-            <div ref={buyRowRef} className="flex items-center gap-2 sm:gap-3 py-1">
-              
-              {/* Quantity Counter (Exact Image 3 Styling) */}
-              <div className="flex items-center rounded-2xl border border-gray-300/80 bg-white px-3 sm:px-3.5 py-2 sm:py-2.5 shadow-2xs shrink-0 gap-3 select-none">
-                <button
-                  type="button"
-                  onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                  className="font-bold text-lg sm:text-xl text-[#7A5318] hover:text-[#5C3D10] transition cursor-pointer select-none active:scale-90 px-1"
-                  aria-label="Decrease quantity"
-                >
-                  -
-                </button>
-                <span className="w-5 text-center text-sm sm:text-base font-extrabold text-[#2C1D0E] font-mono select-none">
-                  {quantity}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => setQuantity((q) => Math.min(10, q + 1))}
-                  className="font-bold text-lg sm:text-xl text-[#7A5318] hover:text-[#5C3D10] transition cursor-pointer select-none active:scale-90 px-1"
-                  aria-label="Increase quantity"
-                >
-                  +
-                </button>
-              </div>
-
-              {/* BUY NOW Button in the same row (Exact Image 3 Styling) */}
+            {/* PRIMARY CTA ACTION BUTTONS (Exact Fatima Calligrapher 24K Gold Styling) */}
+            <div className="space-y-2 mb-2">
               <button
                 type="button"
                 onClick={handleProceedToShopifyCheckout}
                 disabled={isRedirecting}
-                className="flex-1 bg-gradient-to-r from-[#F5D88E] via-[#E2B858] to-[#C99632] text-[#221307] font-black py-3.5 sm:py-4 px-4 rounded-2xl shadow-[0_4px_18px_rgba(226,184,88,0.45)] flex items-center justify-center gap-2 text-xs sm:text-sm md:text-base hover:opacity-95 active:scale-98 transition-all cursor-pointer border border-[#FFF0B8]"
+                style={{ touchAction: 'manipulation' }}
+                className="w-full gold-bg-gradient text-[#1A1208] font-black py-3.5 px-4 rounded-xl shadow-gold-glow flex items-center justify-center gap-2 text-sm sm:text-base hover:opacity-95 active:scale-98 transition-all cursor-pointer border border-[#F3E3B6]"
               >
-                <span className="text-amber-600 text-sm sm:text-base drop-shadow-xs">⚡</span>
-                <span className="truncate tracking-wide">
+                <span className="text-amber-800 text-sm pointer-events-none">⚡</span>
+                <span className="tracking-wide pointer-events-none">
                   {isRedirecting
-                    ? 'DIRECTING TO CHECKOUT...'
-                    : `BUY NOW — COD (₹${totalPrice.toLocaleString('en-IN')})`}
+                    ? 'CONNECTING TO CHECKOUT...'
+                    : `BUY NOW — CASH ON DELIVERY (₹${totalPrice.toLocaleString('en-IN')})`}
                 </span>
+                <span className="text-sm font-black pointer-events-none">→</span>
               </button>
-            </div>
 
-            {/* Select Package Edition Card (Exact Image 2 Vertical List Styling) */}
-            <div className="bg-white border border-[#E5CCA0]/60 rounded-2xl sm:rounded-3xl p-3.5 sm:p-4 shadow-xs">
-              <div className="flex items-center justify-between mb-3">
-                <label className="text-xs sm:text-sm font-bold text-[#2C1D0E] flex items-center gap-1.5">
-                  <span className="text-[#8A5F1A]">✦</span>
-                  <span>Select Package Edition:</span>
-                </label>
-                <span className="text-[10px] sm:text-xs font-bold text-[#8A5F1A] bg-[#FAF0D8] px-2.5 py-0.5 rounded-full border border-[#E5CCA0]">
-                  3 Options Available
-                </span>
-              </div>
-
-              {/* 3 Package Option Cards - Stacked Vertically as full rows */}
-              <div className="flex flex-col gap-2.5 sm:gap-3">
-                
-                {/* Option 1: Standard 6ml */}
-                <button
-                  type="button"
-                  onClick={() => setSelectedEdition('standard')}
-                  className={`w-full text-left p-3 sm:p-3.5 rounded-xl sm:rounded-2xl border-2 transition-all cursor-pointer relative ${
-                    selectedEdition === 'standard'
-                      ? 'border-[#7A5318] bg-[#FAF7EE] shadow-2xs'
-                      : 'border-gray-200/90 bg-white hover:border-gray-300'
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="text-xs sm:text-sm font-extrabold text-[#2C1D0E]">1x Standard</div>
-                      <div className="text-[11px] sm:text-xs text-gray-500 font-normal mt-0.5">6ml Single Flacon</div>
-                    </div>
-                    <div className="text-base sm:text-lg font-black text-[#2C1D0E]">₹599</div>
-                  </div>
-                </button>
-
-                {/* Option 2: Royal Duo (Save Extra) */}
-                <button
-                  type="button"
-                  onClick={() => setSelectedEdition('duo')}
-                  className={`w-full text-left p-3 sm:p-3.5 rounded-xl sm:rounded-2xl border-2 transition-all cursor-pointer relative ${
-                    selectedEdition === 'duo'
-                      ? 'border-[#7A5318] bg-[#FAF7EE] shadow-2xs'
-                      : 'border-gray-200/90 bg-white hover:border-gray-300'
-                  }`}
-                >
-                  <span className="absolute -top-2.5 right-3.5 sm:right-4 bg-[#00875A] text-white text-[9.5px] sm:text-[10px] font-bold px-2 sm:px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-xs">
-                    SAVE ₹100
-                  </span>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="text-xs sm:text-sm font-extrabold text-[#2C1D0E]">2x Royal Duo</div>
-                      <div className="text-[11px] sm:text-xs text-gray-500 font-normal mt-0.5">Two 6ml Flacons</div>
-                    </div>
-                    <div className="text-base sm:text-lg font-black text-[#2C1D0E]">₹1,099</div>
-                  </div>
-                </button>
-
-                {/* Option 3: Full Collector Box */}
-                <button
-                  type="button"
-                  onClick={() => setSelectedEdition('box')}
-                  className={`w-full text-left p-3 sm:p-3.5 rounded-xl sm:rounded-2xl border-2 transition-all cursor-pointer relative ${
-                    selectedEdition === 'box'
-                      ? 'border-[#7A5318] bg-[#FAF7EE] shadow-2xs'
-                      : 'border-gray-200/90 bg-white hover:border-gray-300'
-                  }`}
-                >
-                  <span className="absolute -top-2.5 right-3.5 sm:right-4 bg-[#D97706] text-white text-[9.5px] sm:text-[10px] font-extrabold px-2 sm:px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-xs">
-                    BEST VALUE
-                  </span>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="text-xs sm:text-sm font-extrabold text-[#2C1D0E]">All 5 Set</div>
-                      <div className="text-[11px] sm:text-xs text-gray-500 font-normal mt-0.5">5 Artisanal Flacons</div>
-                    </div>
-                    <div className="text-base sm:text-lg font-black text-[#2C1D0E]">₹2,499</div>
-                  </div>
-                </button>
-
-              </div>
-            </div>
-
-            {/* Secondary 2-Column Buttons: Add to Cart & WhatsApp Order */}
-            <div className="grid grid-cols-2 gap-2">
               <button
                 type="button"
                 onClick={handleAddToCart}
-                className="w-full bg-white hover:bg-gray-50 text-[#2C1D0E] font-bold py-2.5 px-3 rounded-xl border border-gray-300 flex items-center justify-center gap-1.5 text-xs transition-colors shadow-xs cursor-pointer active:scale-95"
+                style={{ touchAction: 'manipulation' }}
+                className="w-full bg-white hover:bg-gray-50 text-[#1A1208] font-bold py-2.5 px-3 rounded-xl border border-gray-300 flex items-center justify-center gap-1.5 text-xs sm:text-sm transition-colors shadow-2xs cursor-pointer active:scale-98"
               >
-                <span>🛒</span>
-                <span>Add to Cart</span>
+                <span className="text-amber-700 pointer-events-none">🛒</span>
+                <span className="pointer-events-none">Add to Cart • Free Air Shipping on ₹999+</span>
               </button>
-
-              <a
-                href={`https://wa.me/919970347703?text=Hello%20Abu%20Haani%2C%20I%20want%20to%20order%20${encodeURIComponent(product.title)}%20(${selectedEdition})`}
-                target="_blank"
-                rel="noreferrer"
-                className="w-full bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold py-2.5 px-3 rounded-xl border border-emerald-300 flex items-center justify-center gap-1.5 text-xs transition-colors shadow-xs active:scale-95"
-              >
-                <span>💬</span>
-                <span>Order on WhatsApp</span>
-              </a>
             </div>
 
             {/* 4 Trust & Quality Guarantee Badges (Exact Fatima Calligrapher 2x2 Grid) */}
@@ -685,7 +686,13 @@ function ProductDetailContent({
                 href={`/products/${p.handle}`}
                 className="bg-white rounded-2xl p-3 border border-gray-200 shadow-2xs hover:shadow-md hover:border-[#8A5F1A] transition-all group flex flex-col justify-between"
               >
-                <div className="aspect-square rounded-xl overflow-hidden bg-[#FAF6EE] mb-2 p-2 flex items-center justify-center">
+                <div className="aspect-square rounded-xl overflow-hidden bg-[#FAF6EE] mb-2 p-2 flex items-center justify-center relative">
+                  {p.videoUrl && (
+                    <div className="absolute top-2 right-2 z-10 flex items-center gap-1 bg-[#1A120B]/85 backdrop-blur-md text-[#F5D88E] text-[9px] font-bold px-2 py-0.5 rounded-full border border-[#E2B858]/50 shadow-xs">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#E2B858] animate-pulse" />
+                      <span>▶ VIDEO</span>
+                    </div>
+                  )}
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={p.featuredImage}
@@ -709,60 +716,59 @@ function ProductDetailContent({
 
       </main>
 
-      {/* 5. Sticky Floating Bottom Bar: ONLY Quantity + BUY NOW in ONE Row (Exact Same as Image 3) */}
-      <div
-        className={`fixed bottom-0 inset-x-0 z-[100] bg-[#FAF6EE]/95 backdrop-blur-md border-t border-[#DEC99D] shadow-[0_-8px_25px_rgba(44,29,14,0.18)] px-3 py-2.5 sm:py-3 transition-all duration-300 ${
-          showStickyBuy
-            ? 'translate-y-0 opacity-100 pointer-events-auto'
-            : 'translate-y-full opacity-0 pointer-events-none'
-        }`}
+      {/* Permanent Luxury Sticky Bottom Bar (Ultra-Attractive & High-Converting) */}
+      <aside
+        aria-label="Sticky Purchase Bar"
+        className="fixed bottom-0 inset-x-0 z-50 bg-[#FAF6EE]/96 backdrop-blur-xl border-t border-[#DFCBA0] shadow-[0_-10px_35px_rgba(44,29,14,0.18)] px-3 sm:px-6 py-2.5 sm:py-3 select-none"
         style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}
       >
         <div className="max-w-xl mx-auto flex items-center gap-2 sm:gap-3">
           
-          {/* Quantity Selector: Exact same rounded-2xl white card */}
-          <div className="flex items-center rounded-2xl border border-gray-300/80 bg-white px-3 sm:px-3.5 py-2 sm:py-2.5 shadow-2xs shrink-0 gap-3 select-none">
+          {/* Quantity Selector Luxury Pill */}
+          <div className="flex items-center rounded-2xl border border-[#DEC99D] bg-white px-2 py-1.5 shadow-2xs shrink-0 gap-2 sm:gap-3">
             <button
               type="button"
               onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-              className="font-bold text-lg sm:text-xl text-[#7A5318] hover:text-[#5C3D10] transition cursor-pointer select-none active:scale-90 px-1"
+              className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-[#FAF5EC] hover:bg-[#F3E7CE] text-[#7A5318] active:scale-90 flex items-center justify-center font-bold text-base sm:text-lg transition-all cursor-pointer"
               aria-label="Decrease quantity"
             >
-              -
+              −
             </button>
-            <span className="w-5 text-center text-sm sm:text-base font-extrabold text-[#2C1D0E] font-mono select-none">
+            <span className="w-5 text-center text-xs sm:text-sm font-black text-[#2C1D0E] font-mono">
               {quantity}
             </span>
             <button
               type="button"
               onClick={() => setQuantity((q) => Math.min(10, q + 1))}
-              className="font-bold text-lg sm:text-xl text-[#7A5318] hover:text-[#5C3D10] transition cursor-pointer select-none active:scale-90 px-1"
+              className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-[#FAF5EC] hover:bg-[#F3E7CE] text-[#7A5318] active:scale-90 flex items-center justify-center font-bold text-base sm:text-lg transition-all cursor-pointer"
               aria-label="Increase quantity"
             >
               +
             </button>
           </div>
 
-          {/* BUY NOW Button: Exact same golden button */}
+          {/* Grand BUY NOW Button (Exact Fatima Calligrapher Gold Gradient & Glow) */}
           <button
             type="button"
             onClick={handleProceedToShopifyCheckout}
             disabled={isRedirecting}
-            className="flex-1 bg-gradient-to-r from-[#F5D88E] via-[#E2B858] to-[#C99632] text-[#221307] font-black py-3.5 sm:py-4 px-4 rounded-2xl shadow-[0_4px_18px_rgba(226,184,88,0.45)] flex items-center justify-center gap-2 text-xs sm:text-sm md:text-base hover:opacity-95 active:scale-98 transition-all cursor-pointer border border-[#FFF0B8]"
+            style={{ touchAction: 'manipulation' }}
+            className="flex-1 gold-bg-gradient text-[#1A1208] font-black py-3 sm:py-3.5 px-3 sm:px-4 rounded-xl shadow-gold-glow flex items-center justify-center gap-1.5 sm:gap-2 text-xs sm:text-sm active:scale-98 transition-all cursor-pointer border border-[#F3E3B6]"
           >
-            <span className="text-amber-600 text-sm sm:text-base drop-shadow-xs">⚡</span>
-            <span className="truncate tracking-wide">
+            <span className="text-amber-800 text-xs sm:text-sm pointer-events-none">⚡</span>
+            <span className="tracking-wide font-black uppercase truncate pointer-events-none">
               {isRedirecting
-                ? 'DIRECTING TO CHECKOUT...'
+                ? 'CONNECTING TO CHECKOUT...'
                 : `BUY NOW — COD (₹${totalPrice.toLocaleString('en-IN')})`}
             </span>
+            <span className="text-xs sm:text-sm font-black pointer-events-none">→</span>
           </button>
 
         </div>
-      </div>
+      </aside>
 
-      {/* 6. Luxury Footer */}
-      <Footer onOpenWhatsApp={() => window.open('https://wa.me/919999999999?text=Hello%20Abu%20Haani', '_blank')} />
+      {/* 5. Luxury Footer */}
+      <Footer />
 
       {/* Search Modal */}
       <SearchModal

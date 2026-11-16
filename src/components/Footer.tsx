@@ -2,9 +2,8 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { WhatsAppIcon } from './Icons';
 
-export const Footer: React.FC<{ onOpenWhatsApp?: () => void }> = ({ onOpenWhatsApp }) => {
+export const Footer: React.FC = () => {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
 
@@ -65,14 +64,16 @@ export const Footer: React.FC<{ onOpenWhatsApp?: () => void }> = ({ onOpenWhatsA
             </div>
           </div>
 
-          {/* Badge 4: WhatsApp Support & Concierge */}
+          {/* Badge 4: Dedicated Royal Concierge (NO WhatsApp) */}
           <div className="flex flex-col sm:flex-row items-center sm:text-left gap-2.5 sm:gap-3 p-2">
             <div className="w-10 h-10 rounded-full bg-[#FAF0D8] border border-[#E5CCA0] flex items-center justify-center text-[#8A5F1A] shrink-0 shadow-xs">
-              <WhatsAppIcon className="w-5 h-5 text-emerald-600" />
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
+              </svg>
             </div>
             <div>
-              <p className="text-xs sm:text-sm font-bold text-[#2C1D0E]">WhatsApp Helpline</p>
-              <p className="text-[11px] text-[#7A634D] hidden sm:block">+91 99703 47703 (Live)</p>
+              <p className="text-xs sm:text-sm font-bold text-[#2C1D0E]">Dedicated Support</p>
+              <p className="text-[11px] text-[#7A634D] hidden sm:block">7 Days (10 AM – 9 PM)</p>
             </div>
           </div>
         </div>
@@ -97,31 +98,27 @@ export const Footer: React.FC<{ onOpenWhatsApp?: () => void }> = ({ onOpenWhatsA
               Purveyors of pure non-alcoholic artisanal attars and rare oriental perfumes. Handcrafted using ancient royal hydro-distillation traditions for an enduring 14-18 hour sillage.
             </p>
 
-            {/* Helpline Box (Inspired by Fatima Calligrapher) */}
-            <div className="p-3.5 rounded-2xl bg-[#FFFDF9] border border-[#DEC99D] space-y-2 text-xs">
-              <div className="flex items-center gap-2 text-[#8A5F1A] font-bold">
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+            {/* Direct Royal Concierge Box - Clean Luxury Brand Styling (No phone number) */}
+            <div className="p-4 rounded-2xl bg-[#FFFDF9] border border-[#DEC99D] shadow-xs space-y-2 max-w-sm">
+              <div className="flex items-center gap-2 text-[#8A5F1A] font-bold text-[11px] uppercase tracking-wider">
+                <svg className="w-4 h-4 text-[#8A5F1A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
                 </svg>
-                <span>Customer Support Helpline</span>
+                <span>Direct Client Concierge</span>
               </div>
               
-              <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-3 text-xs">
-                <a href="tel:+919970347703" className="font-bold text-[#2C1D0E] hover:text-[#8A5F1A] hover:underline">
-                  +91 99703 47703
-                </a>
-                <span className="text-[#DEC99D] hidden sm:inline">•</span>
+              <div>
                 <a
-                  href="https://wa.me/919970347703?text=Hello%20Abu%20Haani%2C%20I%20need%20assistance%20with%20an%20attar%20order"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 font-bold text-emerald-700 hover:text-emerald-800 hover:underline"
+                  href="mailto:care@abuhaani.com"
+                  className="text-base sm:text-lg font-bold text-[#2C1D0E] hover:text-[#8A5F1A] transition tracking-tight"
                 >
-                  <WhatsAppIcon className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>WhatsApp Support</span>
+                  care@abuhaani.com
                 </a>
               </div>
-              <p className="text-[10px] text-[#8C765C]">Available Mon – Sun: 10:00 AM – 9:00 PM IST</p>
+              <div className="flex items-center gap-1.5 text-[10px] text-[#8C765C] pt-1.5 border-t border-[#DEC99D]/40">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
+                <span>Dedicated Client Desk • Mon – Sun: 10 AM – 9 PM IST</span>
+              </div>
             </div>
           </div>
 
@@ -172,14 +169,7 @@ export const Footer: React.FC<{ onOpenWhatsApp?: () => void }> = ({ onOpenWhatsA
                 </Link>
               </li>
               <li>
-                <a
-                  href="https://wa.me/919970347703?text=Hi%20Abu%20Haani%2C%20I%20want%20to%20track%20my%20order"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="hover:text-[#8A5F1A] transition hover:underline flex items-center gap-1"
-                >
-                  <span>Track Your Order</span>
-                </a>
+                <span className="text-[#5C442D]">Track Your Order</span>
               </li>
               <li>
                 <span className="text-[#5C442D]">Shipping Policy (4-5 Days)</span>
@@ -275,14 +265,7 @@ export const Footer: React.FC<{ onOpenWhatsApp?: () => void }> = ({ onOpenWhatsA
             <span>•</span>
             <span>Fast Express Shipping</span>
             <span>•</span>
-            <a
-              href="https://wa.me/919970347703"
-              target="_blank"
-              rel="noreferrer"
-              className="hover:text-[#8A5F1A] hover:underline"
-            >
-              VIP Support
-            </a>
+            <span>Dedicated Client Support</span>
           </div>
 
         </div>

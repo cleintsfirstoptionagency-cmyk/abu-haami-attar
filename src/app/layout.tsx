@@ -30,6 +30,14 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <head>
+        {/* Instant Checkout & Shopify Pre-warming */}
+        <link rel="preconnect" href="https://ezf1x7-pn.myshopify.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://ezf1x7-pn.myshopify.com" />
+        <link rel="preconnect" href="https://cdn.shopify.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://cdn.shopify.com" />
+        <link rel="preconnect" href="https://fastrr.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://fastrr.com" />
+
         {/* Luxury Typography Fonts */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

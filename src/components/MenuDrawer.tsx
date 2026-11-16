@@ -2,14 +2,13 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { WhatsAppIcon, SparklesIcon, ShieldCheckIcon } from './Icons';
+import { SparklesIcon, ShieldCheckIcon } from './Icons';
 import { INITIAL_SHOPIFY_PRODUCTS } from '@/lib/initialProducts';
 
 interface MenuDrawerProps {
   isOpen: boolean;
   onClose: () => void;
   onSelectCollection: () => void;
-  onOpenWhatsAppGuide?: () => void;
 }
 
 export const MenuDrawer: React.FC<MenuDrawerProps> = ({
@@ -52,8 +51,8 @@ export const MenuDrawer: React.FC<MenuDrawerProps> = ({
             </button>
           </div>
 
-          {/* 2. Main Menu Scrollable Body */}
-          <div className="p-4 sm:p-6 space-y-6 flex-1 overflow-y-auto custom-scrollbar">
+          {/* 2. Main Menu Scrollable Body with Small Product Cards */}
+          <div className="p-4 sm:p-6 space-y-6 flex-1 overflow-y-auto">
             
             {/* Quick Explore Buttons Row */}
             <div className="grid grid-cols-2 gap-2">
@@ -76,7 +75,7 @@ export const MenuDrawer: React.FC<MenuDrawerProps> = ({
               </button>
             </div>
 
-            {/* Featured Section: Products WITH Photos, Ratings & Prices */}
+            {/* Featured Section: All Products with Small Visual Cards */}
             <div>
               <div className="flex items-center justify-between mb-3 px-1">
                 <p className="text-[11px] uppercase tracking-wider text-[#8A5F1A] font-bold flex items-center gap-1.5">
@@ -88,7 +87,7 @@ export const MenuDrawer: React.FC<MenuDrawerProps> = ({
                 </span>
               </div>
 
-              {/* Products List with High-Res Images */}
+              {/* Products List with High-Res Image Cards */}
               <div className="space-y-2.5">
                 {INITIAL_SHOPIFY_PRODUCTS.map((prod) => {
                   const price = prod.variants[0]?.price || 599;
@@ -100,21 +99,17 @@ export const MenuDrawer: React.FC<MenuDrawerProps> = ({
                       className="group flex items-center gap-3 p-2.5 rounded-2xl bg-[#FFFDF9] border border-[#E8DDCA] hover:border-[#8A5F1A] hover:shadow-md transition-all duration-300"
                     >
                       {/* Product Image Thumbnail */}
-                      <div className="relative w-14 h-14 sm:w-16 sm:h-16 shrink-0 rounded-xl overflow-hidden bg-[#140E0A] border border-[#DFCBA0]/60">
+                      <div className="relative w-14 h-14 sm:w-16 sm:h-16 shrink-0 rounded-xl overflow-hidden bg-[#FAF6EE] border border-gray-200 p-1 flex items-center justify-center">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
-                          src={prod.featuredImage || prod.images?.[0] || '/logo.png'}
+                          src={prod.featuredImage}
                           alt={prod.title}
-                          className="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500"
+                          className="w-full h-full object-contain group-hover:scale-105 transition-transform"
                         />
                       </div>
 
                       {/* Product Info */}
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-1 text-[10px] text-amber-600 font-bold mb-0.5">
-                          <span>★★★★★</span>
-                          <span className="text-gray-500 font-semibold">(5.0)</span>
-                        </div>
                         <h4 className="text-xs sm:text-sm font-bold text-[#2C1D0E] truncate group-hover:text-[#8A5F1A] transition">
                           {prod.title}
                         </h4>
@@ -143,32 +138,33 @@ export const MenuDrawer: React.FC<MenuDrawerProps> = ({
               </div>
             </div>
 
-            {/* Client Services & Customer Concierge */}
+            {/* Client Services & Concierge (100% Professional, Zero phone number/WhatsApp) */}
             <div className="pt-3 border-t border-[#E8DDCA] space-y-2.5">
               <p className="text-[11px] uppercase tracking-wider text-[#8A5F1A] font-bold px-1 flex items-center gap-1.5">
                 <span>✦</span>
                 <span>Customer Care & Concierge</span>
               </p>
 
-              {/* WhatsApp VIP Concierge */}
-              <a
-                href="https://wa.me/919970347703?text=Hello%20Abu%20Haani%2C%20I%20need%20assistance%20with%20an%20artisanal%20attar%20order"
-                target="_blank"
-                rel="noreferrer"
-                className="w-full text-left px-4 py-3 rounded-2xl bg-emerald-50/80 border border-emerald-300/80 text-emerald-950 hover:bg-emerald-100 font-medium text-xs flex items-center justify-between transition group shadow-2xs"
-              >
-                <div className="flex items-center gap-2.5">
-                  <WhatsAppIcon className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <div>
-                    <p className="font-bold text-emerald-900 leading-tight">WhatsApp Helpline</p>
-                    <p className="text-[10px] text-emerald-700">+91 99703 47703</p>
+              {/* Concierge Desk */}
+              <div className="p-3.5 rounded-2xl bg-[#FFFDF9] border border-[#DEC99D] shadow-2xs space-y-1">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm">📧</span>
+                    <span className="font-bold text-xs text-[#2C1D0E]">Dedicated Client Support</span>
                   </div>
+                  <span className="text-[9px] text-emerald-800 font-semibold bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    Online
+                  </span>
                 </div>
-                <span className="text-[9px] uppercase tracking-wider text-emerald-800 font-bold bg-white/80 px-2 py-0.5 rounded-full border border-emerald-300 flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  Live Chat
-                </span>
-              </a>
+                <a
+                  href="mailto:care@abuhaani.com"
+                  className="text-xs font-mono font-bold text-[#8A5F1A] hover:underline block pt-0.5"
+                >
+                  care@abuhaani.com
+                </a>
+                <p className="text-[10px] text-gray-500">Mon – Sun: 10:00 AM – 9:00 PM IST</p>
+              </div>
 
               {/* 100% Non-Alcoholic & COD Guarantee */}
               <div className="p-3 rounded-2xl bg-[#FFFDF9] border border-[#DEC99D] text-xs text-[#5C442D] space-y-1.5 shadow-2xs">
@@ -177,14 +173,14 @@ export const MenuDrawer: React.FC<MenuDrawerProps> = ({
                   <span className="text-[11px] font-bold text-[#2C1D0E]">100% Pure Alcohol-Free Attar</span>
                 </div>
                 <p className="text-[10px] text-[#7A634D] leading-relaxed">
-                  Traditional deg-bhapka hydro-distillation method. Enduring 14-18 hours royal sillage. Cash on Delivery available across all India pincodes.
+                  Traditional hydro-distillation method. Enduring 14-18 hours royal sillage. Cash on Delivery available across all India pincodes.
                 </p>
               </div>
             </div>
 
           </div>
 
-          {/* 3. Drawer Footer: Delivery Info & Made with Love */}
+          {/* 3. Drawer Footer: Delivery Info & Authenticity */}
           <div className="p-4 border-t border-[#E8DDCA] bg-[#F2EBE0] space-y-2">
             <div className="flex items-center justify-between text-[11px] text-[#7A6045]">
               <span className="flex items-center gap-1.5">
@@ -199,7 +195,7 @@ export const MenuDrawer: React.FC<MenuDrawerProps> = ({
             <div className="pt-1.5 border-t border-[#E5CCA0]/60 flex flex-col sm:flex-row items-center justify-between text-[10px] text-[#8C765C] gap-1 text-center">
               <span>© 2026 Abu Haani Parfumerie.</span>
               <span className="font-semibold text-[#8A5F1A]">
-                Made with ❤️ by Arsalan
+                100% Artisanal Quality
               </span>
             </div>
           </div>

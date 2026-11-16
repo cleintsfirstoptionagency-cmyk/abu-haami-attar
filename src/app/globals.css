@@ -5,7 +5,21 @@
   --text-dark: #2a1a0a;
   --text-muted: #736250;
   --gold-primary: #d4a037;
-  --gold-gradient: linear-gradient(135deg, #f5dba1 0%, #d8a543 50%, #b88325 100%);
+  --gold-gradient: linear-gradient(135deg, #DFC685 0%, #C59A3F 50%, #A98030 100%);
+}
+
+/* Exact Fatima Calligrapher 24K Gold Gradient & Glow */
+.gold-bg-gradient {
+  background: linear-gradient(135deg, #DFC685 0%, #C59A3F 50%, #A98030 100%) !important;
+}
+.gold-bg-gradient:hover {
+  background: linear-gradient(135deg, #EBDCB2 0%, #D4B05C 50%, #8A6424 100%) !important;
+}
+.shadow-gold-glow {
+  box-shadow: 0 4px 18px rgba(197, 154, 63, 0.45) !important;
+}
+.shadow-gold-glow:hover {
+  box-shadow: 0 6px 24px rgba(197, 154, 63, 0.65) !important;
 }
 
 * {
